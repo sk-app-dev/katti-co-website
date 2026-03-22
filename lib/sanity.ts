@@ -39,7 +39,7 @@ export const ALL_POSTS_QUERY = `*[_type == "post"] | order(_createdAt desc) {
   }
 }`;
 
-export const BLOG_POST_QUERY = `*[_type == "post" && slug.current == $slug][0] {
+export const POST_BY_SLUG_QUERY = `*[_type == "post" && slug.current == $slug][0] {
   _id,
   title,
   slug,
@@ -48,6 +48,8 @@ export const BLOG_POST_QUERY = `*[_type == "post" && slug.current == $slug][0] {
     name
   },
   body,
+  excerpt,
+  category,
   mainImage {
     asset -> {
       url
