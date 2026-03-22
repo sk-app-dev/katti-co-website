@@ -51,12 +51,14 @@ export async function POST(request: NextRequest) {
 
     // Check if API key exists
     if (!process.env.GEMINI_API_KEY) {
-      console.error("GEMINI_API_KEY not set");
+      console.error("❌ GEMINI_API_KEY not set in environment");
       return NextResponse.json(
         { error: "Chat service not configured" },
         { status: 500 }
       );
     }
+
+    console.log("✅ GEMINI_API_KEY found, initializing Gemini...");
 
     // Build conversation history for Gemini
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -70,31 +72,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate response using simple text prompt
-    const result = await model.generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: lastMessage.content }],
+    console.log("📤 Sending to Gemini:", lastMessage.content.slice(0, 50));
+
+    // Generate response using simple text prompt with timeout
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Gemini API timeout")), 25000)
+    );
+
+    const result = await Promise.race([
+      model.generateContent({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: lastMessage.content }],
+          },
+        ],
+        generationConfig: {
+          maxOutputTokens: 512,
+          temperature: 0.7,
         },
-      ],
-      generationConfig: {
-        maxOutputTokens: 512,
-        temperature: 0.7,
-      },
-    });
+      }),
+      timeoutPromise,
+    ]);
 
     const reply =
-      result.response.text() || "I'm sorry, I could not generate a response.";
+      (result as any).response?.text() || "I'm sorry, I could not generate a response.";
 
+    console.log("✅ Gemini response received");
     return NextResponse.json({ reply });
   } catch (error: any) {
-    console.error("Chat error:", error?.message || error);
+    console.error("❌ Chat error:", error?.message || error);
 
     if (error.message?.includes("API key") || error.message?.includes("authentication")) {
       return NextResponse.json(
-        { error: "API authentication error. Please check your configuration." },
+        { error: "API authentication error. Check your Gemini API key configuration." },
         { status: 500 }
+      );
+    }
+
+    if (error.message?.includes("timeout")) {
+      return NextResponse.json(
+        { error: "Chat service is taking too long. Please try again." },
+        { status: 504 }
       );
     }
 
