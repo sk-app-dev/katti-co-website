@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     console.log("✅ GEMINI_API_KEY found, initializing Gemini...");
 
     // Build conversation history for Gemini
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     // Get the last user message
     const lastMessage = messages[messages.length - 1];
