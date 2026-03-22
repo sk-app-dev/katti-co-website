@@ -9,29 +9,30 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, phone, organisation, matterType, description } = body;
+    const { firstName, lastName, email, phone, org, matter, message } = body;
 
     // Validation
-    if (!email || !description) {
+    if (!email || !message) {
       return NextResponse.json(
-        { error: "Email and description are required" },
+        { error: "Email and message are required" },
         { status: 400 }
       );
     }
 
     // Send email via Resend
     const result = await resend.emails.send({
-      from: process.env.CONTACT_SENDER_EMAIL || "noreply@kattiandco.in",
+      from: process.env.CONTACT_SENDER_EMAIL || "noreply@kattiandco.com",
       to: process.env.CONTACT_RECIPIENT_EMAIL || "aprameya.katti@kattiandco.com",
-      subject: `New Enquiry from ${email}`,
+      subject: `New Enquiry from ${firstName || email}`,
       html: `
         <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${firstName} ${lastName || ""}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-        <p><strong>Organisation:</strong> ${organisation || "Not provided"}</p>
-        <p><strong>Matter Type:</strong> ${matterType || "Not provided"}</p>
-        <p><strong>Description:</strong></p>
-        <p>${description.replace(/\n/g, "<br>")}</p>
+        <p><strong>Organisation:</strong> ${org || "Not provided"}</p>
+        <p><strong>Matter Type:</strong> ${matter || "Not provided"}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, "<br>")}</p>
       `,
     });
 
