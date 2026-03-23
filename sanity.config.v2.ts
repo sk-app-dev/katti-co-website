@@ -14,8 +14,9 @@ import {apiVersion} from './sanity/env'
 import {schema} from './sanity/schemaTypes'
 import {structure} from './sanity/structure'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID_V2 || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET_V2 || 'v2'
+// Hardcoded V2 configuration (for deployed studio)
+const projectId = '9epvqzza'
+const dataset = 'v2'
 
 export default defineConfig({
   basePath: '/studio-v2',
