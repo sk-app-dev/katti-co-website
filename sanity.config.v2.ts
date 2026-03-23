@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * V2 Studio Configuration - Separate from production
  * This allows testing new features without affecting the live site
