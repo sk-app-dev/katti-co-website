@@ -1,5 +1,10 @@
 // components/About.tsx
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import { client } from "@/sanity/lib/client";
+import fallbackFounderImage from "@/public/founder.jpg";
 
 const VALUES = [
   {
@@ -44,7 +49,40 @@ const VALUES = [
   },
 ];
 
+interface FounderImage {
+  image?: {
+    asset: {
+      url: string;
+    };
+  };
+}
+
 export default function About() {
+  const [founderImage, setFounderImage] = useState<FounderImage | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFounderImage = async () => {
+      try {
+        const query = `*[_type == "founder"][0] {
+          image {
+            asset {
+              url
+            }
+          }
+        }`;
+        const data = await client.fetch(query);
+        setFounderImage(data);
+      } catch (error) {
+        console.error("Error fetching founder image:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFounderImage();
+  }, []);
+
   return (
     <section className="section about" id="about">
       <div className="reveal">
@@ -91,73 +129,33 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right — founder card */}
+        {/* Right — founder photo */}
         <div className="reveal delay-2">
-          <div className="founder-card">
-            <div className="founder-photo">
-              <Image
-                src="/founder.jpg"
-                alt="Mr. Aprameya N. Katti — Founder & Principal Attorney, Katti & Co."
-                width={500}
-                height={600}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                  objectPosition: "center top",
-                  maxHeight: 400,
-                  filter: "brightness(1.03) contrast(1.06) saturate(1.08)",
-                }}
-                priority
-              />
+          {loading ? (
+            <div className="founder-card">
+              <div style={{ padding: "2rem", textAlign: "center" }}>Loading...</div>
             </div>
-
-            <div className="founder-name">Mr. Aprameya N. Katti</div>
-            <div className="founder-role">Founder &amp; Principal Attorney</div>
-
-            <p className="founder-bio">
-              A computer science engineer who transitioned into the legal
-              profession with a deep interest in technology and law. His
-              combined background enables the firm to handle complex
-              computer-related inventions — from patent drafting and
-              prosecution to litigation.
-            </p>
-            <p className="founder-bio">
-              Previously at leading IP firms in India. Served as Judicial
-              Researcher at the High Court of Karnataka. Worked closely with a
-              Senior Advocate across tax, commercial and constitutional matters.
-            </p>
-
-            <div className="tags">
-              {["CS Engineer","Patent Specialist","Judicial Researcher","High Court","IP Litigation","Tax & Commercial"].map(t => (
-                <span className="tag" key={t}>{t}</span>
-              ))}
+          ) : (
+            <div className="founder-card">
+              <div className="founder-photo">
+                <Image
+                  src={founderImage?.image?.asset?.url || fallbackFounderImage}
+                  alt="Founder photo, Katti & Co."
+                  width={500}
+                  height={600}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                    objectPosition: "center top",
+                    maxHeight: 400,
+                    filter: "brightness(1.03) contrast(1.06) saturate(1.08)",
+                  }}
+                  priority
+                />
+              </div>
             </div>
-
-            <div className="founder-links">
-              <a
-                href="mailto:aprameya.katti@kattiandco.com"
-                className="founder-link"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                aprameya.katti@kattiandco.com
-              </a>
-              <a
-                href="https://www.linkedin.com/in/adv-aprameya-n-katti-640974119/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="founder-link"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-                LinkedIn — Personal Profile
-              </a>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
