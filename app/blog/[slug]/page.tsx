@@ -83,12 +83,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <>
       {/* Fixed navbar — minimal and elegant */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 999, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.2rem clamp(1.5rem, 5vw, 3rem)", background: "linear-gradient(180deg, rgba(7,8,13,.99) 0%, rgba(7,8,13,.96) 100%)", borderBottom: "1px solid rgba(201,166,64,.1)", backdropFilter: "blur(12px)" }}>
-        <Link href="/" style={{ fontFamily: "var(--font-cinzel)", fontSize: "clamp(0.85rem, 1.8vw, 1rem)", fontWeight: 600, letterSpacing: ".12em", color: "var(--text)", textDecoration: "none", transition: "all 0.3s", display: "flex", alignItems: "center", gap: "0.4rem", textTransform: "uppercase" }}>
-          <span style={{ color: "var(--gold)", fontSize: "1.2em" }}>K</span>Katti
-        </Link>
-        <Link href="/blog" style={{ fontFamily: "var(--font-cinzel)", fontSize: "clamp(0.6rem, 1vw, 0.7rem)", letterSpacing: ".08em", textTransform: "uppercase", color: "var(--text)", textDecoration: "none", padding: "0.65rem 1.4rem", background: "transparent", border: "1.5px solid var(--gold)", borderRadius: "8px", transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)", fontWeight: 700 }}>
-          ← Insights
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 999, display: "flex", alignItems: "center", justifyContent: "flex-end", padding: "1.2rem clamp(1.5rem, 5vw, 3rem)", background: "linear-gradient(180deg, rgba(7,8,13,.99) 0%, rgba(7,8,13,.96) 100%)", borderBottom: "1px solid rgba(201,166,64,.1)", backdropFilter: "blur(12px)" }}>
+        <Link href="/blog" style={{ fontFamily: "var(--font-cinzel)", fontSize: "clamp(0.65rem, 1.2vw, 0.8rem)", letterSpacing: ".12em", textTransform: "uppercase", color: "var(--text)", textDecoration: "none", padding: "0.8rem 1.6rem", background: "linear-gradient(135deg, rgba(201,166,64,.12) 0%, rgba(201,166,64,.06) 100%)", border: "1.5px solid var(--gold)", borderRadius: "10px", transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          ↑ Back to Insights
         </Link>
       </nav>
 
