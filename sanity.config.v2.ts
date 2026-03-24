@@ -5,7 +5,7 @@
 
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
+import {deskTool} from 'sanity/desk'
 
 // V2 configuration uses separate project/dataset
 import {apiVersion} from './sanity/env'
@@ -23,7 +23,7 @@ export default defineConfig({
   title: 'Katti & Co. - V2 (Testing)',
   schema,
   plugins: [
-    structureTool({structure}),
+    deskTool(),
     visionTool({defaultApiVersion: apiVersion}),
   ],
 })

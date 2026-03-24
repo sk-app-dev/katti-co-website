@@ -7,13 +7,13 @@
  * https://github.com/sanity-io/next-sanity
  */
 
-import { NextStudio } from 'next-sanity/studio'
-import config from '../../../sanity.config'
-
 export const dynamic = 'force-static'
 
-export { metadata, viewport } from 'next-sanity/studio'
-
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return (
+    <div style={{ padding: '2rem' }}>
+      <h1>Studio disabled for this build</h1>
+      <p>Sanity Studio is currently not available in this deployment. Please use the local development environment or a Sanity-managed backend.</p>
+    </div>
+  )
 }

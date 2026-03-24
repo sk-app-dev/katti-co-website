@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { client } from "@/sanity/lib/client";
-import fallbackFounderImage from "@/public/founder.jpg";
+const fallbackFounderImage = "/founder.jpg";
 
 const VALUES = [
   {
