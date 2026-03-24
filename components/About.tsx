@@ -63,14 +63,29 @@ interface Founder {
   };
 }
 
+interface TeamMember {
+  _id: string;
+  name: string;
+  designation: string;
+  bio?: string;
+  email?: string;
+  phone?: string;
+  image?: {
+    asset: {
+      url: string;
+    };
+  };
+}
+
 export default function About() {
   const [founder, setFounder] = useState<Founder | null>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFounder = async () => {
+    const fetchData = async () => {
       try {
-        const query = `*[_type == "founder"][0] {
+        const founderQuery = `*[_type == "founder"][0] {
           _id,
           name,
           title,
@@ -83,18 +98,40 @@ export default function About() {
             }
           }
         }`;
-        const data = await client.fetch(query);
-        console.log("Founder data fetched:", data);
-        setFounder(data);
+        const teamQuery = `*[_type == "team"] | order(order asc) {
+          _id,
+          name,
+          designation,
+          bio,
+          email,
+          phone,
+          image {
+            asset {
+              url
+            }
+          }
+        }`;
+
+        const [founderData, teamData] = await Promise.all([
+          client.fetch(founderQuery),
+          client.fetch(teamQuery),
+        ]);
+
+        console.log("Founder data fetched:", founderData);
+        console.log("Team data fetched:", teamData);
+        
+        setFounder(founderData);
+        setTeamMembers(teamData || []);
       } catch (error) {
-        console.error("Error fetching founder:", error);
-        setFounder(null); // Fallback to no data state
+        console.error("Error fetching data:", error);
+        setFounder(null);
+        setTeamMembers([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFounder();
+    fetchData();
   }, []);
 
   return (
@@ -212,6 +249,41 @@ export default function About() {
           )}
         </div>
       </div>
+
+      {/* Team Members Section */}
+      {!loading && teamMembers.length > 0 && (
+        <div className="team-section reveal delay-2">
+          <div className="team-label">Our Team</div>
+          <div className="team-grid">
+            {teamMembers.map((member) => (
+              <div className="team-card" key={member._id}>
+                {member.image?.asset?.url && (
+                  <div className="team-photo">
+                    <Image
+                      src={member.image.asset.url}
+                      alt={member.name}
+                      width={400}
+                      height={300}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        objectPosition: "center top",
+                        display: "block",
+                        verticalAlign: "top",
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="team-name">{member.name}</div>
+                <div className="team-designation">{member.designation}</div>
+                {member.bio && <p className="team-bio">{member.bio}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

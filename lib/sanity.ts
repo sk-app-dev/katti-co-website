@@ -58,3 +58,17 @@ export const POST_BY_SLUG_QUERY = `*[_type == "blog" && slug.current == $slug][0
     }
   }
 }`;
+
+export const TEAM_MEMBERS_QUERY = `*[_type == "team"] | order(order asc) {
+  _id,
+  name,
+  designation,
+  email,
+  phone,
+  bio,
+  image {
+    asset -> {
+      url
+    }
+  }
+}`;

@@ -173,9 +173,9 @@ img { max-width: 100%; display: block; }
 .value-title { font-family: var(--font-cinzel), serif; font-size: .7rem; letter-spacing: .08em; color: var(--text); margin-bottom: .3rem; }
 .value-desc { font-size: .73rem; line-height: 1.65; color: var(--t3); }
 .founder-card { background: var(--bg3); border: 1px solid var(--bdr); padding: 2rem; position: sticky; top: 86px; }
-.founder-photo { width: 100%; margin: 0; overflow: hidden; border: 1px solid var(--bdr); background: var(--bg4); aspect-ratio: 3/4; line-height: 0; }
+.founder-photo { width: 100%; margin: 0 0 0.5rem 0; overflow: hidden; border: 1px solid var(--bdr); background: var(--bg4); aspect-ratio: 3/4; line-height: 0; }
 .founder-photo img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center center; filter: brightness(1.03) contrast(1.06) saturate(1.08); }
-.founder-name { font-family: var(--font-cormorant), serif; font-size: 1.42rem; font-weight: 300; color: var(--text); margin: 0.95rem 0 0.18rem 0; }
+.founder-name { font-family: var(--font-cormorant), serif; font-size: 1.42rem; font-weight: 300; color: var(--text); margin: 0 0 0.18rem 0; }
 .founder-role { font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.35rem; }
 .founder-bio { font-size: .81rem; line-height: 1.87; color: var(--t2); font-weight: 300; margin-bottom: .7rem; }
 .tags { display: flex; flex-wrap: wrap; gap: .38rem; margin-top: 1.4rem; }
@@ -184,6 +184,18 @@ img { max-width: 100%; display: block; }
 .founder-link { display: inline-flex; align-items: center; gap: .55rem; font-size: .74rem; color: var(--t2); transition: color .2s; word-break: break-all; }
 .founder-link:hover { color: var(--gold); }
 .founder-link svg { flex-shrink: 0; color: var(--gold); }
+
+/* ─── TEAM MEMBERS ─── */
+.team-section { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--bdr); }
+.team-label { font-family: var(--font-cinzel), serif; font-size: .59rem; letter-spacing: .36em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; font-weight: 700; }
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.8rem; }
+.team-card { background: var(--bg2); border: 1px solid var(--bdr); padding: 1.5rem; border-radius: 8px; text-align: center; transition: border-color .3s, background .3s; }
+.team-card:hover { border-color: rgba(201,166,64,.32); background: var(--bg3); }
+.team-photo { width: 100%; height: 180px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 6px; overflow: hidden; margin-bottom: 1.2rem; }
+.team-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.team-name { font-family: var(--font-cormorant), serif; font-size: 1.1rem; font-weight: 300; color: var(--text); margin-bottom: .4rem; }
+.team-designation { font-family: var(--font-cinzel), serif; font-size: .55rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); margin-bottom: .9rem; font-weight: 700; }
+.team-bio { font-size: .75rem; line-height: 1.6; color: var(--t3); font-weight: 300; }
 
 /* ─── PRACTICE ─── */
 .practice { background: var(--bg); }
