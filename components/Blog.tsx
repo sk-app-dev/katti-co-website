@@ -1,13 +1,13 @@
-// components/Blog.tsx
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { client } from "@/sanity/lib/client";
 
 interface BlogPost {
   _id: string;
   title: string;
-  slug: string;
+  slug: { current: string } | string;
   excerpt?: string;
   content?: any[];
   image?: {
@@ -62,6 +62,8 @@ export default function Blog() {
           }
         }`;
         const data = await client.fetch(query);
+        console.log("Blog data fetched from Sanity:", data);
+        console.log("Number of posts found:", data.length);
         
         if (data && data.length > 0) {
           setPosts(data);
@@ -99,12 +101,15 @@ export default function Blog() {
           {posts.map((post) => (
             <article key={post._id} className="blog-card">
               {post.image?.asset?.url && (
-                <img
-                  src={post.image.asset.url}
-                  alt={post.title}
-                  className="blog-image"
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
-                />
+                <div style={{ position: "relative", width: "100%", height: "200px", marginBottom: "1rem" }}>
+                  <Image
+                    src={post.image.asset.url}
+                    alt={post.title}
+                    fill
+                    style={{ objectFit: "cover", borderRadius: "4px" }}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
               )}
               <h3 className="blog-title">{post.title}</h3>
               {post.excerpt && <p className="blog-excerpt">{post.excerpt}</p>}
@@ -114,6 +119,9 @@ export default function Blog() {
                   <span> • {new Date(post.publishedAt).toLocaleDateString()}</span>
                 )}
               </div>
+              <a href={`/blog/${typeof post.slug === 'string' ? post.slug : post.slug.current}`} className="read-more">
+                Read More →
+              </a>
             </article>
           ))}
         </div>

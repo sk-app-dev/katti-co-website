@@ -4,6 +4,7 @@
 
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { client, POST_BY_SLUG_QUERY, ALL_POSTS_QUERY } from "@/lib/sanity";
 import { notFound } from "next/navigation";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
@@ -100,6 +101,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {post.title}
         </h1>
 
+        {post.image && (
+          <div style={{ position: "relative", width: "100%", height: "400px", marginBottom: "2rem", borderRadius: "8px", overflow: "hidden" }}>
+            <Image
+              src={post.image.asset.url}
+              alt={post.title}
+              fill
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          </div>
+        )}
+
         <div style={{ fontSize: ".66rem", color: "var(--t3)", marginBottom: "2.2rem", paddingBottom: "1.6rem", borderBottom: "1px solid var(--bdr2)" }}>
           Published{" "}
           {new Date(post.publishedAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
@@ -107,7 +120,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         <div style={{ fontSize: ".91rem", lineHeight: 1.92, color: "var(--t2)", fontWeight: 300 }}>
-          <PortableText value={post.body} components={ptComponents} />
+          <PortableText value={post.content} components={ptComponents} />
         </div>
 
         <div style={{ marginTop: "3rem", paddingTop: "1.5rem", borderTop: "1px solid var(--bdr)" }}>

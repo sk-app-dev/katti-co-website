@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { client } from "@/sanity/lib/client";
 
 interface GalleryItem {
   _id: string;
@@ -23,11 +24,66 @@ function vmEmbed(url: string): string | null {
   return m ? `https://player.vimeo.com/video/${m[1]}` : null;
 }
 
-export default function Gallery({ initialItems = [] }: { initialItems?: GalleryItem[] }) {
+export default function Gallery() {
+  const [items, setItems] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "photo" | "video">("all");
   const [lboxIdx, setLboxIdx] = useState<number | null>(null);
 
-  const filtered = filter === "all" ? initialItems : initialItems.filter((i) => i.type === filter);
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const data = await client.fetch(`*[_type == "gallery"]{
+          _id,
+          title,
+          description,
+          images[]{
+            _key,
+            asset->{
+              url,
+              metadata{
+                dimensions
+              }
+            },
+            alt,
+            caption
+          }
+        }`);
+
+        // Flatten the images from all gallery documents
+        const flattenedItems: GalleryItem[] = [];
+        data.forEach((gallery: any) => {
+          if (gallery.images) {
+            gallery.images.forEach((img: any) => {
+              flattenedItems.push({
+                _id: `${gallery._id}-${img._key}`,
+                type: "photo",
+                caption: img.caption,
+                image: {
+                  asset: {
+                    url: img.asset.url,
+                    metadata: img.asset.metadata
+                  }
+                }
+              });
+            });
+          }
+        });
+
+        setItems(flattenedItems);
+        console.log("Fetched gallery items:", flattenedItems);
+      } catch (error) {
+        console.error("Error fetching gallery:", error);
+        setItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
+
+  const filtered = filter === "all" ? items : items.filter((i) => i.type === filter);
   const photoItems = filtered.filter((i) => i.type === "photo");
 
   // Keyboard nav for lightbox
@@ -67,7 +123,11 @@ export default function Gallery({ initialItems = [] }: { initialItems?: GalleryI
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="gallery-empty">
+          Loading gallery...
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="gallery-empty">
           No media yet. Add photos and videos via the Sanity Studio.
         </div>

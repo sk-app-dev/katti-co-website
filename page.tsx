@@ -17,8 +17,26 @@ export const revalidate = 60; // ISR — revalidate every 60s
 
 async function getGalleryItems() {
   try {
-    return await client.fetch(GALLERY_QUERY);
-  } catch {
+    const galleries = await client.fetch(GALLERY_QUERY);
+    console.log("Gallery data fetched from Sanity:", galleries);
+    // Flatten gallery items into a single array
+    const items = galleries.flatMap((gallery: any) =>
+      gallery.items?.map((item: any) => ({
+        _id: `${gallery._id}-${item._key}`,
+        type: "photo" as const,
+        caption: item.caption || gallery.title,
+        image: {
+          asset: {
+            url: item.asset?.url,
+            metadata: item.asset?.metadata
+          }
+        }
+      })) || []
+    );
+    console.log("Flattened gallery items:", items);
+    return items;
+  } catch (error) {
+    console.error("Gallery fetch error:", error);
     return []; // Sanity not yet configured — return empty
   }
 }

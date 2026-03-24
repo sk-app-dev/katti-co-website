@@ -14,6 +14,29 @@ export const GALLERY_QUERY = `*[_type == "gallery"] | order(_createdAt desc) {
   _id,
   title,
   description,
+  "items": images[] {
+    _key,
+    asset -> {
+      url,
+      metadata {
+        dimensions {
+          width,
+          height
+        }
+      }
+    },
+    alt,
+    caption
+  }
+}`;
+
+export const ALL_POSTS_QUERY = `*[_type == "blog"] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  author,
+  excerpt,
   image {
     asset -> {
       url
@@ -21,36 +44,15 @@ export const GALLERY_QUERY = `*[_type == "gallery"] | order(_createdAt desc) {
   }
 }`;
 
-export const ALL_POSTS_QUERY = `*[_type == "post"] | order(_createdAt desc) {
-  _id,
-  title,
-  slug {
-    current
-  },
-  publishedAt,
-  author -> {
-    name
-  },
-  excerpt,
-  mainImage {
-    asset -> {
-      url
-    }
-  }
-}`;
-
-export const POST_BY_SLUG_QUERY = `*[_type == "post" && slug.current == $slug][0] {
+export const POST_BY_SLUG_QUERY = `*[_type == "blog" && slug.current == $slug][0] {
   _id,
   title,
   slug,
   publishedAt,
-  author -> {
-    name
-  },
-  body,
+  author,
+  content,
   excerpt,
-  category,
-  mainImage {
+  image {
     asset -> {
       url
     }
