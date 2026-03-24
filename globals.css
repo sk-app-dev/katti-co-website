@@ -173,7 +173,7 @@ img { max-width: 100%; display: block; }
 .value-title { font-family: var(--font-cinzel), serif; font-size: .7rem; letter-spacing: .08em; color: var(--text); margin-bottom: .3rem; }
 .value-desc { font-size: .73rem; line-height: 1.65; color: var(--t3); }
 .founder-card { background: var(--bg3); border: 1px solid var(--bdr); padding: 2rem; position: sticky; top: 86px; }
-.founder-photo { width: 100%; margin: 0 0 0.5rem 0; overflow: hidden; border: 1px solid var(--bdr); background: var(--bg4); aspect-ratio: 3/4; line-height: 0; }
+.founder-photo { width: 100%; margin: 0 0 0.5rem 0; overflow: hidden; border: 1px solid var(--bdr); background: var(--bg4); aspect-ratio: 2/3; line-height: 0; }
 .founder-photo img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center center; filter: brightness(1.03) contrast(1.06) saturate(1.08); }
 .founder-name { font-family: var(--font-cormorant), serif; font-size: 1.42rem; font-weight: 300; color: var(--text); margin: 0 0 0.18rem 0; }
 .founder-role { font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.35rem; }
