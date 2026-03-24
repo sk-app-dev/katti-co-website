@@ -197,7 +197,7 @@ export default function About() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   style={{
                     width: "100%",
-                    height: "auto",
+                    height: "100%",
                     objectFit: "cover",
                     objectPosition: "center center",
                     filter: "brightness(1.03) contrast(1.06) saturate(1.08)",
