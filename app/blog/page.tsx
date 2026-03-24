@@ -38,59 +38,52 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <section style={{ padding: "80px 20px", minHeight: "100vh", background: "var(--bg)" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <h1 style={{ fontSize: "3rem", marginBottom: "10px", color: "var(--gold)" }}>Legal Insights</h1>
-        <p style={{ fontSize: "1.1rem", color: "var(--text)", marginBottom: "40px" }}>
+    <section className="section blog-page">
+      <div>
+        <div className="section-label">Insights</div>
+        <h1 className="section-title">Legal Insights</h1>
+        <p className="section-sub">
           Essays and articles on patents, trademarks, IP law, and entrepreneurship.
         </p>
 
         {loading ? (
           <div style={{ textAlign: "center", padding: "3rem" }}>Loading posts...</div>
         ) : posts.length > 0 ? (
-          <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}>
+          <div className="blog-page-grid">
             {posts.map((post) => (
-              <article key={post._id} style={{ border: "1px solid var(--bdr)", borderRadius: "8px", padding: "1.5rem", background: "var(--bg2)" }}>
+              <article key={post._id} className="blog-page-card">
                 {post.image && (
-                  <div style={{ position: "relative", width: "100%", height: "200px", marginBottom: "1rem" }}>
+                  <div className="blog-page-card-image">
                     <Image
                       src={post.image.asset.url}
                       alt={post.title}
                       fill
-                      style={{ objectFit: "cover", borderRadius: "4px" }}
+                      style={{ objectFit: "cover" }}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 )}
-                <h2 style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>
-                  <Link href={`/blog/${post.slug.current}`} style={{ color: "var(--gold)", textDecoration: "none" }}>
+                <h2>
+                  <Link href={`/blog/${post.slug.current}`}>
                     {post.title}
                   </Link>
                 </h2>
-                <p style={{ fontSize: "0.9rem", color: "var(--text)", marginBottom: "1rem" }}>
+                <p className="blog-page-card-meta">
                   {new Date(post.publishedAt).toLocaleDateString()} {post.author && `by ${post.author}`}
                 </p>
-                {post.excerpt && <p style={{ color: "var(--text)" }}>{post.excerpt}</p>}
+                {post.excerpt && <p className="blog-page-card-excerpt">{post.excerpt}</p>}
               </article>
             ))}
           </div>
         ) : (
-          <div
-            style={{
-              padding: "40px",
-              textAlign: "center",
-              background: "var(--bg2)",
-              borderRadius: "8px",
-              border: "1px solid var(--bdr)",
-            }}
-          >
-            <p style={{ fontSize: "1rem", color: "var(--text)" }}>
+          <div className="blog-page-empty">
+            <p>
               📝 No blog posts yet. Visit <strong>kattiandco.in/studio</strong> to add your first article!
             </p>
           </div>
         )}
 
-        <div style={{ marginTop: "60px", textAlign: "center" }}>
+        <div style={{ marginTop: "3rem", textAlign: "center" }}>
           <Link
             href="/"
             style={{
@@ -101,6 +94,8 @@ export default function BlogPage() {
               borderRadius: "4px",
               textDecoration: "none",
               fontWeight: "600",
+              fontSize: "0.9rem",
+              transition: "opacity 0.2s",
             }}
           >
             ← Back Home

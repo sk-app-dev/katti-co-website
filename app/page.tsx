@@ -9,7 +9,6 @@ import { Expertise, Approach, BlogTeaser } from "../components/Sections";
 import Gallery from "../components/Gallery";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
-import ChatWidget from "../components/ChatWidget";
 
 export default async function HomePage() {
   return (
@@ -23,7 +22,6 @@ export default async function HomePage() {
       <BlogTeaser />
       <Gallery />
       <Contact />
-      <ChatWidget />
       <Footer />
     </>
   );

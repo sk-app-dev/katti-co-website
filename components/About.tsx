@@ -162,9 +162,10 @@ export default function About() {
                     width: "100%",
                     height: "auto",
                     objectFit: "cover",
-                    objectPosition: "center top",
-                    maxHeight: "400px",
+                    objectPosition: "center center",
                     filter: "brightness(1.03) contrast(1.06) saturate(1.08)",
+                    display: "block",
+                    verticalAlign: "top",
                   }}
                   priority
                   onError={() => console.error("Image failed to load:", founder.image?.asset?.url || fallbackFounderImage)}
