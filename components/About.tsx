@@ -84,9 +84,11 @@ export default function About() {
           }
         }`;
         const data = await client.fetch(query);
+        console.log("Founder data fetched:", data);
         setFounder(data);
       } catch (error) {
         console.error("Error fetching founder:", error);
+        setFounder(null); // Fallback to no data state
       } finally {
         setLoading(false);
       }
@@ -151,19 +153,21 @@ export default function About() {
             <div className="founder-card">
               <div className="founder-photo">
                 <Image
-                  src={founder.image?.asset?.url || fallbackFounderImage}
+                  src={founder.image?.asset?.url ? founder.image.asset.url : fallbackFounderImage}
                   alt={`${founder.name} — ${founder.title}, Katti & Co.`}
-                  width={500}
-                  height={600}
+                  width={400}
+                  height={500}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   style={{
                     width: "100%",
                     height: "auto",
                     objectFit: "cover",
                     objectPosition: "center top",
-                    maxHeight: 400,
+                    maxHeight: "400px",
                     filter: "brightness(1.03) contrast(1.06) saturate(1.08)",
                   }}
                   priority
+                  onError={() => console.error("Image failed to load:", founder.image?.asset?.url || fallbackFounderImage)}
                 />
               </div>
 
