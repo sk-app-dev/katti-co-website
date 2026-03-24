@@ -49,7 +49,13 @@ const VALUES = [
   },
 ];
 
-interface FounderImage {
+interface Founder {
+  _id: string;
+  name: string;
+  title: string;
+  bio?: string;
+  expertise?: string[];
+  linkedIn?: string;
   image?: {
     asset: {
       url: string;
@@ -58,13 +64,19 @@ interface FounderImage {
 }
 
 export default function About() {
-  const [founderImage, setFounderImage] = useState<FounderImage | null>(null);
+  const [founder, setFounder] = useState<Founder | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFounderImage = async () => {
+    const fetchFounder = async () => {
       try {
         const query = `*[_type == "founder"][0] {
+          _id,
+          name,
+          title,
+          bio,
+          expertise,
+          linkedIn,
           image {
             asset {
               url
@@ -72,15 +84,15 @@ export default function About() {
           }
         }`;
         const data = await client.fetch(query);
-        setFounderImage(data);
+        setFounder(data);
       } catch (error) {
-        console.error("Error fetching founder image:", error);
+        console.error("Error fetching founder:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFounderImage();
+    fetchFounder();
   }, []);
 
   return (
@@ -129,18 +141,18 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right — founder photo */}
+        {/* Right — founder profile */}
         <div className="reveal delay-2">
           {loading ? (
             <div className="founder-card">
               <div style={{ padding: "2rem", textAlign: "center" }}>Loading...</div>
             </div>
-          ) : (
+          ) : founder ? (
             <div className="founder-card">
               <div className="founder-photo">
                 <Image
-                  src={founderImage?.image?.asset?.url || fallbackFounderImage}
-                  alt="Founder photo, Katti & Co."
+                  src={founder.image?.asset?.url || fallbackFounderImage}
+                  alt={`${founder.name} — ${founder.title}, Katti & Co.`}
                   width={500}
                   height={600}
                   style={{
@@ -154,6 +166,43 @@ export default function About() {
                   priority
                 />
               </div>
+
+              <div className="founder-name">{founder.name}</div>
+              <div className="founder-role">{founder.title}</div>
+
+              {founder.bio && <p className="founder-bio">{founder.bio}</p>}
+
+              {founder.expertise && founder.expertise.length > 0 && (
+                <div className="tags">
+                  {founder.expertise.map((tag) => (
+                    <span className="tag" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="founder-links">
+                <a href="mailto:aprameya.katti@kattiandco.com" className="founder-link">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  aprameya.katti@kattiandco.com
+                </a>
+                {founder.linkedIn && (
+                  <a href={founder.linkedIn} target="_blank" rel="noopener noreferrer" className="founder-link">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                    LinkedIn — Personal Profile
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="founder-card">
+              <div style={{ padding: "2rem", textAlign: "center" }}>No founder data available</div>
             </div>
           )}
         </div>
