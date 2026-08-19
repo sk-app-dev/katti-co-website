@@ -12,6 +12,10 @@ yarn.lock
 out
 dist
 build
+*.tsbuildinfo
+
+# Sanity CLI local runtime cache
+.sanity
 
 # IDE
 .idea

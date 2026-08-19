@@ -7,7 +7,7 @@ If you're trying to build a *different* website using this project as a starting
 ## What this site actually is
 
 - **Framework:** Next.js 16 (App Router), TypeScript, plain CSS (no Tailwind, no CSS-in-JS — `globals.css` is the only stylesheet).
-- **CMS:** Sanity (project `9epvqzza`, dataset `production`) — blog posts, founder profile, team members, gallery, site-wide contact settings, and a private form-submissions log.
+- **CMS:** Sanity (see `sanity.config.ts` for the project ID; dataset `production`) — blog posts, founder profile, team members, gallery, site-wide contact settings, and a private form-submissions log.
 - **Email:** Resend, for the contact form.
 - **AI chat:** "Mitra" — a hybrid assistant. Most questions are answered instantly from a hand-written knowledge base (BM25 keyword search, zero API calls); only novel questions fall through to Google Gemini.
 - **No user authentication anywhere.** No admin panel, no login, no session cookies. Every page is public.
@@ -17,7 +17,7 @@ If you're trying to build a *different* website using this project as a starting
 This trips people up, so it's worth stating plainly:
 
 1. **The website** (this Next.js app) — deployed via your host (Vercel, etc.) from a git push.
-2. **The Sanity Studio** (the content-editing UI your team uses) — deployed *separately* via `npx sanity deploy`, hosted by Sanity itself at `https://katti-studio.sanity.studio`. It shares this repo's `sanity/schemaTypes/` folder as its schema source, but pushing website code does **not** update the Studio, and vice versa.
+2. **The Sanity Studio** (the content-editing UI your team uses) — deployed *separately* via `npx sanity deploy`, hosted by Sanity itself (see `sanity.cli.ts` for the deployment target). It shares this repo's `sanity/schemaTypes/` folder as its schema source, but pushing website code does **not** update the Studio, and vice versa.
 
 If you add or change a Sanity schema type (a new content type, a new field), you must run `npx sanity deploy` for the Studio's editing UI to pick it up — the website reading/writing data doesn't require this, but *editing that data by hand in Studio* does.
 
@@ -65,7 +65,7 @@ Only needed when you change something under `sanity/schemaTypes/`:
 npx sanity deploy --yes
 ```
 
-This requires you to be logged in (`npx sanity login`) with access to the `9epvqzza` project. It rebuilds and pushes the Studio's editing UI — it does **not** touch your content data, so it's always safe to run.
+This requires you to be logged in (`npx sanity login`) with access to the project. It rebuilds and pushes the Studio's editing UI — it does **not** touch your content data, so it's always safe to run.
 
 ## Pre-deploy checklist
 

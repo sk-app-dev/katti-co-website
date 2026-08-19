@@ -8,7 +8,7 @@ The repo arrived with a large, entirely **uncommitted** working tree: a founder/
 
 ## Architecture facts a fresh session needs
 
-- Sanity project `9epvqzza`, dataset `production`. Studio is deployed separately at `https://katti-studio.sanity.studio` (see `DEPLOYMENT.md` — schema changes need `npx sanity deploy`, website changes need a normal git deploy, they are independent).
+- Sanity dataset `production` (project ID is in `sanity.config.ts`, not repeated here). Studio is deployed separately (see `DEPLOYMENT.md` — schema changes need `npx sanity deploy`, website changes need a normal git deploy, they are independent).
 - One shared Sanity client: `lib/sanity.ts` (`client`, plus every GROQ query constant). `lib/sanityImage.ts` has the one `urlFor()` helper. Every component uses these — a second, parallel client setup (`sanity/lib/client.ts`, using `next-sanity`) existed and was removed this session; if you see an import from `@/sanity/lib/*`, that's a regression, revert it.
 - The AI chat feature is named **Mitra** (renamed from "Yogi" this session — Sanskrit for "friend"). Routes: `/mitra` (page), `/api/mitra` (chat endpoint), `/api/mitra-content` (feeds it live blog posts). Internal file/component names still say "Yogi" (`components/YogiChat.tsx`, `lib/yogi-engine.ts`, `lib/yogi-config.ts`, CSS classes `.yogi-*`) — this was a deliberate scope decision (see "Yogi → Mitra rename" below), not an oversight.
 - No authentication anywhere on this site. `next-auth` and `bcryptjs` were installed but never used (leftover from an abandoned admin-login feature) — removed this session.
