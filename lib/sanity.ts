@@ -37,6 +37,7 @@ export const ALL_POSTS_QUERY = `*[_type == "blog"] | order(publishedAt desc) {
   publishedAt,
   author,
   excerpt,
+  category,
   image {
     asset -> {
       url
@@ -59,16 +60,26 @@ export const POST_BY_SLUG_QUERY = `*[_type == "blog" && slug.current == $slug][0
   }
 }`;
 
-export const TEAM_MEMBERS_QUERY = `*[_type == "team"] | order(order asc) {
+export const TEAM_MEMBER_QUERY = `*[_type == "teamMember"] | order(_createdAt asc) {
   _id,
   name,
-  designation,
+  title,
+  bio,
+  expertise,
+  linkedIn,
+  image {
+    asset->,
+    hotspot,
+    crop
+  }
+}`;
+
+export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0] {
   email,
   phone,
-  bio,
-  image {
-    asset -> {
-      url
-    }
-  }
+  addressLine1,
+  addressLine2,
+  addressLine3,
+  city,
+  pincode
 }`;

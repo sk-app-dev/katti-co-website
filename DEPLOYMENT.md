@@ -1,269 +1,82 @@
-# Katti & Co. — Complete Deployment Guide
-# Vercel + Next.js + Sanity + Resend
-# ═══════════════════════════════════════════════════════
+# Katti & Co. — Deployment Guide
 
-## WHAT YOU'LL HAVE AFTER THIS GUIDE
-- Website live at kattiandco.in
-- Blog posts editable at kattiandco.in/studio (Sanity Studio)
-- Contact form emails landing in your inbox
-- Secure admin login (bcrypt + JWT, server-side)
-- Lex AI chat with API key safely on the server
+This is the accurate, current guide for deploying this specific site. It reflects the codebase as of the session that produced `SESSION_LOG.md` — read that file first if you're picking this project up cold.
 
-## TIME NEEDED: ~45 minutes (first time)
+If you're trying to build a *different* website using this project as a starting pattern, use `GENERAL_WEBSITE_DEPLOYMENT_GUIDE.md` instead — this file is specific to Katti & Co.
 
----
+## What this site actually is
 
-## STEP 1 — Install Prerequisites (on your computer)
+- **Framework:** Next.js 16 (App Router), TypeScript, plain CSS (no Tailwind, no CSS-in-JS — `globals.css` is the only stylesheet).
+- **CMS:** Sanity (project `9epvqzza`, dataset `production`) — blog posts, founder profile, team members, gallery, site-wide contact settings, and a private form-submissions log.
+- **Email:** Resend, for the contact form.
+- **AI chat:** "Mitra" — a hybrid assistant. Most questions are answered instantly from a hand-written knowledge base (BM25 keyword search, zero API calls); only novel questions fall through to Google Gemini.
+- **No user authentication anywhere.** No admin panel, no login, no session cookies. Every page is public.
+
+## Two separate things get deployed
+
+This trips people up, so it's worth stating plainly:
+
+1. **The website** (this Next.js app) — deployed via your host (Vercel, etc.) from a git push.
+2. **The Sanity Studio** (the content-editing UI your team uses) — deployed *separately* via `npx sanity deploy`, hosted by Sanity itself at `https://katti-studio.sanity.studio`. It shares this repo's `sanity/schemaTypes/` folder as its schema source, but pushing website code does **not** update the Studio, and vice versa.
+
+If you add or change a Sanity schema type (a new content type, a new field), you must run `npx sanity deploy` for the Studio's editing UI to pick it up — the website reading/writing data doesn't require this, but *editing that data by hand in Studio* does.
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in real values. On your host, set the same variables in its dashboard (Vercel → Project → Settings → Environment Variables, or equivalent).
+
+| Variable | Used by | Notes |
+|---|---|---|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | everywhere data is read | public, safe to expose to the browser |
+| `NEXT_PUBLIC_SANITY_DATASET` | everywhere data is read | `production` |
+| `SANITY_API_TOKEN` | `app/api/contact/route.ts` | needs **write** access — used to save form submissions |
+| `RESEND_API_KEY` | `app/api/contact/route.ts` | contact form email |
+| `CONTACT_RECIPIENT_EMAIL` | `app/api/contact/route.ts` | where enquiries land; falls back to a hardcoded address if unset |
+| `CONTACT_SENDER_EMAIL` | `app/api/contact/route.ts` | must be a domain verified in Resend |
+| `GEMINI_API_KEY` | `app/api/mitra/route.ts` | only called for questions the knowledge base can't answer; site works without it (falls back to a "not configured" message) |
+
+There is no `NEXTAUTH_*`, no `ADMIN_*` — those were removed along with the unused `next-auth`/`bcryptjs` dependencies. If a future session needs real authentication, it has to be built, not just uncommented.
+
+## First-time setup
 
 ```bash
-# Install Node.js (if not installed)
-# Download from: https://nodejs.org  (choose LTS version)
-
-# Verify installation
-node --version   # should show v18+ or v20+
-npm --version    # should show 9+
-
-# Install Git (if not installed)
-# Download from: https://git-scm.com
-```
-
----
-
-## STEP 2 — Set Up the Project
-
-```bash
-# 1. Create a new folder and copy these project files into it
-mkdir katti-co-website
-cd katti-co-website
-
-# 2. Copy all files from this project into that folder
-
-# 3. Install dependencies
 npm install
-
-# 4. Create your environment file
-cp .env.example .env.local
+cp .env.example .env.local   # then fill in real values
+npm run dev                  # http://localhost:3000
 ```
 
----
+## Deploying the website
 
-## STEP 3 — Create Sanity Account & Project
-
-1. Go to **https://sanity.io** → Sign Up (free)
-2. Create new project:
-   - Name: "Katti & Co."
-   - Dataset: production
-   - Plan: Free
-3. Copy your **Project ID** (looks like: `abc1def2`)
-4. Go to **API** tab → **Tokens** → Add API Token:
-   - Name: "website-write"
-   - Permissions: **Editor**
-   - Copy the token (starts with `sk...`)
+Standard Next.js deploy — this repo has no special build steps.
 
 ```bash
-# Put these in your .env.local:
-NEXT_PUBLIC_SANITY_PROJECT_ID=abc1def2      # your project ID
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=sk...                      # your editor token
+git push origin main
 ```
 
----
+If your host auto-deploys from `main` (Vercel default), that's it. Otherwise trigger a build from your host's dashboard/CLI. Confirm the environment variables above are set on the host *before* the first deploy — several routes throw at request time (not build time) if they're missing, so a missing var won't fail the build, it'll fail silently in production until someone hits that path.
 
-## STEP 4 — Create Resend Account (Email)
+The homepage (`/`) is statically generated at build time. **This matters**: if you edit content in Sanity Studio after the site is deployed, those changes will not appear on the live site until you redeploy — there's no automatic revalidation on the homepage. `/blog/[slug]` pages do revalidate automatically (`export const revalidate = 60`), but `/` and the founder/team sections do not use ISR at the page level (they're client-fetched, so they do update live in the browser — see the note in SESSION_LOG.md about the local/live desync this caused).
 
-1. Go to **https://resend.com** → Sign Up (free)
-2. Add your domain: **kattiandco.in**
-3. Add the DNS records it shows you (in your domain provider — GoDaddy/Namecheap etc.)
-4. Wait for verification (usually 5-10 minutes)
-5. Create API Key → copy it
+## Deploying the Sanity Studio
+
+Only needed when you change something under `sanity/schemaTypes/`:
 
 ```bash
-# In .env.local:
-RESEND_API_KEY=re_...                       # your Resend API key
-CONTACT_RECIPIENT_EMAIL=aprameya.katti@kattiandco.com
-CONTACT_SENDER_EMAIL=noreply@kattiandco.in  # must be verified in Resend
+npx sanity deploy --yes
 ```
 
----
+This requires you to be logged in (`npx sanity login`) with access to the `9epvqzza` project. It rebuilds and pushes the Studio's editing UI — it does **not** touch your content data, so it's always safe to run.
 
-## STEP 5 — Generate Admin Password Hash
+## Pre-deploy checklist
 
-```bash
-# Run this in your terminal to generate your bcrypt password hash
-node -e "
-const bcrypt = require('bcryptjs');
-const password = 'YourPasswordHere';   // CHANGE THIS to your real password
-const hash = bcrypt.hashSync(password, 12);
-console.log('Add this to .env.local:');
-console.log('ADMIN_PASSWORD_HASH=' + hash);
-"
-```
+- [ ] `npx tsc --noEmit` passes clean
+- [ ] `npx next build` passes clean
+- [ ] All env vars above are set on the host
+- [ ] If you changed any `sanity/schemaTypes/*.ts` file, you've also run `npx sanity deploy`
+- [ ] Sanity's CORS origins (sanity.io/manage → project → API → CORS Origins) include your production domain — without this, every client-side data fetch (founder, team, gallery, contact settings) silently fails on the live site
+- [ ] Placeholder/test content has been replaced or removed in Studio (check Founder Profile, Team Member) — nothing you don't want visible should be live
+- [ ] No `console.log` debug statements left in changed files (`grep -rn "console.log(" app components lib`)
 
-```bash
-# In .env.local:
-ADMIN_USERNAME=ank
-ADMIN_PASSWORD_HASH=$2a$12$...            # the hash from above
-```
+## Rolling back
 
----
-
-## STEP 6 — Generate NextAuth Secret
-
-```bash
-# In your terminal:
-node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-
-# Copy the output into .env.local:
-NEXTAUTH_SECRET=your_random_output_here
-NEXTAUTH_URL=http://localhost:3000        # change to https://kattiandco.in for production
-```
-
----
-
-## STEP 7 — Add Anthropic API Key
-
-1. Go to **https://console.anthropic.com**
-2. API Keys → Create Key
-3. Add to .env.local:
-
-```bash
-ANTHROPIC_API_KEY=sk-ant-...
-```
-
----
-
-## STEP 8 — Test Locally
-
-```bash
-npm run dev
-# Open http://localhost:3000
-# Test contact form, blog, chat
-```
-
----
-
-## STEP 9 — Push to GitHub
-
-```bash
-# Create a GitHub account if you don't have one: https://github.com
-
-# Initialize git in your project folder
-git init
-git add .
-git commit -m "Initial commit: Katti & Co. website"
-
-# Create new repo on GitHub:
-# Go to github.com → New Repository → Name: katti-co-website → Create
-
-# Push your code
-git remote add origin https://github.com/YOUR_USERNAME/katti-co-website.git
-git branch -M main
-git push -u origin main
-```
-
----
-
-## STEP 10 — Deploy to Vercel
-
-1. Go to **https://vercel.com** → Sign Up with GitHub
-2. Click **"Add New Project"**
-3. Import **katti-co-website** from GitHub
-4. Framework: **Next.js** (auto-detected)
-5. Click **"Environment Variables"** → Add all from your .env.local:
-   - NEXTAUTH_SECRET
-   - NEXTAUTH_URL → set to: https://kattiandco.in
-   - NEXT_PUBLIC_SANITY_PROJECT_ID
-   - NEXT_PUBLIC_SANITY_DATASET
-   - SANITY_API_TOKEN
-   - RESEND_API_KEY
-   - CONTACT_RECIPIENT_EMAIL
-   - CONTACT_SENDER_EMAIL
-   - ADMIN_USERNAME
-   - ADMIN_PASSWORD_HASH
-   - ANTHROPIC_API_KEY
-6. Click **Deploy** → wait ~2 minutes
-
-Your site is now live at a `.vercel.app` URL.
-
----
-
-## STEP 11 — Connect Your Domain (kattiandco.in)
-
-1. In Vercel → Project Settings → **Domains**
-2. Add: **kattiandco.in** and **www.kattiandco.in**
-3. Vercel will show you DNS records to add
-4. Log in to your domain provider (GoDaddy/Namecheap/etc.)
-5. Add the records (takes 5-30 minutes to propagate)
-6. Vercel auto-issues an SSL certificate (HTTPS) ✓
-
----
-
-## STEP 12 — Set Up Sanity Studio CORS
-
-1. Go to **sanity.io** → your project → **API** → **CORS Origins**
-2. Add: `https://kattiandco.in`
-3. Check "Allow credentials"
-
----
-
-## STEP 13 — Write Your First Blog Post
-
-1. Go to **https://kattiandco.in/studio**
-2. Log in with admin credentials
-3. Click **Blog Posts** → **Create**
-4. Write, publish — appears on site immediately (within 60 seconds due to ISR)
-
----
-
-## AFTER DEPLOYMENT — HOW TO UPDATE
-
-```bash
-# Every time you make changes:
-git add .
-git commit -m "describe your change"
-git push
-
-# Vercel auto-deploys every push to main branch
-# Zero downtime — takes ~1 minute
-```
-
----
-
-## SECURITY SUMMARY
-
-| What | How it's secured |
-|---|---|
-| Admin password | bcrypt hash (12 rounds), server-side only |
-| Auth session | JWT signed with NEXTAUTH_SECRET, 8hr expiry |
-| API keys | Server-side only (env vars), never in browser |
-| Contact form | Input validation (Zod) + rate limiting (3/min per IP) |
-| Chat | Rate limiting (20/hr per IP) |
-| Admin routes | Edge middleware checks JWT before page loads |
-| Sanity Studio | Protected behind auth middleware |
-| HTTPS | Auto-provisioned by Vercel (Let's Encrypt) |
-| Env vars | Vercel encrypts at rest, never exposed in logs |
-
----
-
-## TROUBLESHOOTING
-
-**"NEXTAUTH_SECRET missing"**
-→ Make sure you added it in Vercel Environment Variables
-
-**"Sanity fetch returns empty"**
-→ Check CORS origins in Sanity project settings
-
-**"Email not sending"**
-→ Verify your domain in Resend, check RESEND_API_KEY
-
-**"Admin login fails"**
-→ Regenerate bcrypt hash — make sure no extra spaces in password
-
----
-
-## SUPPORT
-For any issues, the Vercel and Next.js docs are excellent:
-- https://nextjs.org/docs
-- https://vercel.com/docs
-- https://www.sanity.io/docs
-- https://resend.com/docs
+Nothing here is destructive by nature — Sanity Studio deploys never touch content, and the website deploy is just whatever's in your last-known-good commit. To roll back the website, redeploy an earlier commit through your host, or `git revert`. To roll back a schema change, redeploy Studio from an earlier commit of `sanity/schemaTypes/` — again, content is untouched either way.

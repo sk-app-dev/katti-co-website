@@ -1,7 +1,24 @@
 "use client";
 // components/Contact.tsx
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { client, SITE_SETTINGS_QUERY } from "@/lib/sanity";
+
+interface SiteSettings {
+  email?: string;
+  phone?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  addressLine3?: string;
+  city?: string;
+  pincode?: string;
+}
+
+const FALLBACK_SETTINGS: SiteSettings = {
+  email: "aprameya.katti@kattiandco.com",
+  phone: "+91 78993 01767",
+  city: "Bengaluru, Karnataka, India",
+};
 
 const MATTER_TYPES = [
   "Patent Filing & Prosecution",
@@ -24,6 +41,27 @@ type Status = "idle" | "sending" | "success" | "error";
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SETTINGS);
+
+  useEffect(() => {
+    client
+      .fetch(SITE_SETTINGS_QUERY)
+      .then((data: SiteSettings | null) => {
+        if (data) setSettings({ ...FALLBACK_SETTINGS, ...data });
+      })
+      .catch(() => {
+        // keep fallback settings
+      });
+  }, []);
+
+  const officeAddress = [
+    settings.addressLine1,
+    settings.addressLine2,
+    settings.addressLine3,
+    [settings.city, settings.pincode].filter(Boolean).join(" - "),
+  ]
+    .filter(Boolean)
+    .join(", ") || settings.city || FALLBACK_SETTINGS.city;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,8 +134,8 @@ export default function Contact() {
             <div>
               <div className="contact-label">Email</div>
               <div className="contact-value">
-                <a href="mailto:aprameya.katti@kattiandco.com">
-                  aprameya.katti@kattiandco.com
+                <a href={`mailto:${settings.email}`}>
+                  {settings.email}
                 </a>
               </div>
             </div>
@@ -109,7 +147,7 @@ export default function Contact() {
             </svg>
             <div>
               <div className="contact-label">Phone</div>
-              <div className="contact-value">+91 78993 01767</div>
+              <div className="contact-value">{settings.phone}</div>
             </div>
           </div>
 
@@ -139,7 +177,7 @@ export default function Contact() {
             </svg>
             <div>
               <div className="contact-label">Office</div>
-              <div className="contact-value">Bengaluru, Karnataka, India</div>
+              <div className="contact-value">{officeAddress}</div>
             </div>
           </div>
         </div>

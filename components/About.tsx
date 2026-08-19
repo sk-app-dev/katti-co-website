@@ -1,9 +1,10 @@
 // components/About.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { client } from "@/sanity/lib/client";
+import { client, TEAM_MEMBER_QUERY } from "@/lib/sanity";
+import { urlFor } from "@/lib/sanityImage";
 const fallbackFounderImage = "/founder.jpg";
 
 const VALUES = [
@@ -54,6 +55,26 @@ interface Founder {
   name: string;
   title: string;
   bio?: string;
+  experience?: number;
+  qualifications?: string[];
+  expertise?: string[];
+  linkedIn?: string;
+  email?: string;
+  image?: {
+    asset: {
+      url: string;
+      metadata?: {
+        dimensions?: { width: number; height: number };
+      };
+    };
+  };
+}
+
+interface TeamMember {
+  _id: string;
+  name: string;
+  title: string;
+  bio?: string;
   expertise?: string[];
   linkedIn?: string;
   image?: {
@@ -63,19 +84,20 @@ interface Founder {
   };
 }
 
-interface TeamMember {
-  _id: string;
-  name: string;
-  designation: string;
-  bio?: string;
-  email?: string;
-  phone?: string;
-  image?: {
-    asset: {
-      url: string;
-    };
-  };
-}
+const founderQuery = `*[_type == "founder"][0] {
+  name,
+  title,
+  bio,
+  qualifications,
+  expertise,
+  linkedIn,
+  email,
+  image {
+    asset->,
+    hotspot,
+    crop
+  }
+}`;
 
 export default function About() {
   const [founder, setFounder] = useState<Founder | null>(null);
@@ -85,41 +107,11 @@ export default function About() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const founderQuery = `*[_type == "founder"][0] {
-          _id,
-          name,
-          title,
-          bio,
-          expertise,
-          linkedIn,
-          image {
-            asset {
-              url
-            }
-          }
-        }`;
-        const teamQuery = `*[_type == "team"] | order(order asc) {
-          _id,
-          name,
-          designation,
-          bio,
-          email,
-          phone,
-          image {
-            asset {
-              url
-            }
-          }
-        }`;
-
         const [founderData, teamData] = await Promise.all([
           client.fetch(founderQuery),
-          client.fetch(teamQuery),
+          client.fetch(TEAM_MEMBER_QUERY),
         ]);
 
-        console.log("Founder data fetched:", founderData);
-        console.log("Team data fetched:", teamData);
-        
         setFounder(founderData);
         setTeamMembers(teamData || []);
       } catch (error) {
@@ -134,8 +126,20 @@ export default function About() {
     fetchData();
   }, []);
 
+  // No fixed crop — request the image at a sensible max width only, so the
+  // full uploaded photo is always shown (never cropped) at any window size.
+  const founderImageUrl = founder?.image
+    ? urlFor(founder.image.asset).width(800).auto('format').url()
+    : fallbackFounderImage;
+
+  // Real dimensions from Sanity drive the box's aspect ratio, so a portrait,
+  // square, or landscape photo all render fully uncropped without guessing.
+  const founderDims = founder?.image?.asset?.metadata?.dimensions;
+  const founderImgWidth = founderDims?.width ?? 800;
+  const founderImgHeight = founderDims?.height ?? 1000;
+
   return (
-    <section className="section about" id="about">
+  <section className="section about" id="about">
       <div className="reveal">
         <div className="section-label">The Firm</div>
         <h2 className="section-title">
@@ -190,29 +194,31 @@ export default function About() {
             <div className="founder-card">
               <div className="founder-photo">
                 <Image
-                  src={founder.image?.asset?.url ? founder.image.asset.url : fallbackFounderImage}
+                  src={founderImageUrl}
                   alt={`${founder.name} — ${founder.title}, Katti & Co.`}
-                  width={400}
-                  height={500}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center center",
-                    filter: "brightness(1.03) contrast(1.06) saturate(1.08)",
-                    display: "block",
-                    verticalAlign: "top",
-                  }}
+                  width={founderImgWidth}
+                  height={founderImgHeight}
+                  sizes="(max-width: 768px) 75vw, 400px"
                   priority
-                  onError={() => console.error("Image failed to load:", founder.image?.asset?.url || fallbackFounderImage)}
+                  onError={() => console.error("Image failed to load:", founderImageUrl)}
                 />
               </div>
 
-              <div className="founder-name">{founder.name}</div>
+              <div className="founder-name mt-4">{founder.name}</div>
               <div className="founder-role">{founder.title}</div>
 
               {founder.bio && <p className="founder-bio">{founder.bio}</p>}
+
+            {founder.qualifications && founder.qualifications.length > 0 && (
+              <div className="founder-qualifications">
+                <h4>Qualifications</h4>
+                <ul>
+                  {founder.qualifications.map((qual, index) => (
+                    <li key={index}>{qual}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
               {founder.expertise && founder.expertise.length > 0 && (
                 <div className="tags">
@@ -225,12 +231,14 @@ export default function About() {
               )}
 
               <div className="founder-links">
-                <a href="mailto:aprameya.katti@kattiandco.com" className="founder-link">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  aprameya.katti@kattiandco.com
-                </a>
+                {founder.email && (
+                  <a href={`mailto:${founder.email}`} className="founder-link">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                      <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    {founder.email}
+                  </a>
+                )}
                 {founder.linkedIn && (
                   <a href={founder.linkedIn} target="_blank" rel="noopener noreferrer" className="founder-link">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
@@ -248,42 +256,40 @@ export default function About() {
             </div>
           )}
         </div>
-      </div>
 
-      {/* Team Members Section */}
-      {!loading && teamMembers.length > 0 && (
-        <div className="team-section reveal delay-2">
-          <div className="team-label">Our Team</div>
-          <div className="team-grid">
-            {teamMembers.map((member) => (
-              <div className="team-card" key={member._id}>
-                {member.image?.asset?.url && (
-                  <div className="team-photo">
-                    <Image
-                      src={member.image.asset.url}
-                      alt={member.name}
-                      width={400}
-                      height={300}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center top",
-                        display: "block",
-                        verticalAlign: "top",
-                      }}
-                    />
-                  </div>
-                )}
-                <div className="team-name">{member.name}</div>
-                <div className="team-designation">{member.designation}</div>
-                {member.bio && <p className="team-bio">{member.bio}</p>}
-              </div>
-            ))}
+        {/* Team Members Section beside founder */}
+        {!loading && teamMembers.length > 0 && (
+          <div className="team-section reveal delay-3">
+            <div className="team-label">Our Team</div>
+            <div className="team-grid">
+              {teamMembers.map((member) => (
+                <div className="team-card" key={member._id}>
+                  {member.image?.asset && (
+                    <div className="team-photo">
+                      <Image
+                        src={urlFor(member.image).width(200).height(200).fit('crop').crop('top').auto('format').url()}
+                        alt={member.name}
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  )}
+                  <div className="team-name">{member.name}</div>
+                  <div className="team-designation">{member.title}</div>
+                  {member.bio && <p className="team-bio">{member.bio}</p>}
+                  {member.expertise && member.expertise.length > 0 && (
+                    <div className="team-expertise">
+                      {member.expertise.map((skill, index) => (
+                        <span key={index} className="expertise-tag">{skill}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </section>
-  );
+        )}
+      </div>
+  </section>
+  )
 }

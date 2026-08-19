@@ -1,0 +1,75 @@
+# Session Log — 2026-08-19
+
+Read this first if you're a new session (human or AI) picking up this project. It records what changed, why, what broke along the way (including mistakes made *during* this session, not just pre-existing bugs), and what's still open. `DEPLOYMENT.md` covers how to ship; this file covers how we got here.
+
+## Starting point
+
+The repo arrived with a large, entirely **uncommitted** working tree: a founder/team-profile redesign, a new AI chat feature ("Yogi," later renamed "Mitra" — see below), and assorted schema changes, all sitting on top of an already-committed baseline. Nothing in this session was committed until the very end (see the final commit for the full diff). The live production site was running the old, pre-session committed code the entire time these changes were made — several bugs described below only became visible because of that live/local split.
+
+## Architecture facts a fresh session needs
+
+- Sanity project `9epvqzza`, dataset `production`. Studio is deployed separately at `https://katti-studio.sanity.studio` (see `DEPLOYMENT.md` — schema changes need `npx sanity deploy`, website changes need a normal git deploy, they are independent).
+- One shared Sanity client: `lib/sanity.ts` (`client`, plus every GROQ query constant). `lib/sanityImage.ts` has the one `urlFor()` helper. Every component uses these — a second, parallel client setup (`sanity/lib/client.ts`, using `next-sanity`) existed and was removed this session; if you see an import from `@/sanity/lib/*`, that's a regression, revert it.
+- The AI chat feature is named **Mitra** (renamed from "Yogi" this session — Sanskrit for "friend"). Routes: `/mitra` (page), `/api/mitra` (chat endpoint), `/api/mitra-content` (feeds it live blog posts). Internal file/component names still say "Yogi" (`components/YogiChat.tsx`, `lib/yogi-engine.ts`, `lib/yogi-config.ts`, CSS classes `.yogi-*`) — this was a deliberate scope decision (see "Yogi → Mitra rename" below), not an oversight.
+- No authentication anywhere on this site. `next-auth` and `bcryptjs` were installed but never used (leftover from an abandoned admin-login feature) — removed this session.
+- Contact form (`app/api/contact/route.ts`) does two things per submission: sends an email via Resend, and saves a record to Sanity's `formSubmission` type (a lightweight internal CRM — New/Contacted/Resolved/Archived status + notes, visible only in Studio, never on the public site).
+
+## Bugs found and fixed, in the order they surfaced
+
+Each entry: what was wrong, why, what the fix was.
+
+1. **`founder.email` used but not declared on the `Founder` TS interface.** Build-breaking under `strict: true`. Fixed by adding the field.
+2. **Voice input in the chat widget never sent a message.** `sr.onend`'s closure read a stale `transcript` value captured before speech started, not the live value from `sr.onresult`. Fixed with a `useRef` that `onresult` keeps current and `onend` reads instead.
+3. **Founder "expertise" tags never rendered.** The GROQ query fetching founder data didn't select the `expertise` field, even though the interface and JSX both expected it. Fixed by adding it to the query.
+4. **`/api/yogi-content` (now `/api/mitra-content`) route referenced but never created.** Every page load fetched a 404 silently. Created the route.
+5. **Founder photo and the standalone `/yogi` (now `/mitra`) page used Tailwind utility classes** in a project with no Tailwind dependency — rendered completely unstyled. Converted to the site's actual plain-CSS system.
+6. **`/privacy-policy` and `/disclaimer` pages had no `Navbar`/`Footer` and used a `.container` class that doesn't exist in `globals.css`.** Predates this session (files last touched months earlier) — content rendered fully unstyled, edge-to-edge, no site chrome. Fixed by adding Navbar/Footer and using the site's real `.section` pattern.
+7. **Footer's "Privacy Policy"/"Disclaimer" buttons had no explicit text color.** `<button>` elements don't inherit color like `<a>` does — rendered black-on-black, unreadable. Fixed with explicit `color: var(--t3)`.
+8. **Homepage "Legal Insights" preview cards never showed a thumbnail image**, despite the query already fetching one. Added the `<Image>` render and matching CSS.
+9. **Team query (`_type == "team"`) was replaced with a new schema (`_type == "teamMember"`) but the old schema/query was left in place.** This caused a genuinely confusing live/local split: the live (undeployed) site kept showing old `_type: "team"` test data ("wer") while local dev showed new `_type: "teamMember"` test data ("Srinidhi K") — two different pieces of placeholder junk under two different schema types, easily mistaken for "there are two team members." Root cause was that **none of this session's code changes were deployed** — see "Live vs. local confusion" below. Old `team.ts` schema and its dead `TEAM_MEMBERS_QUERY` were removed once confirmed empty.
+10. **Contact form (`app/api/contact/route.ts`) interpolated raw user input into an HTML email with zero escaping** — an HTML/phishing-injection vector into whatever inbox receives enquiries. Fixed with `escapeHtml()` on every field, added Zod validation, per-IP rate limiting, and generic (non-leaking) error responses.
+11. **Chat markdown renderers allowed `javascript:` URIs in rendered links**; one of the two renderers (`YogiChatPage.tsx`) did no HTML-escaping at all. Self-XSS only (no path found to affect another user's session) but fixed anyway: added `escapeHtml` + a URL-scheme allowlist (`http:`/`https:`/`mailto:` only) to both renderers.
+12. **No security headers set anywhere.** Added `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` in `next.config.js`.
+13. **Orphaned `/api/chat` route** (backend for a `ChatWidget.tsx` component already deleted before this session) was still live and publicly callable — an unauthenticated endpoint hitting the paid Gemini API with its own separate rate limiter. Deleted.
+14. **Navbar's anchor links (`#about`, `#gallery`, etc.) did nothing on any page other than the homepage** — `handleAnchorClick` looked up `document.getElementById()`, which only finds those sections on `/`. Fixed to fall back to `/#section` navigation when the target isn't on the current page.
+15. **Hero section text was sized for one screen and looked wrong at others.** `min-height: 100vh` with no cap meant a 27"+/32" monitor stretched the section far taller than its content, leaving a large dead gap; the font-size `clamp()` was also large enough to force an unintended line-wrap that split "Where Technical" onto two lines. Fixed: `min-height: min(100vh, 980px)` + `justify-content: center` (holds a sane size and centers content at any viewport height), tighter font clamp (verified the intended 3-line phrase grouping holds from 1366px up through 2560px-wide viewports).
+16. **`.blog-teaser-grid` used `align-items: center`**, vertically centering a short text column against a tall 3-card column — created a large, confusing gap between the section heading and its own paragraph. Changed to `align-items: start`.
+17. **Founder photo crop cut off at the shoulders regardless of box size.** Root cause: Sanity's `@sanity/image-url` builder applies a *manually stored crop region* from Sanity Studio's own crop tool by default, whenever the source object includes `hotspot`/`crop` fields — independent of whatever width/height/fit the code requests. Widening the requested crop (first fix attempt) didn't fix it, because the stored crop was being applied on top regardless. Real fix: request the raw asset directly (`urlFor(founder.image.asset)` instead of `urlFor(founder.image)`), bypassing the stored crop, and size the display box from Sanity's own `metadata.dimensions` so any future photo (any aspect ratio) renders fully uncropped.
+18. **`components/Gallery.tsx` used a second, parallel Sanity client** (`sanity/lib/client.ts`, via the `next-sanity` package) instead of the shared `lib/sanity.ts` client every other component uses — same project/dataset, so no data divergence occurred, but it was pure duplication with its own inline GROQ query. Consolidated onto the shared client and existing `GALLERY_QUERY`; deleted the now-dead `sanity/lib/` folder and `sanity/env.ts`, removed the `next-sanity` dependency.
+19. **Leftover debug `console.log` statements** shipping to every visitor's browser console — found in `components/About.tsx`, `components/Gallery.tsx`, `app/blog/page.tsx`. Removed.
+20. **Unused npm dependencies**: `next-auth`, `styled-components`, `bcryptjs` (confirmed zero real usage — the one "bcrypt" hit was a string literal in a keyword-block list, not an import). Removed; dropped `npm audit`'s vulnerability count from 34 → 7 in the process (the rest trace to Sanity Studio's bundled dev tooling, unreachable since Studio isn't embedded in this app — see `DEPLOYMENT.md`).
+21. **Dead exports**: `FOUNDER_QUERY` in `lib/sanity.ts` (superseded by a local duplicate in `About.tsx` — kept the local one since it also fetches `hotspot`/`crop` the shared one didn't), a no-op `.filter()` in `YogiChat.tsx` checking for a property (`isLoading`) that `ChatMessage` never has. Removed.
+22. **`@google/generative-ai` was also an unused dependency** — its only consumer was the deleted `/api/chat` route (bug #13). Neither `app/api/mitra/route.ts` nor `lib/yogi-engine.ts` import it; `callGemini` in the engine hand-rolls its own `fetch()`-based Gemini client instead (see "Open items" below). Removed.
+
+## Mistakes made *during* this session (not pre-existing bugs — things I got wrong and had to fix)
+
+1. **Deployed the Sanity schema without checking what was already live.** The first `npx sanity deploy` this session pushed `sanity/schemaTypes/index.ts` as it stood in this repo — which didn't include a `siteSettings` type that the live Studio already had (defined somewhere outside this repo's history). That deploy silently removed "Site Settings" from the Studio sidebar. Caught it, reconstructed `sanity/schemaTypes/siteSettings.ts` from the live document's actual field shape (fetched via the API), and redeployed. **Lesson: before deploying a schema, diff what's live against what's in the repo, don't assume the repo is the full source of truth.**
+2. **Wrote the contact form's Sanity write as fire-and-forget** (`void client.create(...).catch(...)`, never awaited). Caught before it shipped: on serverless hosting, a function can be frozen the instant it returns a response, so an unawaited background promise can simply never complete. Fixed to run it concurrently with the email send via `Promise.all`, both properly awaited, with only the email's failure able to fail the request.
+3. **First founder-photo crop fix only addressed the requested-dimensions mismatch, not the actual cause.** Widened the crop box thinking a size mismatch was the whole problem; it wasn't — Sanity was applying a stored manual crop regardless of requested size. Took a second pass (see bug #17 above) to find and fix the real cause.
+4. **Removed `next-sanity` from `package.json` without checking all its usages first**, breaking the build (`sanity/lib/client.ts` and `sanity/lib/live.ts` still imported it). Caught immediately by `tsc`, investigated properly the second time (found `Gallery.tsx` was the actual remaining consumer, consolidated it onto the shared client, removed the now-genuinely-dead files, then removed the dependency for real).
+
+## Live vs. local confusion (fully resolved, but worth understanding)
+
+For most of this session, **the live site (kattiandco.com) and the local dev server were running different code**, because nothing was committed. This produced several rounds of "why does X look different here vs there" that turned out to have one root cause each time — not a mystery, just an artifact of the deploy state:
+- Different team-member data (old `_type: "team"` live vs. new `_type: "teamMember"` local) — explained in bug #9 above.
+- Hero text sizing looking different between two screenshots — one was pre-fix (live/old code), one was post-fix (local).
+- A Sanity Studio "Schema type not found" error — the Studio hadn't been redeployed yet to include a schema that already had a document created against it.
+
+None of this indicated corrupted data or a second hidden Sanity project — it was consistently explained by checking which code (committed/live vs. uncommitted/local) was actually running.
+
+## Current state (end of session)
+
+- `npx tsc --noEmit` and `npx next build` both clean.
+- Full route list: `/`, `/blog`, `/blog/[slug]`, `/disclaimer`, `/privacy-policy`, `/mitra`, `/api/contact`, `/api/mitra`, `/api/mitra-content`, `/studio`, `/studio-v2` (Studio routes are static stubs — the real Studio is external, see `DEPLOYMENT.md`).
+- Security: input validation (Zod) + HTML-escaping + rate limiting on both public POST endpoints (`/api/contact`, `/api/mitra`); XSS-hardened markdown rendering in the chat widget; standard security headers set.
+- Contact form saves to Sanity's `formSubmission` type in addition to emailing — confirmed working end-to-end with a real test submission (`TEST-DELETE-ME`, in Studio's Form Submissions — safe to delete, or leave as a reference).
+- Sanity schema currently registered: `blog`, `founder`, `gallery`, `formSubmission`, `teamMember`, `siteSettings`. Studio has been redeployed to match.
+- `package.json` dependencies trimmed to what's actually imported somewhere in the codebase.
+
+## Open items — not bugs, just things a future session should know about
+
+- **Placeholder content still in Sanity**: the one `teamMember` document ("Mr. Srinidhi K") is test data left over from building the feature, not a real team member. Replace or delete it in Studio before the team section goes live to real visitors.
+- **This entire session's work is uncommitted until the commit that follows this log entry.** If you're reading this in git history, it means that commit happened; if you're reading it in an uncommitted working tree, it hasn't yet.
+- **The homepage has no ISR/ revalidation** — content edited in Sanity after a deploy won't show on the live site until the next deploy (client-fetched sections like founder/team/gallery *do* update live in the browser regardless, since that fetch happens client-side, not at build time — only the parts fetched server-side into the static shell are affected).
+- **`YogiChatPage.tsx` still duplicates most of `YogiChat.tsx`'s logic** rather than sharing a hook/component — flagged, not refactored, since it's a bigger change with real regression risk for a working feature.
+- **`lib/yogi-engine.ts` hand-rolls its own Gemini HTTP client** (`callGemini`, plain `fetch()` to the Gemini REST endpoint) rather than using an official SDK. This isn't broken — it works — but if you want to bring back `@google/generative-ai` (removed this session as unused, since its only prior consumer was the deleted `/api/chat` route), you'd need to reinstall it and rewrite `callGemini` to use it.

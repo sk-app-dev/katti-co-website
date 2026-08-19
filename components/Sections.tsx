@@ -106,18 +106,20 @@ export function Approach() {
 
 // components/BlogTeaser.tsx
 import Link from "next/link";
+import Image from "next/image";
 import { client, ALL_POSTS_QUERY } from "@/lib/sanity";
 
 interface Post {
   _id: string; title: string; slug: { current: string };
-  category: string; publishedAt: string;
+  category?: string; publishedAt: string;
+  image?: { asset: { url: string } };
 }
 
 export async function BlogTeaser() {
   let posts: Post[] = [];
   try {
     const all: Post[] = await client.fetch(ALL_POSTS_QUERY);
-    posts = all.slice(0, 3);
+    posts = all.slice(0, 6);
   } catch {
     // Fail silently — Sanity not yet configured
   }
@@ -160,12 +162,25 @@ export async function BlogTeaser() {
                 className="blog-preview-card"
                 style={{ textDecoration: "none" }}
               >
-                <div className="preview-card-cat">{p.category}</div>
-                <div className="preview-card-title">{p.title}</div>
-                <div className="preview-card-date">
-                  {new Date(p.publishedAt).toLocaleDateString("en-IN", {
-                    day: "numeric", month: "short", year: "numeric",
-                  })}
+                {p.image?.asset?.url && (
+                  <div className="preview-card-image">
+                    <Image
+                      src={p.image.asset.url}
+                      alt={p.title}
+                      width={120}
+                      height={90}
+                      sizes="120px"
+                    />
+                  </div>
+                )}
+                <div className="preview-card-body">
+                  <div className="preview-card-cat">{p.category || "Insights"}</div>
+                  <div className="preview-card-title">{p.title}</div>
+                  <div className="preview-card-date">
+                    {new Date(p.publishedAt).toLocaleDateString("en-IN", {
+                      day: "numeric", month: "short", year: "numeric",
+                    })}
+                  </div>
                 </div>
               </Link>
             ))

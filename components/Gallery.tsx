@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { client } from "@/sanity/lib/client";
+import { client, GALLERY_QUERY } from "@/lib/sanity";
 
 interface GalleryItem {
   _id: string;
@@ -33,28 +33,13 @@ export default function Gallery() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const data = await client.fetch(`*[_type == "gallery"]{
-          _id,
-          title,
-          description,
-          images[]{
-            _key,
-            asset->{
-              url,
-              metadata{
-                dimensions
-              }
-            },
-            alt,
-            caption
-          }
-        }`);
+        const data = await client.fetch(GALLERY_QUERY);
 
         // Flatten the images from all gallery documents
         const flattenedItems: GalleryItem[] = [];
         data.forEach((gallery: any) => {
-          if (gallery.images) {
-            gallery.images.forEach((img: any) => {
+          if (gallery.items) {
+            gallery.items.forEach((img: any) => {
               flattenedItems.push({
                 _id: `${gallery._id}-${img._key}`,
                 type: "photo",
@@ -71,7 +56,6 @@ export default function Gallery() {
         });
 
         setItems(flattenedItems);
-        console.log("Fetched gallery items:", flattenedItems);
       } catch (error) {
         console.error("Error fetching gallery:", error);
         setItems([]);

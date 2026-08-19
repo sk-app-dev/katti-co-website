@@ -38,14 +38,18 @@ export default function Navbar() {
     return () => document.removeEventListener("click", handler);
   }, [menuOpen]);
 
-  // Smooth scroll for anchor links
+  // Smooth scroll for anchor links (navigates home first if the target
+  // section doesn't exist on the current page)
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#")) {
-      e.preventDefault();
       const id = href.slice(1);
       const el = document.getElementById(id);
       if (el) {
+        e.preventDefault();
         window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: "smooth" });
+      } else if (window.location.pathname !== "/") {
+        e.preventDefault();
+        window.location.href = `/${href}`;
       }
       setMenuOpen(false);
     } else {

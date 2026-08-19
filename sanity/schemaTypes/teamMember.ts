@@ -1,8 +1,8 @@
 import {defineField, defineType} from 'sanity'
 
 export default defineType({
-  name: 'founder',
-  title: 'Founder Profile',
+  name: 'teamMember',
+  title: 'Team Member',
   type: 'document',
   fields: [
     defineField({
@@ -15,30 +15,18 @@ export default defineType({
       name: 'title',
       title: 'Title/Designation',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'image',
       title: 'Profile Image',
       type: 'image',
       options: {hotspot: true},
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'bio',
       title: 'Bio',
       type: 'text',
-    }),
-    defineField({
-      name: 'experience',
-      title: 'Experience (Years)',
-      type: 'number',
-    }),
-    defineField({
-      name: 'qualifications',
-      title: 'Qualifications',
-      type: 'array',
-      of: [{type: 'string'}],
-      description: 'Professional qualifications, degrees, certifications',
     }),
     defineField({
       name: 'expertise',
@@ -50,11 +38,6 @@ export default defineType({
       name: 'linkedIn',
       title: 'LinkedIn URL',
       type: 'url',
-    }),
-    defineField({
-      name: 'email',
-      title: 'Email',
-      type: 'string',
     }),
   ],
 })

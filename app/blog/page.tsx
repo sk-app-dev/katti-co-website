@@ -25,8 +25,6 @@ export default function BlogPage() {
     const fetchPosts = async () => {
       try {
         const data = await client.fetch(ALL_POSTS_QUERY);
-        console.log("Blog page data fetched from Sanity:", data);
-        console.log("Number of posts found:", data.length);
         setPosts(data);
       } catch (error) {
         console.error("Error fetching posts:", error);
