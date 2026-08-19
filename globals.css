@@ -1,6 +1,10 @@
 /* app/globals.css */
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+/* Fluid base size: unchanged up to ~1280px (current small/laptop
+   experience untouched), grows modestly up to 18px on large monitors
+   so every rem-based size on the site (labels, tags, body text) scales
+   instead of staying pinned at a fixed pixel size forever. */
+html { scroll-behavior: smooth; font-size: clamp(16px, 0.16vw + 14px, 18px); }
 body {
   font-family: var(--font-jost), sans-serif;
   background: #07080d;
