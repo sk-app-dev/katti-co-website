@@ -1,5 +1,5 @@
 /**
- * lib/yogi-config.ts
+ * lib/mitra-config.ts
  * ─────────────────────────────────────────────────────────
  * Single source of truth for the Mitra bot.
  * All firm data verified from kattiandco.com (live).
@@ -7,7 +7,7 @@
  * ─────────────────────────────────────────────────────────
  */
 
-export const YOGI_CONFIG = {
+export const MITRA_CONFIG = {
   // ── Bot identity ──────────────────────────────────────
   BOT_NAME:   "Mitra",
   BOT_PERSONA: "AI Legal Information Assistant for Katti & Co.",
@@ -19,7 +19,7 @@ export const YOGI_CONFIG = {
   GEMINI_ENDPOINT:
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
   TEMPERATURE:  0.2,   // low = less hallucination
-  MAX_TOKENS:   1200,
+  MAX_TOKENS:   2400,  // structured multi-part legal answers (citations, numbered steps) can run long
   MAX_HISTORY:  6,     // conversation turns kept per request
 
   // ── Rate limiting ─────────────────────────────────────
@@ -31,7 +31,7 @@ export const YOGI_CONFIG = {
 
   // ── Firm data (fallback only) ─────────────────────────
   // email/phone are overridden per-request with live Sanity Site Settings
-  // data (see app/api/yogi/route.ts's getFirmInfo()) whenever available —
+  // data (see app/api/mitra/route.ts's getFirmInfo()) whenever available —
   // these values are only used if that fetch fails. Edit Site Settings in
   // Sanity Studio to change the live email/phone, not this file.
   FIRM: {
@@ -103,4 +103,4 @@ export const YOGI_CONFIG = {
   SANITY_BLOG_API: "/api/mitra-content",
 } as const;
 
-export type YogiConfig = typeof YOGI_CONFIG;
+export type MitraConfig = typeof MITRA_CONFIG;

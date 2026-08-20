@@ -1,5 +1,5 @@
-import YogiChatPage from "@/components/YogiChatPage";
+import MitraChatPage from "@/components/MitraChatPage";
 
 export default function MitraPage() {
-  return <YogiChatPage />;
+  return <MitraChatPage />;
 }

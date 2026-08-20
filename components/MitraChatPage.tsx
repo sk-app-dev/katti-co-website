@@ -57,7 +57,7 @@ function renderMarkdown(text: string): string {
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, label, url) => `<a href="${safeHref(url)}" target="_blank" rel="noreferrer">${label}</a>`);
 }
 
-export default function YogiChatPage() {
+export default function MitraChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -155,32 +155,32 @@ export default function YogiChatPage() {
   };
 
   return (
-    <div className="yogipage">
-      <div className="yogipage-inner">
-        <div className="yogipage-grid">
-          <aside className="yogipage-aside">
-            <div className="yogipage-brand">
-              <div className="yogipage-brand-mark">M</div>
+    <div className="mitrapage">
+      <div className="mitrapage-inner">
+        <div className="mitrapage-grid">
+          <aside className="mitrapage-aside">
+            <div className="mitrapage-brand">
+              <div className="mitrapage-brand-mark">M</div>
               <div>
-                <p className="yogipage-brand-label">Mitra</p>
-                <h1 className="yogipage-brand-title">Legal AI Assistant</h1>
+                <p className="mitrapage-brand-label">Mitra</p>
+                <h1 className="mitrapage-brand-title">Legal AI Assistant</h1>
               </div>
             </div>
 
-            <div className="yogipage-intro">
+            <div className="mitrapage-intro">
               <p>Ask questions about Indian law, patents, trademarks, GST, contracts, or firm services.</p>
-              <p className="yogipage-intro-note">Your conversation is informational only and does not constitute legal advice.</p>
+              <p className="mitrapage-intro-note">Your conversation is informational only and does not constitute legal advice.</p>
             </div>
 
             <div>
-              <h2 className="yogipage-quick-label">Try these</h2>
-              <div className="yogipage-quick-list">
+              <h2 className="mitrapage-quick-label">Try these</h2>
+              <div className="mitrapage-quick-list">
                 {QUICK_QUESTIONS.map((item) => (
                   <button
                     key={item.label}
                     onClick={() => send(item.q)}
                     disabled={loading}
-                    className="yogipage-quick-btn"
+                    className="mitrapage-quick-btn"
                   >
                     {item.label}
                   </button>
@@ -188,7 +188,7 @@ export default function YogiChatPage() {
               </div>
             </div>
 
-            <div className="yogipage-how">
+            <div className="mitrapage-how">
               <p>How Mitra works</p>
               <ul>
                 <li>Searches firm knowledge and relevant legal topics.</li>
@@ -198,25 +198,25 @@ export default function YogiChatPage() {
             </div>
           </aside>
 
-          <main className="yogipage-main">
-            <div className="yogipage-chat-header">
+          <main className="mitrapage-main">
+            <div className="mitrapage-chat-header">
               <div>
-                <p className="yogipage-chat-header-label">Chat session</p>
-                <h2 className="yogipage-chat-header-title">Ask Mitra anything</h2>
+                <p className="mitrapage-chat-header-label">Chat session</p>
+                <h2 className="mitrapage-chat-header-title">Ask Mitra anything</h2>
               </div>
-              <div className="yogipage-live-badge">Live</div>
+              <div className="mitrapage-live-badge">Live</div>
             </div>
 
-            <div ref={msgsRef} className="yogipage-msgs">
+            <div ref={msgsRef} className="mitrapage-msgs">
               {messages.length === 0 ? (
-                <div className="yogipage-welcome">
+                <div className="mitrapage-welcome">
                   <div dangerouslySetInnerHTML={{ __html: renderMarkdown(WELCOME_MSG) }} />
                 </div>
               ) : (
                 messages.map((m) => (
-                  <div key={m.id} className={`yogipage-row ${m.role}`}>
-                    <div className={`yogipage-bubble ${m.role}`}>
-                      <div className="yogipage-bubble-role">
+                  <div key={m.id} className={`mitrapage-row ${m.role}`}>
+                    <div className={`mitrapage-bubble ${m.role}`}>
+                      <div className="mitrapage-bubble-role">
                         {m.role === "user" ? "You" : "Mitra"}
                       </div>
                       <div dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />
@@ -225,15 +225,15 @@ export default function YogiChatPage() {
                 ))
               )}
               {loading && (
-                <div className="yogipage-thinking">
-                  <div className="yogipage-thinking-avatar" />
-                  <div className="yogipage-thinking-bubble">Thinking...</div>
+                <div className="mitrapage-thinking">
+                  <div className="mitrapage-thinking-avatar" />
+                  <div className="mitrapage-thinking-bubble">Thinking...</div>
                 </div>
               )}
             </div>
 
-            <div className="yogipage-inputbar">
-              <div className="yogipage-inputrow">
+            <div className="mitrapage-inputbar">
+              <div className="mitrapage-inputrow">
                 <textarea
                   ref={textareaRef}
                   value={input}
@@ -242,17 +242,17 @@ export default function YogiChatPage() {
                   placeholder="Ask a legal question…"
                   rows={1}
                   disabled={loading}
-                  className="yogipage-textarea"
+                  className="mitrapage-textarea"
                 />
                 <button
                   onClick={() => send()}
                   disabled={!input.trim() || loading}
-                  className="yogipage-send-btn"
+                  className="mitrapage-send-btn"
                 >
                   Send
                 </button>
               </div>
-              <p className="yogipage-hint">Pro tip: press Enter to send, Shift+Enter for a newline.</p>
+              <p className="mitrapage-hint">Pro tip: press Enter to send, Shift+Enter for a newline.</p>
             </div>
           </main>
         </div>

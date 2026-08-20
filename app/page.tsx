@@ -9,7 +9,7 @@ import { Expertise, Approach, BlogTeaser } from "../components/Sections";
 import Gallery from "../components/Gallery";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
-import YogiChat from "../components/YogiChat";
+import MitraChat from "../components/MitraChat";
 
 export default async function HomePage() {
   return (
@@ -24,7 +24,7 @@ export default async function HomePage() {
       <Gallery />
       <Contact />
       <Footer />
-      <YogiChat />
+      <MitraChat />
     </>
   );
 }

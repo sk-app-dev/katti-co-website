@@ -2,8 +2,8 @@
  * app/api/mitra-content/route.ts
  * ─────────────────────────────────────────────────────────
  * Serves recent blog posts (from Sanity) as light-weight
- * context for Mitra, shaped to match components/YogiChat.tsx's
- * and lib/yogi-engine.ts's BlogPost interface.
+ * context for Mitra, shaped to match components/MitraChat.tsx's
+ * and lib/mitra-engine.ts's BlogPost interface.
  *
  * GET /api/mitra-content
  * Returns: { posts: BlogPost[] }

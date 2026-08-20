@@ -26,8 +26,8 @@ import {
   type ConversationMessage,
   type BlogPost,
   type FirmInfo,
-} from "@/lib/yogi-engine";
-import { YOGI_CONFIG } from "@/lib/yogi-config";
+} from "@/lib/mitra-engine";
+import { MITRA_CONFIG } from "@/lib/mitra-config";
 import { client, SITE_SETTINGS_QUERY } from "@/lib/sanity";
 
 // ── Live firm contact info (Sanity, falls back to static config) ──
@@ -37,14 +37,14 @@ async function getFirmInfo(): Promise<FirmInfo> {
     const settings = await client.fetch<{ email?: string; phone?: string } | null>(
       SITE_SETTINGS_QUERY,
     );
-    if (!settings) return YOGI_CONFIG.FIRM;
+    if (!settings) return MITRA_CONFIG.FIRM;
     return {
-      ...YOGI_CONFIG.FIRM,
-      email: settings.email || YOGI_CONFIG.FIRM.email,
-      phone: settings.phone || YOGI_CONFIG.FIRM.phone,
+      ...MITRA_CONFIG.FIRM,
+      email: settings.email || MITRA_CONFIG.FIRM.email,
+      phone: settings.phone || MITRA_CONFIG.FIRM.phone,
     };
   } catch {
-    return YOGI_CONFIG.FIRM;
+    return MITRA_CONFIG.FIRM;
   }
 }
 
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const graphResult = searchKnowledge(query);
 
   // ── 4. High-confidence graph answer (0 LLM calls) ────
-  if (graphResult !== null && graphResult.score >= YOGI_CONFIG.GRAPH_THRESHOLD) {
+  if (graphResult !== null && graphResult.score >= MITRA_CONFIG.GRAPH_THRESHOLD) {
     return NextResponse.json({
       type:     "graph",
       text:     formatGraphAnswer(graphResult, firm),
@@ -154,7 +154,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // ── 5. Very low confidence → refuse ──────────────────
   if (
     graphResult === null ||
-    (graphResult.score < YOGI_CONFIG.LLM_THRESHOLD && domainCheck.score < 0.35)
+    (graphResult.score < MITRA_CONFIG.LLM_THRESHOLD && domainCheck.score < 0.35)
   ) {
     return NextResponse.json({
       type:     "refused",

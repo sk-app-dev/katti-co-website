@@ -1,5 +1,5 @@
 /**
- * lib/yogi-engine.ts
+ * lib/mitra-engine.ts
  * ─────────────────────────────────────────────────────────
  * Core BM25 scoring + Gemini routing engine for Mitra.
  * Runs server-side only in Next.js API routes.
@@ -13,11 +13,11 @@
  * ─────────────────────────────────────────────────────────
  */
 
-import { YOGI_CONFIG } from "./yogi-config";
+import { MITRA_CONFIG } from "./mitra-config";
 
 // Firm contact details can be overridden per-request with live Sanity data
-// (see app/api/yogi/route.ts) instead of the static defaults below.
-export type FirmInfo = Omit<typeof YOGI_CONFIG.FIRM, "email" | "phone"> & {
+// (see app/api/mitra/route.ts) instead of the static defaults below.
+export type FirmInfo = Omit<typeof MITRA_CONFIG.FIRM, "email" | "phone"> & {
   email: string;
   phone: string;
 };
@@ -120,7 +120,7 @@ function tokenize(text: string): string[] {
 
 export function containsSecretTopic(query: string): boolean {
   const q = query.toLowerCase();
-  return YOGI_CONFIG.SECRET_TOPICS.some((topic) =>
+  return MITRA_CONFIG.SECRET_TOPICS.some((topic) =>
     q.includes(topic.toLowerCase()),
   );
 }
@@ -134,7 +134,7 @@ export function isLegalOrFirmQuery(query: string): DomainCheckResult {
   // Short greetings / meta questions — always allow
   if (
     q.length < 80 &&
-    /^(hi|hello|hey|what|who|how|can you|tell me|help|thank|about|contact|katti|yogi|the firm)/i.test(q)
+    /^(hi|hello|hey|what|who|how|can you|tell me|help|thank|about|contact|katti|mitra|the firm)/i.test(q)
   ) {
     return { isLegal: true, reason: "greeting_or_meta", score: 0.6 };
   }
@@ -312,7 +312,7 @@ export function getGraphContext(
 
 // ── Disclaimer ────────────────────────────────────────────
 
-export function getDisclaimer(firm: FirmInfo = YOGI_CONFIG.FIRM): string {
+export function getDisclaimer(firm: FirmInfo = MITRA_CONFIG.FIRM): string {
   const { email, name, phone } = firm;
   return `\n\n---\n*⚠️ This is general legal information only — not legal advice for your specific situation. Always consult a qualified advocate before acting on any legal matter. Contact ${name}: [${email}](mailto:${email}) | ${phone}*`;
 }
@@ -323,7 +323,7 @@ export function getDisclaimer(firm: FirmInfo = YOGI_CONFIG.FIRM): string {
 // swap in live Sanity values here so the knowledge base doesn't need a
 // separate hardcoded copy of contact info per entry.
 function withLiveContactInfo(text: string, firm: FirmInfo): string {
-  const defaults = YOGI_CONFIG.FIRM;
+  const defaults = MITRA_CONFIG.FIRM;
   let result = text;
   if (firm.email && firm.email !== defaults.email) {
     result = result.split(defaults.email).join(firm.email);
@@ -336,7 +336,7 @@ function withLiveContactInfo(text: string, firm: FirmInfo): string {
 
 export function formatGraphAnswer(
   result: GraphSearchResult,
-  firm: FirmInfo = YOGI_CONFIG.FIRM,
+  firm: FirmInfo = MITRA_CONFIG.FIRM,
 ): string {
   const { qa, score } = result;
   const note =
@@ -357,7 +357,7 @@ export function buildRefusal(
     | "no_key"
     | "rate_limit"
     | "error",
-  firm: FirmInfo = YOGI_CONFIG.FIRM,
+  firm: FirmInfo = MITRA_CONFIG.FIRM,
 ): string {
   const { email, name, phone } = firm;
 
@@ -407,7 +407,7 @@ function sweepExpiredEntries(now: number): void {
 export function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const WINDOW_MS = 60_000;
-  const MAX = YOGI_CONFIG.RATE_LIMIT_RPM;
+  const MAX = MITRA_CONFIG.RATE_LIMIT_RPM;
 
   sweepExpiredEntries(now);
 
@@ -428,10 +428,10 @@ export function checkRateLimit(ip: string): boolean {
 export function buildSystemPrompt(
   contextItems: Array<{ topic: string; source: string }>,
   livePosts: BlogPost[],
-  firm: FirmInfo = YOGI_CONFIG.FIRM,
+  firm: FirmInfo = MITRA_CONFIG.FIRM,
 ): string {
   const FIRM = firm;
-  const { PRACTICE_AREAS, COURTS, BOT_NAME } = YOGI_CONFIG;
+  const { PRACTICE_AREAS, COURTS, BOT_NAME } = MITRA_CONFIG;
   const practices = PRACTICE_AREAS.join("\n  - ");
   const courts = COURTS.join(", ");
 
@@ -517,7 +517,17 @@ interface GeminiResponse {
     content?: {
       parts?: Array<{ text?: string }>;
     };
+    finishReason?: string;
   }>;
+}
+
+// Gemini can stop mid-sentence (e.g. hits the token budget) partway
+// through a bold/heading marker, leaving a stray "**" or an unclosed
+// list item visible. Trim any trailing fragment so the renderer never
+// shows broken markdown, and note that the answer was cut short.
+function cleanTruncatedText(text: string): string {
+  const trimmed = text.replace(/\*{1,2}[^*\n]*$/, "").trimEnd();
+  return trimmed || text.trimEnd();
 }
 
 export async function callGemini(
@@ -528,7 +538,7 @@ export async function callGemini(
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY not configured");
 
-  const endpoint = `${YOGI_CONFIG.GEMINI_ENDPOINT}?key=${apiKey}`;
+  const endpoint = `${MITRA_CONFIG.GEMINI_ENDPOINT}?key=${apiKey}`;
 
   // Build Gemini content array
   const contents: GeminiContent[] = [
@@ -538,14 +548,14 @@ export async function callGemini(
       role: "model",
       parts: [
         {
-          text: `Understood. I am ${YOGI_CONFIG.BOT_NAME}, the legal information assistant for ${YOGI_CONFIG.FIRM.name}. I will be honest, cite Indian law sources, never hallucinate, and always recommend professional consultation for specific matters. Ready.`,
+          text: `Understood. I am ${MITRA_CONFIG.BOT_NAME}, the legal information assistant for ${MITRA_CONFIG.FIRM.name}. I will be honest, cite Indian law sources, never hallucinate, and always recommend professional consultation for specific matters. Ready.`,
         },
       ],
     },
   ];
 
   // Append bounded conversation history
-  const maxHistoryMessages = YOGI_CONFIG.MAX_HISTORY * 2;
+  const maxHistoryMessages = MITRA_CONFIG.MAX_HISTORY * 2;
   const historySlice = history.slice(-maxHistoryMessages);
   for (const msg of historySlice) {
     contents.push({
@@ -563,10 +573,10 @@ export async function callGemini(
     body: JSON.stringify({
       contents,
       generationConfig: {
-        temperature:     YOGI_CONFIG.TEMPERATURE,
+        temperature:     MITRA_CONFIG.TEMPERATURE,
         topK:            20,
         topP:            0.85,
-        maxOutputTokens: YOGI_CONFIG.MAX_TOKENS,
+        maxOutputTokens: MITRA_CONFIG.MAX_TOKENS,
       },
       safetySettings: [
         { category: "HARM_CATEGORY_HARASSMENT",        threshold: "BLOCK_MEDIUM_AND_ABOVE" },
@@ -582,7 +592,15 @@ export async function callGemini(
   if (!response.ok) throw new Error(`HTTP_${response.status}`);
 
   const data = (await response.json()) as GeminiResponse;
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const candidate = data.candidates?.[0];
+  const text = candidate?.content?.parts?.[0]?.text;
   if (!text) throw new Error("EMPTY_RESPONSE");
+
+  if (candidate?.finishReason === "MAX_TOKENS") {
+    return (
+      cleanTruncatedText(text) +
+      "\n\n*(That answer ran long and got cut short — ask me to continue, or narrow the question.)*"
+    );
+  }
   return text;
 }

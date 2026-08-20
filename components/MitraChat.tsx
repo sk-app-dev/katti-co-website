@@ -1,6 +1,6 @@
 "use client";
 /**
- * components/YogiChat.tsx
+ * components/MitraChat.tsx
  * ─────────────────────────────────────────────────────────
  * Mitra — AI Legal Information Assistant for Katti & Co.
  *
@@ -174,7 +174,7 @@ function renderMarkdown(text: string): string {
     if (/^\|/.test(line)) {
       if (!inTable) {
         if (inList) { html += "</ul>"; inList = false; }
-        html += '<table class="yogi-md-table">';
+        html += '<table class="mitra-md-table">';
         inTable = true;
       }
       if (/^\|[\s\-:]+\|/.test(line)) continue; // separator
@@ -191,19 +191,19 @@ function renderMarkdown(text: string): string {
     if (/^---+$/.test(line.trim())) {
       if (inList) { html += "</ul>"; inList = false; }
       if (inDisclaimer) { html += "</div>"; }
-      html += '<div class="yogi-md-disclaimer">';
+      html += '<div class="mitra-md-disclaimer">';
       inDisclaimer = true;
       continue;
     }
 
     if (/^## /.test(line)) {
       if (inList) { html += "</ul>"; inList = false; }
-      html += `<h3 class="yogi-md-h2">${renderInline(line.slice(3).trim())}</h3>`;
+      html += `<h3 class="mitra-md-h2">${renderInline(line.slice(3).trim())}</h3>`;
       continue;
     }
     if (/^### /.test(line)) {
       if (inList) { html += "</ul>"; inList = false; }
-      html += `<h4 class="yogi-md-h3">${renderInline(line.slice(4).trim())}</h4>`;
+      html += `<h4 class="mitra-md-h3">${renderInline(line.slice(4).trim())}</h4>`;
       continue;
     }
     if (/^[-*] /.test(line) || /^\d+\. /.test(line)) {
@@ -404,9 +404,9 @@ const ModeToggle: React.FC<ModeToggleProps> = ({
   onChange,
   voiceAvailable,
 }) => (
-  <div className="yogi-mode-toggle" role="radiogroup" aria-label="Input and output mode">
+  <div className="mitra-mode-toggle" role="radiogroup" aria-label="Input and output mode">
     <button
-      className={`yogi-mode-btn${mode === "text" ? " active" : ""}`}
+      className={`mitra-mode-btn${mode === "text" ? " active" : ""}`}
       onClick={() => onChange("text")}
       role="radio"
       aria-checked={mode === "text"}
@@ -418,7 +418,7 @@ const ModeToggle: React.FC<ModeToggleProps> = ({
       Text
     </button>
     <button
-      className={`yogi-mode-btn${mode === "voice" ? " active" : ""}${!voiceAvailable ? " disabled" : ""}`}
+      className={`mitra-mode-btn${mode === "voice" ? " active" : ""}${!voiceAvailable ? " disabled" : ""}`}
       onClick={() => voiceAvailable && onChange("voice")}
       role="radio"
       aria-checked={mode === "voice"}
@@ -431,14 +431,14 @@ const ModeToggle: React.FC<ModeToggleProps> = ({
         <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" />
       </svg>
       Voice
-      {!voiceAvailable && <span className="yogi-mode-unavail" aria-hidden="true">✕</span>}
+      {!voiceAvailable && <span className="mitra-mode-unavail" aria-hidden="true">✕</span>}
     </button>
   </div>
 );
 
 // ── Main component ────────────────────────────────────────
 
-export default function YogiChat(): React.JSX.Element {
+export default function MitraChat(): React.JSX.Element {
   const [isOpen, setIsOpen]             = useState(false);
   const [mode, setMode]                 = useState<ChatMode>("text");
   const [messages, setMessages]         = useState<ChatMessage[]>([]);
@@ -858,12 +858,12 @@ export default function YogiChat(): React.JSX.Element {
   // ── Response type → UI metadata ───────────────────────
   const getPill = (type: ResponseType) => {
     switch (type) {
-      case "graph":   return { label: "Knowledge Base", cls: "yogi-pill-kb" };
-      case "gemini":  return { label: "AI Verified",    cls: "yogi-pill-ai" };
-      case "refused": return { label: "Out of Scope",   cls: "yogi-pill-warn" };
-      case "welcome": return { label: "Ready",          cls: "yogi-pill-ready" };
-      case "error":   return { label: "Error",          cls: "yogi-pill-warn" };
-      default:        return { label: "Ready",          cls: "yogi-pill-ready" };
+      case "graph":   return { label: "Knowledge Base", cls: "mitra-pill-kb" };
+      case "gemini":  return { label: "AI Verified",    cls: "mitra-pill-ai" };
+      case "refused": return { label: "Out of Scope",   cls: "mitra-pill-warn" };
+      case "welcome": return { label: "Ready",          cls: "mitra-pill-ready" };
+      case "error":   return { label: "Error",          cls: "mitra-pill-warn" };
+      default:        return { label: "Ready",          cls: "mitra-pill-ready" };
     }
   };
 
@@ -872,7 +872,7 @@ export default function YogiChat(): React.JSX.Element {
     <>
       {/* ── Floating Trigger ──────────────────────────── */}
       <button
-        className="yogi-fab"
+        className="mitra-fab"
         onClick={() => setIsOpen(true)}
         aria-label="Open Mitra — Katti & Co. Legal Assistant"
         title="Chat with Mitra"
@@ -898,13 +898,13 @@ export default function YogiChat(): React.JSX.Element {
           {/* Beak */}
           <path d="M 16 18 L 20 23 L 24 18 Q 22 17 20 17.5 Q 18 17 16 18 Z" fill="#e07020" />
         </svg>
-        <span className="yogi-fab-dot" aria-hidden="true" />
+        <span className="mitra-fab-dot" aria-hidden="true" />
       </button>
 
       {/* ── Chat Panel ────────────────────────────────── */}
       {isOpen && (
         <div
-          className="yogi-overlay"
+          className="mitra-overlay"
           role="dialog"
           aria-modal="true"
           aria-label="Mitra Legal Assistant"
@@ -915,21 +915,21 @@ export default function YogiChat(): React.JSX.Element {
             }
           }}
         >
-          <div className="yogi-window">
+          <div className="mitra-window">
 
             {/* ── Left: Avatar Panel ───────────────────── */}
-            <div className="yogi-avatar-panel" aria-hidden="true">
+            <div className="mitra-avatar-panel" aria-hidden="true">
               {/* Subtle grid overlay */}
-              <div className="yogi-grid-overlay" />
+              <div className="mitra-grid-overlay" />
 
               {/* Firm label */}
-              <div className="yogi-avatar-firm">
-                <span className="yogi-avatar-firm-name">KATTI &amp; Co.</span>
-                <span className="yogi-avatar-firm-role">Legal Assistant</span>
+              <div className="mitra-avatar-firm">
+                <span className="mitra-avatar-firm-name">KATTI &amp; Co.</span>
+                <span className="mitra-avatar-firm-role">Legal Assistant</span>
               </div>
 
               {/* Mode toggle */}
-              <div className="yogi-mode-wrap">
+              <div className="mitra-mode-wrap">
                 <ModeToggle
                   mode={mode}
                   onChange={(m) => {
@@ -944,13 +944,13 @@ export default function YogiChat(): React.JSX.Element {
               </div>
 
               {/* Status label */}
-              <div className="yogi-avatar-status">
-                {isSpeaking  && <span className="yogi-status-speaking">Speaking…</span>}
-                {isListening && <span className="yogi-status-listening">Listening…</span>}
+              <div className="mitra-avatar-status">
+                {isSpeaking  && <span className="mitra-status-speaking">Speaking…</span>}
+                {isListening && <span className="mitra-status-listening">Listening…</span>}
               </div>
 
               {/* Avatar SVG */}
-              <div className="yogi-avatar-svg-wrap">
+              <div className="mitra-avatar-svg-wrap">
                 <ProfessionalAvatar
                   lipState={lipState}
                   isSpeaking={isSpeaking}
@@ -959,30 +959,30 @@ export default function YogiChat(): React.JSX.Element {
               </div>
 
               {/* Name plate */}
-              <div className="yogi-nameplate">
-                <span className="yogi-nameplate-name">Mitra</span>
-                <span className="yogi-nameplate-title">AI Legal Information Assistant</span>
+              <div className="mitra-nameplate">
+                <span className="mitra-nameplate-name">Mitra</span>
+                <span className="mitra-nameplate-title">AI Legal Information Assistant</span>
               </div>
             </div>
 
             {/* ── Right: Chat Panel ─────────────────────── */}
-            <div className="yogi-chat-panel">
+            <div className="mitra-chat-panel">
 
               {/* Header */}
-              <div className="yogi-chat-header">
-                <div className="yogi-chat-header-info">
-                  <span className="yogi-chat-header-name">Legal Information Assistant</span>
-                  <span className="yogi-chat-header-sub">
-                    <span className="yogi-online-dot" aria-hidden="true" />
+              <div className="mitra-chat-header">
+                <div className="mitra-chat-header-info">
+                  <span className="mitra-chat-header-name">Legal Information Assistant</span>
+                  <span className="mitra-chat-header-sub">
+                    <span className="mitra-online-dot" aria-hidden="true" />
                     Online · Katti &amp; Co.
                   </span>
                 </div>
-                <div className="yogi-header-right">
-                  <span className="yogi-info-badge" title="General information only — not legal advice">
+                <div className="mitra-header-right">
+                  <span className="mitra-info-badge" title="General information only — not legal advice">
                     ⓘ Info only
                   </span>
                   <button
-                    className="yogi-close-btn"
+                    className="mitra-close-btn"
                     onClick={() => { stopSpeaking(); stopListening(); setIsOpen(false); }}
                     aria-label="Close assistant"
                   >
@@ -992,13 +992,13 @@ export default function YogiChat(): React.JSX.Element {
               </div>
 
               {/* Quick questions */}
-              <div className="yogi-quick-bar" aria-label="Quick questions">
-                <div className="yogi-quick-label">Common questions</div>
-                <div className="yogi-quick-list" role="list">
+              <div className="mitra-quick-bar" aria-label="Quick questions">
+                <div className="mitra-quick-label">Common questions</div>
+                <div className="mitra-quick-list" role="list">
                   {QUICK_QUESTIONS.map((q) => (
                     <button
                       key={q.label}
-                      className="yogi-qbtn"
+                      className="mitra-qbtn"
                       onClick={() => void sendMessage(q.q)}
                       disabled={isLoading}
                       role="listitem"
@@ -1012,7 +1012,7 @@ export default function YogiChat(): React.JSX.Element {
 
               {/* Messages */}
               <div
-                className="yogi-messages"
+                className="mitra-messages"
                 role="log"
                 aria-live="polite"
                 aria-relevant="additions"
@@ -1023,38 +1023,38 @@ export default function YogiChat(): React.JSX.Element {
                   return (
                     <div
                       key={msg.id}
-                      className={`yogi-msg${msg.role === "user" ? " yogi-msg-user" : " yogi-msg-bot"}`}
+                      className={`mitra-msg${msg.role === "user" ? " mitra-msg-user" : " mitra-msg-bot"}`}
                     >
                       {/* Avatar initials */}
                       <div
-                        className={`yogi-msg-av${msg.role === "user" ? " yogi-msg-av-user" : " yogi-msg-av-bot"}`}
+                        className={`mitra-msg-av${msg.role === "user" ? " mitra-msg-av-user" : " mitra-msg-av-bot"}`}
                         aria-hidden="true"
                       >
                         {msg.role === "user" ? "You" : "M"}
                       </div>
 
                       {/* Bubble */}
-                      <div className="yogi-bubble-wrap">
+                      <div className="mitra-bubble-wrap">
                         <div
-                          className={`yogi-bubble${msg.role === "user" ? " yogi-bubble-user" : " yogi-bubble-bot"}`}
+                          className={`mitra-bubble${msg.role === "user" ? " mitra-bubble-user" : " mitra-bubble-bot"}`}
                           /* Safe: user input is escaped inside renderMarkdown / renderInline */
                           dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }}
                         />
 
                         {/* Meta row */}
-                        <div className={`yogi-msg-meta${msg.role === "user" ? " yogi-msg-meta-user" : ""}`}>
+                        <div className={`mitra-msg-meta${msg.role === "user" ? " mitra-msg-meta-user" : ""}`}>
                           {msg.role === "assistant" && (
-                            <span className={`yogi-pill ${pill.cls}`}>{pill.label}</span>
+                            <span className={`mitra-pill ${pill.cls}`}>{pill.label}</span>
                           )}
                           {msg.source && (
-                            <span className="yogi-src-tag">
+                            <span className="mitra-src-tag">
                               {msg.source.split("—")[0].trim().slice(0, 36)}
                             </span>
                           )}
                           {/* Speak button for bot messages in voice mode */}
                           {msg.role === "assistant" && mode === "voice" && (
                             <button
-                              className="yogi-speak-btn"
+                              className="mitra-speak-btn"
                               onClick={() => isSpeaking ? stopSpeaking() : speak(msg.content)}
                               aria-label={isSpeaking ? "Stop speaking" : "Read aloud"}
                               title={isSpeaking ? "Stop" : "Read aloud"}
@@ -1072,7 +1072,7 @@ export default function YogiChat(): React.JSX.Element {
                               )}
                             </button>
                           )}
-                          <span className="yogi-msg-time">{formatTime(msg.timestamp)}</span>
+                          <span className="mitra-msg-time">{formatTime(msg.timestamp)}</span>
                         </div>
                       </div>
                     </div>
@@ -1081,9 +1081,9 @@ export default function YogiChat(): React.JSX.Element {
 
                 {/* Loading indicator */}
                 {isLoading && (
-                  <div className="yogi-msg yogi-msg-bot" role="status" aria-label="Mitra is thinking">
-                    <div className="yogi-msg-av yogi-msg-av-bot" aria-hidden="true">M</div>
-                    <div className="yogi-typing-bub">
+                  <div className="mitra-msg mitra-msg-bot" role="status" aria-label="Mitra is thinking">
+                    <div className="mitra-msg-av mitra-msg-av-bot" aria-hidden="true">M</div>
+                    <div className="mitra-typing-bub">
                       <span /><span /><span />
                     </div>
                   </div>
@@ -1093,19 +1093,19 @@ export default function YogiChat(): React.JSX.Element {
               </div>
 
               {/* Input area */}
-              <div className="yogi-input-area">
+              <div className="mitra-input-area">
                 {/* Voice transcript preview */}
                 {isListening && transcript && (
-                  <div className="yogi-transcript" aria-live="polite">
-                    <span className="yogi-transcript-dot" aria-hidden="true" />
+                  <div className="mitra-transcript" aria-live="polite">
+                    <span className="mitra-transcript-dot" aria-hidden="true" />
                     {transcript}
                   </div>
                 )}
 
-                <div className="yogi-input-row">
+                <div className="mitra-input-row">
                   <textarea
                     ref={inputRef}
-                    className="yogi-input"
+                    className="mitra-input"
                     value={isListening ? transcript : input}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
@@ -1116,14 +1116,14 @@ export default function YogiChat(): React.JSX.Element {
                     }
                     rows={1}
                     aria-label="Your message"
-                    aria-describedby="yogi-input-hint"
+                    aria-describedby="mitra-input-hint"
                     disabled={isLoading || isListening}
                   />
 
                   {/* Mic button — voice mode only */}
                   {mode === "voice" && voiceAvailable && (
                     <button
-                      className={`yogi-mic-btn${isListening ? " listening" : ""}`}
+                      className={`mitra-mic-btn${isListening ? " listening" : ""}`}
                       onClick={toggleMic}
                       aria-label={isListening ? "Stop listening" : "Start voice input"}
                       aria-pressed={isListening}
@@ -1138,7 +1138,7 @@ export default function YogiChat(): React.JSX.Element {
 
                   {/* Send button */}
                   <button
-                    className="yogi-send-btn"
+                    className="mitra-send-btn"
                     onClick={() => void sendMessage()}
                     disabled={(!input.trim() && !transcript.trim()) || isLoading || isListening}
                     aria-label="Send message"
@@ -1150,13 +1150,13 @@ export default function YogiChat(): React.JSX.Element {
                   </button>
                 </div>
 
-                <p id="yogi-input-hint" className="yogi-input-note">
+                <p id="mitra-input-hint" className="mitra-input-note">
                   ⚠ General information only — not legal advice for your specific situation
                 </p>
               </div>
 
-            </div>{/* end yogi-chat-panel */}
-          </div>{/* end yogi-window */}
+            </div>{/* end mitra-chat-panel */}
+          </div>{/* end mitra-window */}
         </div>
       )}
     </>
