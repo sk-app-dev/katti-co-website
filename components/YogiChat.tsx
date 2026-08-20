@@ -1017,7 +1017,7 @@ export default function YogiChat(): React.JSX.Element {
                         className={`yogi-msg-av${msg.role === "user" ? " yogi-msg-av-user" : " yogi-msg-av-bot"}`}
                         aria-hidden="true"
                       >
-                        {msg.role === "user" ? "You" : "Y"}
+                        {msg.role === "user" ? "You" : "M"}
                       </div>
 
                       {/* Bubble */}
@@ -1069,7 +1069,7 @@ export default function YogiChat(): React.JSX.Element {
                 {/* Loading indicator */}
                 {isLoading && (
                   <div className="yogi-msg yogi-msg-bot" role="status" aria-label="Mitra is thinking">
-                    <div className="yogi-msg-av yogi-msg-av-bot" aria-hidden="true">Y</div>
+                    <div className="yogi-msg-av yogi-msg-av-bot" aria-hidden="true">M</div>
                     <div className="yogi-typing-bub">
                       <span /><span /><span />
                     </div>
