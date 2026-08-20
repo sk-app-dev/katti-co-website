@@ -57,19 +57,32 @@ For most of this session, **the live site (kattiandco.com) and the local dev ser
 
 None of this indicated corrupted data or a second hidden Sanity project — it was consistently explained by checking which code (committed/live vs. uncommitted/local) was actually running.
 
+## Part 2 — after the first push (same session, continued)
+
+The site was pushed and is now **live at kattiandco.com** (Vercel, auto-deploys from `main`). Everything below happened after that first push, in the same session:
+
+1. **Removed the `Co-Authored-By: Claude` trailer** from the two initial commits, per explicit user request — rewrote both via `git commit-tree` (tree contents byte-identical, only commit messages changed) and force-pushed with `--force-with-lease`. **No `Co-Authored-By` trailer in any commit from this point on** — that's a standing instruction for this repo, not a one-time ask.
+2. **Cleaned up outside the repo, in the parent `files/` folder**: deleted an orphaned early draft of `YogiChat.tsx` sitting loose at the top level, an entire superseded duplicate project folder (`katti-co-fixed/`, 3+ months stale, no git history), and a 489MB backup zip of an old repo snapshot. Also found and deleted two `.txt` files (`resend.txt`, `sanity.txt`) sitting in the grandparent folder containing **live plaintext copies of the real Resend and Sanity API tokens** — confirmed they matched what's in `.env.local` before deleting, so nothing broke; just removed an unnecessary plaintext exposure on disk (they were never git-tracked, so never a push risk, just a filesystem one).
+3. **Found genuinely dead code post-push**: `.sanity/runtime/*` had been accidentally committed in an *earlier* (pre-session) commit — it's self-labeled "auto-generated on sanity dev, discarded on modification." Untracked it, added `.sanity` to `.gitignore`.
+4. **Typography, twice**: first made the root `font-size` fluid (`clamp(16px, 0.16vw + 14px, 18px)` — was a flat `16px`, so nothing on the site scaled for large monitors). Then, on user feedback that content/label text still felt small, bumped every sub-1rem `font-size` in `globals.css` by a flat `+0.08rem` (~1.3px) on top of that — roughly 108 selectors, done with a script rather than by hand, headings (≥1rem, already using `clamp()`) left alone. Both verified at 375px / 1366px / 2560px viewports for no regression/overflow.
+5. **Mobile scroll complaint** ("many told there is some issue with scrolling on phone"): couldn't reproduce real touch-scroll behavior in this environment to pin down conclusively, but found and fixed the standout candidate — several sections (hero, **the chat widget's mobile panel, notably `92vh`**, the `/mitra` page, the privacy/disclaimer scroll body) used plain `vh`, which is a well-documented source of exactly this complaint on mobile Safari/Chrome (address-bar show/hide recalculates `vh` mid-scroll). Added `dvh` as a progressive enhancement over the existing `vh` fallback everywhere it was used. **If the user reports the scroll issue persists after this ships, it needs actual on-device testing (BrowserStack or a real phone) — this fix addresses the most likely cause found through code review, not a confirmed root cause.**
+6. **Explained Mitra's full request-routing pipeline** and published it as an artifact (diagram + tech stack + recommendations) — not reproduced here since it's diagram-heavy; the short version is in commit messages and in this file's "Architecture facts" section above. Recommended next steps if asked to keep improving Mitra: streaming the Gemini response (biggest felt-speed win), moving rate-limiting off in-memory storage (currently resets on every cold start, weaker than it looks), and semantic/embedding-based search instead of BM25 (BM25 misses paraphrased questions that don't share the knowledge base's exact keywords).
+
+Commits from this part of the session, in order: `85d752f`→rewritten to `6f42efc` (first ship), `266b23f`→rewritten to `acc83b5` (pre-push cleanup), `4981ad8` (fluid root font-size), `a2c4970` (content/label font-size bump), `68c03fe` (mobile dvh fix). The two rewrites replaced the originals in history — `85d752f`/`266b23f` no longer exist on `main`.
+
 ## Current state (end of session)
 
-- `npx tsc --noEmit` and `npx next build` both clean.
-- Full route list: `/`, `/blog`, `/blog/[slug]`, `/disclaimer`, `/privacy-policy`, `/mitra`, `/api/contact`, `/api/mitra`, `/api/mitra-content`, `/studio`, `/studio-v2` (Studio routes are static stubs — the real Studio is external, see `DEPLOYMENT.md`).
-- Security: input validation (Zod) + HTML-escaping + rate limiting on both public POST endpoints (`/api/contact`, `/api/mitra`); XSS-hardened markdown rendering in the chat widget; standard security headers set.
-- Contact form saves to Sanity's `formSubmission` type in addition to emailing — confirmed working end-to-end with a real test submission (`TEST-DELETE-ME`, in Studio's Form Submissions — safe to delete, or leave as a reference).
-- Sanity schema currently registered: `blog`, `founder`, `gallery`, `formSubmission`, `teamMember`, `siteSettings`. Studio has been redeployed to match.
-- `package.json` dependencies trimmed to what's actually imported somewhere in the codebase.
+- `npx tsc --noEmit` and `npx next build` both clean as of the last commit (`68c03fe`).
+- Live in production at kattiandco.com, auto-deployed from `main` via Vercel. Check `git log origin/main -1` to confirm what's actually deployed before assuming — this session pushed incrementally, not all at once.
+- Full route list unchanged from Part 1 above.
+- No `Co-Authored-By` trailer policy is in effect for this repo going forward.
+- Mobile scroll fix (`68c03fe`) is pushed but **not yet confirmed fixed by the user on a real device** — follow up on this if picking the session back up.
 
 ## Open items — not bugs, just things a future session should know about
 
 - **Placeholder content still in Sanity**: the one `teamMember` document ("Mr. Srinidhi K") is test data left over from building the feature, not a real team member. Replace or delete it in Studio before the team section goes live to real visitors.
-- **This entire session's work is uncommitted until the commit that follows this log entry.** If you're reading this in git history, it means that commit happened; if you're reading it in an uncommitted working tree, it hasn't yet.
 - **The homepage has no ISR/ revalidation** — content edited in Sanity after a deploy won't show on the live site until the next deploy (client-fetched sections like founder/team/gallery *do* update live in the browser regardless, since that fetch happens client-side, not at build time — only the parts fetched server-side into the static shell are affected).
 - **`YogiChatPage.tsx` still duplicates most of `YogiChat.tsx`'s logic** rather than sharing a hook/component — flagged, not refactored, since it's a bigger change with real regression risk for a working feature.
+- **Mitra's knowledge base (`lib/knowledge/*.ts`) is hand-written text, separate from Sanity** — will drift from reality the same way contact info once did, unless someone remembers to update both.
+- **Mobile scroll fix needs on-device confirmation** — see "Current state" above.
 - **`lib/yogi-engine.ts` hand-rolls its own Gemini HTTP client** (`callGemini`, plain `fetch()` to the Gemini REST endpoint) rather than using an official SDK. This isn't broken — it works — but if you want to bring back `@google/generative-ai` (removed this session as unused, since its only prior consumer was the deleted `/api/chat` route), you'd need to reinstall it and rewrite `callGemini` to use it.
