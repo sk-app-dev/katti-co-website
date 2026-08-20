@@ -376,7 +376,7 @@ img { max-width: 100%; display: block; }
 .modal-confirm { font-family: var(--font-cinzel), serif; font-size: .68rem; letter-spacing: .1em; background: var(--gold); color: var(--bg); border: none; padding: .58rem 1.4rem; transition: background .2s; }
 .modal-confirm:hover { background: var(--gold2); }
 
-/* ─── YOGI CHAT WIDGET ─── */
+/* ─── MITRA CHAT WIDGET ─── */
 
 /* FAB — floating right-middle */
 .mitra-fab {
@@ -536,7 +536,7 @@ img { max-width: 100%; display: block; }
 
 /* Messages area */
 .mitra-messages {
-  flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 1rem 1.2rem;
+  flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 1rem 1.2rem;
   display: flex; flex-direction: column; gap: .8rem;
 }
 .mitra-msg { display: flex; gap: .6rem; align-items: flex-start; }
@@ -677,7 +677,7 @@ img { max-width: 100%; display: block; }
   font-size: .76rem; color: var(--t3); font-style: italic;
 }
 
-/* ─── YOGI RESPONSIVE ─── */
+/* ─── MITRA RESPONSIVE ─── */
 @media(max-width:768px){
   .mitra-fab { right: 14px; width: 52px; height: 52px; }
   .mitra-window { flex-direction: column; width: 96vw; height: 92vh; height: 92dvh; }
@@ -736,7 +736,7 @@ img { max-width: 100%; display: block; }
   .gallery-grid{columns:1}
 }
 
-/* ─── YOGI FULL PAGE (/mitra) ─── */
+/* ─── MITRA FULL PAGE (/mitra) ─── */
 .mitrapage { min-height: 100vh; min-height: 100dvh; background: var(--bg); color: var(--text); padding: 1.5rem 1rem; }
 .mitrapage-inner { max-width: 1400px; margin: 0 auto; border-radius: 1.4rem; border: 1px solid var(--bdr2); background: var(--bg3); box-shadow: 0 25px 60px rgba(0,0,0,.5); overflow: hidden; }
 .mitrapage-grid { display: grid; }
