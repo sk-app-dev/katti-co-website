@@ -107,6 +107,7 @@ img { max-width: 100%; display: block; }
 /* ─── HERO ─── */
 .hero {
   min-height: min(100vh, 980px);
+  min-height: min(100dvh, 980px);
   display: flex; flex-direction: column; justify-content: center;
   position: relative; overflow: hidden; padding-top: var(--nav-h);
 }
@@ -408,7 +409,9 @@ img { max-width: 100%; display: block; }
 
 /* Window — two-panel */
 .yogi-window {
-  display: flex; width: min(96vw, 960px); height: min(88vh, 680px);
+  display: flex; width: min(96vw, 960px);
+  height: min(88vh, 680px);
+  height: min(88dvh, 680px);
   background: var(--bg2); border: 1px solid var(--bdr);
   border-radius: 12px; overflow: hidden;
   box-shadow: 0 24px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(201,166,64,.08);
@@ -677,13 +680,13 @@ img { max-width: 100%; display: block; }
 /* ─── YOGI RESPONSIVE ─── */
 @media(max-width:768px){
   .yogi-fab { right: 14px; width: 52px; height: 52px; }
-  .yogi-window { flex-direction: column; width: 96vw; height: 92vh; }
+  .yogi-window { flex-direction: column; width: 96vw; height: 92vh; height: 92dvh; }
   .yogi-avatar-panel { display: none; }
   .yogi-bubble-wrap { max-width: 90%; }
 }
 
 /* ─── PRIVACY POLICY ─── */
-.pp-scroll { max-height: 68vh; overflow-y: auto; padding-right: .3rem; }
+.pp-scroll { max-height: 68vh; max-height: 68dvh; overflow-y: auto; padding-right: .3rem; }
 .pp-body { font-size: .87rem; line-height: 1.85; color: var(--t2); font-weight: 300; }
 .pp-body h3 { font-family: var(--font-cinzel), serif; font-size: .8rem; letter-spacing: .1em; color: var(--gold); margin: 1.3rem 0 .45rem; }
 .pp-body p { margin-bottom: .8rem; }
@@ -734,11 +737,11 @@ img { max-width: 100%; display: block; }
 }
 
 /* ─── YOGI FULL PAGE (/yogi) ─── */
-.yogipage { min-height: 100vh; background: var(--bg); color: var(--text); padding: 1.5rem 1rem; }
+.yogipage { min-height: 100vh; min-height: 100dvh; background: var(--bg); color: var(--text); padding: 1.5rem 1rem; }
 .yogipage-inner { max-width: 1400px; margin: 0 auto; border-radius: 1.4rem; border: 1px solid var(--bdr2); background: var(--bg3); box-shadow: 0 25px 60px rgba(0,0,0,.5); overflow: hidden; }
 .yogipage-grid { display: grid; }
 .yogipage-aside { background: var(--bg2); padding: 2rem; border-bottom: 1px solid var(--bdr2); }
-.yogipage-main { display: flex; flex-direction: column; background: var(--bg); min-height: 60vh; }
+.yogipage-main { display: flex; flex-direction: column; background: var(--bg); min-height: 60vh; min-height: 60dvh; }
 @media (min-width: 1024px) {
   .yogipage-grid { grid-template-columns: 340px 1fr; }
   .yogipage-aside { border-bottom: none; border-right: 1px solid var(--bdr2); }
