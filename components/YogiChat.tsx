@@ -543,6 +543,19 @@ export default function YogiChat(): React.JSX.Element {
     return () => clearTimeout(timer);
   }, [isOpen]);
 
+  // ── Lock page scroll while the panel is open ─────────
+  // Without this, the fixed-position overlay doesn't stop the page
+  // behind it from scrolling on mobile — touch gestures over the
+  // chat panel can "leak" through and scroll the site instead.
+  useEffect(() => {
+    if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
   // ── Keyboard: Escape closes panel ────────────────────
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
