@@ -687,10 +687,15 @@ export default function MitraChat(): React.JSX.Element {
         .filter(Boolean)
         .map((line) => (/[.!?…]$/.test(line) ? line : `${line}.`))
         .join(" ")
+        // "Co." reads the trailing period as an abbreviation and expands it
+        // to "Company" — swap in a comma so the pause survives without
+        // triggering that expansion, in the firm's name specifically.
+        .replace(/&\s*Co\./g, "& Co,")
         // Catch-all: any leftover markdown symbols that survived the above
         // (malformed/unbalanced emphasis from the LLM, stray characters)
         // must never reach the speech engine literally.
         .replace(/[*_#`~|]/g, "")
+        .replace(/,{2,}/g, ",")
         .replace(/\s{2,}/g, " ")
         .trim();
 
