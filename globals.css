@@ -441,6 +441,13 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase; color: var(--t3); margin-top: 2px;
 }
 .mitra-mode-wrap { position: relative; z-index: 1; margin-bottom: .8rem; }
+/* Header copy of the toggle — hidden on desktop, shown only where the
+   avatar panel (and its copy of the toggle) is hidden below 768px.
+   Icon-only: the header row is tight on phone widths, and the accessible
+   label already covers what the hidden text would have said. */
+.mitra-mode-wrap-compact { display: none; }
+.mitra-mode-wrap-compact .mitra-mode-btn-label { display: none; }
+.mitra-mode-wrap-compact .mitra-mode-btn { padding: .35rem .5rem; }
 .mitra-avatar-status { min-height: 20px; text-align: center; position: relative; z-index: 1; }
 .mitra-status-speaking {
   font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
@@ -687,6 +694,7 @@ img { max-width: 100%; display: block; }
   .mitra-fab { right: 14px; width: 52px; height: 52px; }
   .mitra-window { flex-direction: column; width: 96vw; height: 92vh; height: 92dvh; }
   .mitra-avatar-panel { display: none; }
+  .mitra-mode-wrap-compact { display: block; }
   .mitra-bubble-wrap { max-width: 90%; }
 }
 

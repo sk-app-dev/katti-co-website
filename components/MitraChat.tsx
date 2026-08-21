@@ -433,7 +433,7 @@ const ModeToggle: React.FC<ModeToggleProps> = ({
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
       </svg>
-      Text
+      <span className="mitra-mode-btn-label">Text</span>
     </button>
     <button
       className={`mitra-mode-btn${mode === "voice" ? " active" : ""}${!voiceAvailable ? " disabled" : ""}`}
@@ -448,7 +448,7 @@ const ModeToggle: React.FC<ModeToggleProps> = ({
         <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" />
         <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" />
       </svg>
-      Voice
+      <span className="mitra-mode-btn-label">Voice</span>
       {!voiceAvailable && <span className="mitra-mode-unavail" aria-hidden="true">✕</span>}
     </button>
   </div>
@@ -832,6 +832,20 @@ export default function MitraChat(): React.JSX.Element {
     }
   }, [isListening, startListening, stopListening]);
 
+  const handleModeChange = useCallback(
+    (m: ChatMode) => {
+      setMode(m);
+      if (m === "voice") {
+        unlockSpeech();
+      } else {
+        stopSpeaking();
+        stopListening();
+        setMicError(null);
+      }
+    },
+    [unlockSpeech, stopSpeaking, stopListening],
+  );
+
   // ── Build conversation history ────────────────────────
   const conversationHistory = useMemo(
     () =>
@@ -1008,16 +1022,7 @@ export default function MitraChat(): React.JSX.Element {
               <div className="mitra-mode-wrap">
                 <ModeToggle
                   mode={mode}
-                  onChange={(m) => {
-                    setMode(m);
-                    if (m === "voice") {
-                      unlockSpeech();
-                    } else {
-                      stopSpeaking();
-                      stopListening();
-                      setMicError(null);
-                    }
-                  }}
+                  onChange={handleModeChange}
                   voiceAvailable={voiceAvailable}
                 />
               </div>
@@ -1057,6 +1062,17 @@ export default function MitraChat(): React.JSX.Element {
                   </span>
                 </div>
                 <div className="mitra-header-right">
+                  {/* The avatar panel (and the mode toggle inside it) is hidden
+                      below 768px to save space — this is the mobile-visible
+                      equivalent, shown only at that breakpoint via CSS, so
+                      voice mode stays reachable on phones. */}
+                  <div className="mitra-mode-wrap-compact">
+                    <ModeToggle
+                      mode={mode}
+                      onChange={handleModeChange}
+                      voiceAvailable={voiceAvailable}
+                    />
+                  </div>
                   <span className="mitra-info-badge" title="General information only — not legal advice">
                     ⓘ Info only
                   </span>
