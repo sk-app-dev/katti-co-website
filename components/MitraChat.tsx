@@ -450,6 +450,7 @@ export default function MitraChat(): React.JSX.Element {
   const [transcript, setTranscript]     = useState("");
   const transcriptRef = useRef("");
   const [voiceAvailable, setVoiceAvailable] = useState(false);
+  const [micAvailable, setMicAvailable]     = useState(false);
   const [livePosts, setLivePosts]       = useState<BlogPost[]>([]);
   const [contact, setContact]           = useState(FALLBACK_CONTACT);
   const [voicesLoaded, setVoicesLoaded] = useState(false);
@@ -476,10 +477,15 @@ export default function MitraChat(): React.JSX.Element {
   }, []);
 
   // ── Check voice API availability ──────────────────────
+  // Speech recognition (mic input) and speech synthesis (read-aloud output)
+  // are tracked separately — many mobile browsers (notably iOS Safari)
+  // support synthesis but not recognition, and gating the whole voice mode
+  // on both meant voice was invisible on phones even though playback works.
   useEffect(() => {
     const SRClass = getSpeechRecognitionClass();
     const hasSynth = typeof window !== "undefined" && "speechSynthesis" in window;
-    setVoiceAvailable(!!SRClass && hasSynth);
+    setMicAvailable(!!SRClass);
+    setVoiceAvailable(hasSynth);
 
     if (hasSynth) {
       // Voices may load asynchronously
@@ -623,26 +629,60 @@ export default function MitraChat(): React.JSX.Element {
       if (typeof window === "undefined" || !window.speechSynthesis) return;
 
       // Strip markdown for TTS
-      const plain = text
-        .replace(/\*\*(.+?)\*\*/g, "$1")
-        .replace(/\*(.+?)\*/g, "$1")
+      const withoutMarkdown = text
+        .replace(/```[\s\S]*?```/g, "") // fenced code blocks
+        .replace(/\*\*\*(.+?)\*\*\*/g, "$1") // bold+italic
+        .replace(/\*\*(.+?)\*\*/g, "$1") // bold
+        .replace(/\*(.+?)\*/g, "$1") // italic
+        .replace(/__(.+?)__/g, "$1")
+        .replace(/_(.+?)_/g, "$1")
         .replace(/`([^`]+)`/g, "$1")
         .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-        .replace(/#{1,4} /g, "")
-        .replace(/^[-*] /gm, "")
+        .replace(/^\s*#{1,4}\s+/gm, "")
+        .replace(/^\s*[-*]\s+/gm, "")
+        .replace(/^\s*\d+\.\s+/gm, "") // numbered list markers
         .replace(/---+/g, "")
-        .replace(/\|[^\n]+\|/g, "") // strip tables
-        .replace(/\n{2,}/g, ". ")
-        .replace(/\n/g, " ")
-        .trim()
-        // Limit length to avoid very long TTS
-        .slice(0, 800);
+        .replace(/\|[^\n]+\|/g, ""); // strip tables
+
+      // Every source line becomes its own spoken "sentence" — list items and
+      // paragraph breaks are usually separated by a single \n with no
+      // trailing period, which otherwise collapses into one unbroken clause
+      // with no pause between points when read aloud.
+      const plain = withoutMarkdown
+        .split(/\n+/)
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => (/[.!?…]$/.test(line) ? line : `${line}.`))
+        .join(" ")
+        // Catch-all: any leftover markdown symbols that survived the above
+        // (malformed/unbalanced emphasis from the LLM, stray characters)
+        // must never reach the speech engine literally.
+        .replace(/[*_#`~|]/g, "")
+        .replace(/\s{2,}/g, " ")
+        .trim();
 
       if (!plain) return;
 
+      // Cut at a sentence boundary near the limit rather than mid-word.
+      const LIMIT = 800;
+      const spoken =
+        plain.length <= LIMIT
+          ? plain
+          : (() => {
+              const cut = plain.slice(0, LIMIT);
+              const lastStop = Math.max(
+                cut.lastIndexOf(". "),
+                cut.lastIndexOf("? "),
+                cut.lastIndexOf("! "),
+              );
+              return lastStop > LIMIT * 0.5
+                ? cut.slice(0, lastStop + 1)
+                : cut + "…";
+            })();
+
       stopSpeaking();
 
-      const utt = new SpeechSynthesisUtterance(plain);
+      const utt = new SpeechSynthesisUtterance(spoken);
       utt.lang    = "en-IN";
       utt.rate    = 0.92;
       utt.pitch   = 1.05;
@@ -1111,7 +1151,9 @@ export default function MitraChat(): React.JSX.Element {
                     onKeyDown={handleKeyDown}
                     placeholder={
                       mode === "voice"
-                        ? "Press the mic or type your question…"
+                        ? micAvailable
+                          ? "Press the mic or type your question…"
+                          : "Type your question — I'll read the answer aloud…"
                         : "Ask a legal question or ask about Katti & Co.…"
                     }
                     rows={1}
@@ -1120,8 +1162,8 @@ export default function MitraChat(): React.JSX.Element {
                     disabled={isLoading || isListening}
                   />
 
-                  {/* Mic button — voice mode only */}
-                  {mode === "voice" && voiceAvailable && (
+                  {/* Mic button — voice mode only, and only if this browser supports speech recognition */}
+                  {mode === "voice" && micAvailable && (
                     <button
                       className={`mitra-mic-btn${isListening ? " listening" : ""}`}
                       onClick={toggleMic}
