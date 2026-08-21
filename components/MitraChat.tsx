@@ -690,8 +690,11 @@ export default function MitraChat(): React.JSX.Element {
         // The speech engine expands "Co" to "Company" from its own built-in
         // abbreviation dictionary — this is a word-level lookup, not just a
         // trailing-period heuristic, so removing the period alone didn't
-        // stop it. Respell phonetically so nothing matches that lookup.
-        .replace(/&\s*Co\.?/g, "& Koh")
+        // stop it. Respell phonetically so nothing matches that lookup, and
+        // keep a comma so the pause that the period used to give doesn't
+        // disappear along with it — "Koh" isn't a recognized abbreviation,
+        // so pairing it with punctuation is safe this time.
+        .replace(/&\s*Co\.?/g, "& Koh,")
         // Catch-all: any leftover markdown symbols that survived the above
         // (malformed/unbalanced emphasis from the LLM, stray characters)
         // must never reach the speech engine literally.
