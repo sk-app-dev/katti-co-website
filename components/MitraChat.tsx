@@ -265,6 +265,24 @@ function getSpeechRecognitionClass(): SpeechRecognitionConstructor | null {
   return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
 }
 
+function describeMicError(code: string): string {
+  switch (code) {
+    case "not-allowed":
+    case "service-not-allowed":
+      return "Microphone access is blocked. Allow it in your browser's site settings and try again.";
+    case "no-speech":
+      return "Didn't catch that — try again.";
+    case "audio-capture":
+      return "No microphone found on this device.";
+    case "network":
+      return "Voice input needs an internet connection to work.";
+    case "language-not-supported":
+      return "Voice input isn't supported in this language on your device.";
+    default:
+      return "Voice input isn't available right now — try typing instead.";
+  }
+}
+
 // ── Time helper ───────────────────────────────────────────
 
 function formatTime(ts: number): string {
@@ -451,6 +469,7 @@ export default function MitraChat(): React.JSX.Element {
   const transcriptRef = useRef("");
   const [voiceAvailable, setVoiceAvailable] = useState(false);
   const [micAvailable, setMicAvailable]     = useState(false);
+  const [micError, setMicError]             = useState<string | null>(null);
   const [livePosts, setLivePosts]       = useState<BlogPost[]>([]);
   const [contact, setContact]           = useState(FALLBACK_CONTACT);
   const [voicesLoaded, setVoicesLoaded] = useState(false);
@@ -616,6 +635,20 @@ export default function MitraChat(): React.JSX.Element {
 
   // ── Speech synthesis (TTS) ────────────────────────────
 
+  // iOS Safari only allows speechSynthesis to produce audio if it has been
+  // triggered by a direct, synchronous user gesture at least once in the
+  // page's lifetime — the auto-speak call after a chat response arrives
+  // happens after an `await fetch(...)`, which no longer counts as a
+  // gesture, so it plays silently with no error. Firing one silent
+  // utterance from the actual click that enters voice mode "unlocks" it for
+  // every later programmatic call in the same session.
+  const unlockSpeech = useCallback(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    const unlock = new SpeechSynthesisUtterance(" ");
+    unlock.volume = 0;
+    window.speechSynthesis.speak(unlock);
+  }, []);
+
   const stopSpeaking = useCallback(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
@@ -732,6 +765,7 @@ export default function MitraChat(): React.JSX.Element {
     const SRClass = getSpeechRecognitionClass();
     if (!SRClass) return;
 
+    setMicError(null);
     stopSpeaking();
 
     const sr = new SRClass();
@@ -772,6 +806,7 @@ export default function MitraChat(): React.JSX.Element {
     sr.onerror = (e: SpeechRecognitionErrorEvent) => {
       if (e.error !== "aborted") {
         console.warn("[Mitra STT] error:", e.error);
+        setMicError(describeMicError(e.error));
       }
       setIsListening(false);
       setTranscript("");
@@ -784,6 +819,7 @@ export default function MitraChat(): React.JSX.Element {
       sr.start();
     } catch (err) {
       console.warn("[Mitra STT] could not start:", err);
+      setMicError("Couldn't start the microphone. Try again, or type your question instead.");
       setIsListening(false);
     }
   }, [stopSpeaking]);
@@ -974,9 +1010,12 @@ export default function MitraChat(): React.JSX.Element {
                   mode={mode}
                   onChange={(m) => {
                     setMode(m);
-                    if (m === "text") {
+                    if (m === "voice") {
+                      unlockSpeech();
+                    } else {
                       stopSpeaking();
                       stopListening();
+                      setMicError(null);
                     }
                   }}
                   voiceAvailable={voiceAvailable}
@@ -1191,6 +1230,10 @@ export default function MitraChat(): React.JSX.Element {
                     </svg>
                   </button>
                 </div>
+
+                {micError && (
+                  <p className="mitra-mic-error" role="alert">{micError}</p>
+                )}
 
                 <p id="mitra-input-hint" className="mitra-input-note">
                   ⚠ General information only — not legal advice for your specific situation

@@ -662,6 +662,11 @@ img { max-width: 100%; display: block; }
   margin-top: .4rem; line-height: 1.4;
 }
 
+.mitra-mic-error {
+  font-size: .68rem; color: var(--red); text-align: center;
+  margin-top: .4rem; line-height: 1.4;
+}
+
 /* Markdown table */
 .mitra-md-table {
   width: 100%; border-collapse: collapse; margin: .4rem 0; font-size: .8rem;
