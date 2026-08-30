@@ -1,0 +1,276 @@
+<title>The Master Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --blue: #3D5A80; --blue-soft: #E1E8EF; --warn: #A85C2A; --warn-soft: #F3E2D3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --blue: #8FAFD1; --blue-soft: #1E2A38; --warn: #D08148; --warn-soft: #3A2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --blue: #8FAFD1; --blue-soft: #1E2A38; --warn: #D08148; --warn-soft: #3A2517;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.68; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14; letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance; }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0 1.1rem; font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; margin-bottom: 2.6rem; }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  .recheck { border: 1px solid var(--line-strong); border-radius: 4px; background: var(--paper-raised); padding: 1.3rem 1.5rem; margin-bottom: 2.6rem; }
+  .recheck .k { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--good); margin: 0 0 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+  .recheck .k::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--good); flex: none; }
+  .recheck ul { margin-bottom: 0; }
+  .recheck li { font-size: 0.93rem; }
+
+  .flag { border-top: 2px solid var(--warn); border-bottom: 2px solid var(--warn); background: var(--paper-raised); padding: 1.4rem 1.6rem; margin-bottom: 2.6rem; }
+  .flag .k { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--warn); margin: 0 0 0.6rem; display: block; font-weight: 500; }
+  .flag p { margin: 0 0 0.7rem; }
+  .flag p:last-child { margin-bottom: 0; }
+
+  section.block { margin-bottom: 3rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.5rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.45rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance; }
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.97rem; margin: 1.5rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  b { font-weight: 600; }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 0.87em; background: var(--accent-soft); color: var(--accent-strong); padding: 0.1em 0.35em; border-radius: 3px; }
+
+  .plain { display: block; font-size: 0.88rem; color: var(--ink-soft); background: var(--paper-raised); border-left: 2px solid var(--accent); padding: 0.6rem 0.9rem; margin: 0.8rem 0 1.2rem; border-radius: 0 3px 3px 0; }
+  .plain b { color: var(--ink); }
+
+  .haves { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 0.5rem; }
+  .have { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 4px; padding: 1rem 1.1rem; }
+  .have .t { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .have .d { font-size: 0.85rem; color: var(--ink-soft); }
+
+  .phases { list-style: none; padding: 0; margin: 0 0 1rem; border-top: 1px solid var(--line); }
+  .phases > li { display: grid; grid-template-columns: 6.4rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--line); margin: 0; }
+  .phases .ph-label { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--accent); letter-spacing: 0.03em; padding-top: 0.15rem; }
+  .phases .ph-body p { margin: 0 0 0.35rem; color: var(--ink); }
+  .phases .ph-body .sub { color: var(--ink-faint); font-size: 0.87rem; margin: 0; }
+  .tag { display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 0.15em 0.5em; border-radius: 3px; margin-right: 0.4em; margin-top: 0.3em; }
+  .tag-new { background: var(--good-soft); color: var(--good); }
+  .tag-free { background: var(--blue-soft); color: var(--blue); }
+  .tag-fix { background: var(--warn-soft); color: var(--warn); }
+
+  .gpu-box { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); padding: 1.6rem 1.8rem; background: var(--paper-raised); margin-bottom: 3rem; }
+  .gpu-box h2 { font-size: 1.4rem; margin-bottom: 0.9rem; }
+
+  .idea { border-left: 2px solid var(--line-strong); padding-left: 1rem; margin-bottom: 1.2rem; }
+  .idea h4 { font-family: "IBM Plex Sans", sans-serif; font-size: 0.96rem; font-weight: 600; margin: 0 0 0.3rem; color: var(--ink); }
+  .idea p { font-size: 0.94rem; color: var(--ink-soft); margin: 0; }
+
+  .skip-item { margin-bottom: 0.9rem; font-size: 0.94rem; }
+  .skip-item b { color: var(--ink); }
+  .skip-item span { color: var(--ink-soft); }
+
+  .closing { border-top: 1px solid var(--line); padding-top: 2rem; }
+  .closing ol { padding-left: 1.4rem; }
+  .closing li b { color: var(--ink); }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint); }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+    .phases > li { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — plain-English edition, rechecked Aug 29 2026</p>
+  <h1>The master plan</h1>
+  <p class="dek">Everything from every session pulled into one plan: Mitra, the free law data, a private search tool, a drafting tool, your GPU, and an honest recheck of whether this is really the max available — explained without assuming you know law or AI.</p>
+
+  <nav class="jump">
+    <a href="#rechecked">Rechecked</a>
+    <a href="#have">What we have</a>
+    <a href="#ceiling">The one rule</a>
+    <a href="#plan">The plan</a>
+    <a href="#gpu">Your GPU</a>
+    <a href="#ideas">Other real ideas</a>
+    <a href="#skip">What to skip</a>
+    <a href="#start">Where to start</a>
+  </nav>
+
+  <div class="recheck" id="rechecked">
+    <p class="k">Actually rechecked this time, not just restated</p>
+    <ul>
+      <li><b>The free law dataset's numbers hold up.</b> Independently checked the math behind its biggest figure (463.6GB of embeddings) against the raw vector count — it comes out within the normal range once you account for how a search index stores things. Not inflated.</li>
+      <li><b>Found a real problem by reading Mitra's actual settings, not just its plan.</b> Mitra already uses more than half its allowed free-tier speed limit with Gemini, on its own, with one shared key. Pointing a drafting tool at that same key would risk both breaking when used together. Fixed below: a second, separate free key for internal tools — costs nothing, just needs to be kept apart from Mitra's.</li>
+      <li><b>One earlier idea corrected instead of repeated:</b> a specialized Indian-legal-language AI model was suggested for search. Checked its actual documentation directly — it's built for <i>sorting</i> legal text into categories, not for searching it. Kept for the job it's actually good at (see Mitra's roadmap below), dropped from the search job.</li>
+    </ul>
+  </div>
+
+  <section class="block" id="have">
+    <div class="block-head"><h2>What we actually have to work with</h2></div>
+    <div class="haves">
+      <div class="have">
+        <div class="t">A live website + Mitra</div>
+        <div class="d">Already built and working — the chatbot, the site, hosted on Vercel.</div>
+      </div>
+      <div class="have">
+        <div class="t">Free Indian law data</div>
+        <div class="d">12.8 million court judgments and 22,265 laws, already organized and computer-searchable, free to use commercially with credit given. Verified directly, not assumed.</div>
+      </div>
+      <div class="have">
+        <div class="t">Your laptop's graphics card</div>
+        <div class="d">An RTX 3060 with 6GB of memory — a real, free computing resource. Explained in full below.</div>
+      </div>
+      <div class="have">
+        <div class="t">A working example to copy</div>
+        <div class="d">A free, already-built drafting tool (Word add-in) that other people maintain — we can adapt it instead of building one from nothing.</div>
+      </div>
+      <div class="have">
+        <div class="t">Claude, already in hand</div>
+        <div class="d">This conversation itself can become the "engine" behind a private search tool at no extra cost — explained in the plan below.</div>
+      </div>
+      <div class="have">
+        <div class="t">A tight budget</div>
+        <div class="d">Every decision here is chosen with "does this cost money" in mind, not just "is this possible."</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="flag" id="ceiling">
+    <span class="k">⚠ The one rule that applies to everything below</span>
+    <p>The free law data has real, admitted flaws — some old Supreme Court judgments don't show up when you filter by date, and every High Court judgment (including all of Karnataka's) has no working "which other cases quote this one" link, only the Supreme Court does. None of this makes the data unusable. It does mean: <b>anything any of these tools finds needs a human to check it against the real source before relying on it</b> — this is a law firm's name attached to the answer, not a hobby project. That's not a stage to grow out of, it's a permanent rule, same as Mitra never giving advice on someone's specific case.</p>
+  </div>
+
+  <section class="block" id="plan">
+    <div class="block-head"><h2>The plan, in order</h2></div>
+    <p>Three separate things — Mitra (free, public), a search tool (private, for us), a drafting tool (private, for us) — each only makes sense once the step before it is working.</p>
+
+    <ul class="phases">
+      <li>
+        <span class="ph-label">Step 1</span>
+        <div class="ph-body">
+          <p>Finish polishing Mitra as it exists today</p>
+          <p class="sub">Faster responses, real spam protection, a "was this helpful" button, merging duplicated code. Already underway.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Step 2</span>
+        <div class="ph-body">
+          <p>Give Mitra the free law library instead of a handwritten cheat-sheet <span class="tag tag-new">refined</span></p>
+          <p class="sub">Swap hand-typed answers for real Karnataka High Court judgments and real law text. Two further upgrades once that's working: teach Mitra to search again if its first attempt wasn't enough instead of always answering off one lookup, and use the specialized Indian-legal-language model — correctly, this time — to sort a question into the right practice area before searching, which it's actually built for.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Step 3</span>
+        <div class="ph-body">
+          <p>Build a private search tool, just for the firm <span class="tag tag-new">now concrete</span></p>
+          <p class="sub">A "Google, but only for Indian case law" tool for your own research. Store the data on your own computer, index it with a free, simple search method, and connect it to Claude directly — meaning you can search it right inside a conversation like this one, no extra app, no extra login, no extra AI subscription needed for the "search" part.</p>
+          <span class="plain"><b>Why separate from Mitra?</b> Mitra talks to the public and has to stay cautious. An internal tool is just for you, so it can go deeper without that caution.</span>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Step 4</span>
+        <div class="ph-body">
+          <p>Build a drafting / contract-review tool <span class="tag tag-fix">one fix applied</span></p>
+          <p class="sub">Adapt the existing free Word add-in mentioned above — a working, mature tool already, not a demo. One important fix: give it its <i>own</i> free Gemini key, separate from Mitra's — checked Mitra's actual settings and it's already using more than half its speed allowance alone, so sharing one key between the two risks both slowing down or failing together.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Step 5</span>
+        <div class="ph-body">
+          <p>Measure whether any of this is actually working</p>
+          <p class="sub">A set of test questions with known correct answers, graded automatically — there's a working scoring method to copy for this too, not just something to invent from scratch.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Later, if wanted</span>
+        <div class="ph-body">
+          <p>Sell the search and drafting tools to other small firms</p>
+          <p class="sub">Both become sellable mostly by wrapping the same working backend in a simple screen for other people to use — not a rebuild. Being honest about the other half: this makes the firm partly a software vendor to other firms, which is ongoing work (support, keeping it running for someone else), not a one-time thing. A real comparable Indian product charges ₹9,000–17,250 per person per month — real room to charge less, given our costs are near zero, but only worth it if taking on that ongoing responsibility is actually wanted.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <div class="gpu-box" id="gpu">
+    <h2>What your GPU actually adds</h2>
+    <p><span class="plain">A GPU (graphics card) is the part of a computer built for doing huge amounts of math at once — originally for video games, but that same ability is exactly what AI needs. Yours (RTX 3060, 6GB) is a real, useful one — not top-of-the-line, but genuinely capable for the right jobs.</span></p>
+
+    <h3>What it's good for</h3>
+    <ul>
+      <li><b>Powering the search tool's "understand meaning, not just keywords" upgrade, for free.</b> Turning case text into something searchable by meaning normally means paying a cloud AI service per document, even if only a small fee. Your GPU can do that exact conversion locally instead — for the entire scoped slice of Karnataka High Court cases and law text, for free, with no speed limit and no ongoing bill. This is a real upgrade over the plan's earlier assumption of using a cloud AI service's free tier for this step — genuinely better, now that the GPU is properly accounted for.</li>
+      <li><b>Teaching Mitra your own writing, for free.</b> The free law data covers public law, not the firm's own past blog posts, opinions, or way of explaining things. Your GPU can convert your own documents into something searchable the same way, as many times as you want, at no cost.</li>
+      <li><b>A free practice space.</b> While building and testing any of this, every real test question normally costs a small amount through Gemini. Your GPU can run a smaller, free AI model locally for rough testing during development — not as good as Gemini, but good enough to catch bugs before spending real calls confirming things properly.</li>
+    </ul>
+
+    <h3>What it's not for</h3>
+    <p>It can't run the actual live chatbot that visitors talk to. A laptop gets closed, goes to sleep, and isn't always connected — the real website needs to be reachable 24/7 from anywhere, which needs a proper always-on server, same as Mitra already runs on today. Think of the GPU as a workshop, not the storefront.</p>
+  </div>
+
+  <section class="block" id="ideas">
+    <div class="block-head"><h2>Other real ideas worth having on the list</h2></div>
+
+    <div class="idea">
+      <h4>Judge conduct &amp; argument-style lookup <span class="tag tag-new">verified legitimate</span></h4>
+      <p>Not "predict how a judge will rule" — narrower and genuinely useful: surface what style or tone of argument a specific judge has previously pushed back on, so you know what to avoid before appearing in front of them. Built from two text sources: judgments themselves, where judges sometimes explicitly note conduct in their orders, and legal-journalism coverage (LiveLaw, Bar &amp; Bench regularly quote a judge's real-time oral remarks, not just the final written order). The video/facial-analysis version of this same idea is off the table — checked directly against the Supreme Court's own July 24, 2026 order, which bans third parties from downloading, storing, or reusing hearing recordings without permission (only the Court's own official stream is exempt). Recognized news reporting is explicitly still allowed, which is exactly why the text-based route above holds up as the real path, not a workaround.</p>
+    </div>
+
+    <div class="idea">
+      <h4>Track what people actually ask Mitra</h4>
+      <p>A simple, free log of the real questions visitors type in. Right now, which topics to prioritize for the knowledge base is a guess — this would tell us for certain.</p>
+    </div>
+
+    <div class="idea">
+      <h4>Build free first, pay only once something's proven</h4>
+      <p>Prototype the search and drafting tools using free local tools and your GPU first, confirm they're genuinely useful, and only move to paid always-on hosting once it's clear it's worth paying for — rather than committing to a monthly bill from day one.</p>
+    </div>
+  </section>
+
+  <section class="block" id="skip">
+    <div class="block-head"><h2>What's deliberately <i>not</i> on this plan</h2></div>
+    <p>Being honest about the ceiling matters as much as the plan itself.</p>
+    <div class="skip-item"><b>Training our own AI model from scratch.</b> <span>Would cost more than the entire rest of this plan combined, for a worse result than just using Gemini and Claude well.</span></div>
+    <div class="skip-item"><b>Fine-tuning a model on your GPU.</b> <span>Technically possible in a very limited way, but 6GB is right at the edge of what that needs — not worth the time for what little it would improve.</span></div>
+    <div class="skip-item"><b>Running the live chatbot off your laptop.</b> <span>Covered above — a laptop can't be the thing 24/7 website visitors rely on.</span></div>
+    <div class="skip-item"><b>Reusing the free dataset's own pre-computed "search by meaning" index directly.</b> <span>It's built with a specific paid AI model — using it means paying that provider per search. Re-doing this ourselves on the GPU avoids that entirely, for our own slice of the data.</span></div>
+    <div class="skip-item"><b>Mitra giving case-specific legal advice to visitors.</b> <span>A firm rule, not a technical one — doesn't change no matter how good any of this gets.</span></div>
+  </section>
+
+  <section class="block closing" id="start">
+    <h2 style="margin-bottom: 1.1rem;">Where this actually starts</h2>
+    <ol>
+      <li><b>Now:</b> finish Step 1 — the Mitra polish work already underway.</li>
+      <li><b>Next:</b> fork the free drafting tool with its own separate key — the fastest real win, since the app is already built.</li>
+      <li><b>Then:</b> download the Karnataka High Court + law-text slice and get the private search tool running, connected here in Claude — real research value at zero cost.</li>
+      <li><b>Whenever there's a spare evening:</b> use the GPU to do a small free test — teaching the search tool one piece of real case text locally, just to confirm the approach works before building anything bigger on it.</li>
+    </ol>
+  </section>
+
+  <footer>The Master Plan — reference document, Katti &amp; Co. web project</footer>
+
+</div>

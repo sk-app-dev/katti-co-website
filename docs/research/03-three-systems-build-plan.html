@@ -1,0 +1,253 @@
+<title>Three Systems Build Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.65; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  h1 {
+    font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14;
+    letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance;
+  }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump {
+    display: flex; flex-wrap: wrap; gap: 0 1.2rem;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.76rem;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 0.9rem 0; margin-bottom: 2.6rem;
+  }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  .system {
+    border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+    background: var(--paper-raised); padding: 1.6rem 1.8rem; margin-bottom: 2.6rem;
+  }
+  .system-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+  .system h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.5rem; margin: 0; }
+  .system-status {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+    text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 3px; white-space: nowrap;
+  }
+  .status-live { background: var(--good-soft); color: var(--good); }
+  .status-build { background: var(--accent-soft); color: var(--accent-strong); }
+  .system-sub { color: var(--ink-soft); font-size: 0.98rem; margin: 0.3rem 0 0; }
+
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.95rem; margin: 1.5rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.5rem; }
+  li::marker { color: var(--ink-faint); }
+  code {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.87em;
+    background: var(--accent-soft); color: var(--accent-strong);
+    padding: 0.1em 0.35em; border-radius: 3px;
+  }
+
+  .phases { list-style: none; padding: 0; margin: 0 0 1rem; border-top: 1px solid var(--line); }
+  .phases li {
+    display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem;
+    padding: 0.85rem 0; border-bottom: 1px solid var(--line); margin: 0;
+  }
+  .phases .ph-label { font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--accent); padding-top: 0.15rem; }
+  .phases .ph-body p { margin: 0 0 0.25rem; color: var(--ink); }
+  .phases .ph-body .sub { color: var(--ink-faint); font-size: 0.87rem; }
+
+  .cost-row {
+    display: flex; gap: 1.5rem; flex-wrap: wrap; font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem; color: var(--ink-faint); border-top: 1px dashed var(--line);
+    padding-top: 0.9rem; margin-top: 1.2rem;
+  }
+  .cost-row b { color: var(--ink); font-weight: 500; }
+
+  .later {
+    border-left: 2px solid var(--line-strong); padding-left: 1rem; margin-top: 1.4rem;
+    font-size: 0.94rem; color: var(--ink-soft);
+  }
+  .later b { color: var(--ink); }
+
+  .order {
+    border-top: 1px solid var(--line); padding-top: 1.6rem; margin-top: 1rem;
+  }
+  footer {
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);
+    font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint);
+  }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+    .phases li { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — build plan, Aug 29 2026</p>
+  <h1>Three systems, three plans</h1>
+  <p class="dek">Mitra, the search tool, and the drafting tool are separate products with separate audiences and separate timelines — this treats them that way, with concrete steps for each.</p>
+
+  <nav class="jump">
+    <a href="#mitra">Mitra</a>
+    <a href="#search">Search bot</a>
+    <a href="#draft">Draft bot</a>
+    <a href="#order">Suggested order</a>
+  </nav>
+
+  <div class="system" id="mitra">
+    <div class="system-head">
+      <h2>Mitra</h2>
+      <span class="system-status status-live">Live — no rebuild needed</span>
+    </div>
+    <p class="system-sub">Free, public, on the website. Already working.</p>
+    <p>Nothing in this plan touches Mitra. The one optional future link between it and the search bot below: once the search bot's Karnataka-HC-plus-legislation data exists, Mitra's knowledge base could eventually draw from that same verified data instead of hand-written entries — but that's a later decision, not part of building the other two systems.</p>
+  </div>
+
+  <div class="system" id="search">
+    <div class="system-head">
+      <h2>Search bot</h2>
+      <span class="system-status status-build">To build — internal first</span>
+    </div>
+    <p class="system-sub">Firm-only for now. Commercialize later once it's proven internally.</p>
+
+    <h3>What it is</h3>
+    <p>A private tool that searches real Karnataka High Court judgments, Central legislation, and the regulators matching our practice areas — reachable through Claude Code/Desktop as an MCP server, so no separate app or login is needed to start using it.</p>
+
+    <ul class="phases">
+      <li>
+        <span class="ph-label">Phase 1</span>
+        <div class="ph-body">
+          <p>Download the scoped slice from Hugging Face (<code>vaquill/open-india-law</code>) — Karnataka HC judgments, Central legislation, and the regulator files matching our six practice areas.</p>
+          <p class="sub">Free, CC BY 4.0. Lands on the local SSD, not the cloud.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Phase 2</span>
+        <div class="ph-body">
+          <p>Index it with SQLite FTS5 — plain keyword search over the real text. No embeddings, no vector database, nothing to pay for.</p>
+          <p class="sub">This alone is already a real upgrade over hand-written KB entries — actual judgments and actual section text, searchable.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Phase 3</span>
+        <div class="ph-body">
+          <p>Build the MCP server (Python, FastMCP-style) exposing <code>search_judgments()</code> and <code>search_legislation()</code> tools over that index. Connect it here, in Claude Code.</p>
+          <p class="sub">No LLM API key needed for this — Claude's already doing the thinking through this session.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Phase 4</span>
+        <div class="ph-body">
+          <p>Optional upgrade: add semantic search. Re-embed the same scoped slice using Gemini's free-tier embeddings (not Vaquill's Voyage vectors — different model, different space, can't mix them), store in Chroma alongside the keyword index.</p>
+          <p class="sub">Only worth doing once keyword search has been used for a while and its gaps are actually felt.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="cost-row">
+      <span><b>Cost:</b> $0</span>
+      <span><b>Storage:</b> local SSD</span>
+      <span><b>Access:</b> Claude Code / Desktop via MCP</span>
+    </div>
+
+    <div class="later">
+      <b>Commercializing later:</b> the MCP server and index are the hard part, and they're already built for us by then. Turning it into something sellable to other firms is mostly a packaging exercise — a simple hosted web UI wrapped around the same backend, plus hosting and billing for other firms' access. Not a rebuild.
+    </div>
+  </div>
+
+  <div class="system" id="draft">
+    <div class="system-head">
+      <h2>Draft bot</h2>
+      <span class="system-status status-build">To build — internal first</span>
+    </div>
+    <p class="system-sub">Firm-only for now. Commercialize later.</p>
+
+    <h3>What it is</h3>
+    <p>A self-hosted fork of Vaquill's <code>ms-word-addin</code> — first-draft generation for notices, replies, opinions, and contracts, inside Word, running on our own Gemini key.</p>
+
+    <ul class="phases">
+      <li>
+        <span class="ph-label">Phase 1</span>
+        <div class="ph-body">
+          <p>Fork the already-cloned repo, set <code>VITE_EDITION=community</code>. This build has no dependency on Vaquill's servers at all.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Phase 2</span>
+        <div class="ph-body">
+          <p>Point it at Gemini using the same API key Mitra already uses. Build the static add-in files and sideload the manifest into Word.</p>
+          <p class="sub">Sideloading is standard for a personal/internal add-in — no Microsoft Store publishing needed.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Phase 3</span>
+        <div class="ph-body">
+          <p>Add a thin server-side proxy for the Gemini key — same pattern as <code>/api/mitra</code> already uses — so the key never sits in client-side code. Host it free on Vercel, alongside the main site.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ph-label">Phase 4</span>
+        <div class="ph-body">
+          <p>Optional: feed in our own redacted past documents as style templates, replacing the repo's default US-oriented ones, so drafts come out in the firm's actual voice and structure.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="cost-row">
+      <span><b>Cost:</b> $0 (Gemini free tier, same as Mitra)</span>
+      <span><b>Hosting:</b> Vercel free tier</span>
+      <span><b>License:</b> Apache-2.0</span>
+    </div>
+
+    <div class="later">
+      <b>Commercializing later:</b> same shape as the search bot — the app itself is already built and self-hostable. Selling it to other firms means hosting and supporting it for them (their own key or a metered shared one), not rebuilding the core product. Lexlegis.ai charges ₹9,000+/user/month for a more elaborate version of this same idea — real room to price under that.
+    </div>
+  </div>
+
+  <div class="order" id="order">
+    <h2 style="margin-bottom: 1rem; font-family: 'IBM Plex Serif', serif; font-size: 1.4rem;">Suggested order</h2>
+    <ol>
+      <li><b>Draft bot first</b> — the repo is already mature and complete; forking and configuring it is the fastest path to something real and usable, likely a day or two of work.</li>
+      <li><b>Search bot second</b> — genuinely useful but needs actual data download and indexing work before it's usable, not just configuration.</li>
+      <li><b>Revisit Mitra last</b>, and only if the search bot's verified data turns out to be worth folding into its knowledge base.</li>
+    </ol>
+    <p style="margin-bottom:0;">Reasonable to reverse this if research is a bigger daily need than drafting right now — this is a suggestion, not a fixed sequence.</p>
+  </div>
+
+  <footer>Three Systems Build Plan — reference document, Katti &amp; Co. web project</footer>
+
+</div>

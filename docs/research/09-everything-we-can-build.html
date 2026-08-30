@@ -1,0 +1,341 @@
+<title>Everything We Can Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3; --stop: #9B3A2E; --stop-soft: #F2DEDA;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.66; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 45rem; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14; letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance; }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0 1.2rem; font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; margin-bottom: 2.4rem; }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  section.block { margin-bottom: 3rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.35rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.44rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance; }
+  .tagline { color: var(--ink-soft); font-size: 0.99rem; margin: 0.4rem 0 1.4rem; max-width: 40rem; }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.5rem; }
+  li::marker { color: var(--ink-faint); }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 0.85em; background: var(--accent-soft); color: var(--accent-strong); padding: 0.1em 0.35em; border-radius: 3px; }
+
+  .principle { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); background: var(--paper-raised); padding: 1.5rem 1.7rem; margin-bottom: 2.6rem; }
+  .principle h2 { font-size: 1.28rem; margin-bottom: 0.8rem; }
+  .principle p:last-child { margin-bottom: 0; }
+  .quote { border-left: 2px solid var(--line-strong); padding-left: 0.9rem; font-style: italic; color: var(--ink-soft); font-size: 0.93rem; margin: 0.8rem 0; }
+
+  /* item rows */
+  .item { border-top: 1px solid var(--line); padding: 0.95rem 0; }
+  .item:last-child { border-bottom: 1px solid var(--line); }
+  .item-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+  .item-n { font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; color: var(--ink-faint); min-width: 1.6rem; }
+  .item-name { font-weight: 600; font-size: 0.99rem; color: var(--ink); }
+  .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15em 0.45em; border-radius: 3px; white-space: nowrap; }
+  .b-good { background: var(--good-soft); color: var(--good); }
+  .b-warn { background: var(--warn-soft); color: var(--warn); }
+  .b-stop { background: var(--stop-soft); color: var(--stop); }
+  .b-gold { background: var(--accent-soft); color: var(--accent-strong); }
+  .item-body { padding-left: 2.2rem; }
+  .item-body p { font-size: 0.94rem; color: var(--ink-soft); margin: 0 0 0.35rem; }
+  .item-src { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; color: var(--ink-faint); }
+  .item-src b { color: var(--ink-soft); font-weight: 500; }
+
+  .tier-label { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.3rem; }
+  .tier-tag { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.2em 0.55em; border-radius: 3px; }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint); }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+    .item-body { padding-left: 0; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — the complete list, Aug 30 2026</p>
+  <h1>Everything we can build</h1>
+  <p class="dek">Every option surfaced across the whole investigation, in one list, with what each is built from and what it costs. Thirty-four items across four tiers — including six that should be ruled out and why.</p>
+
+  <nav class="jump">
+    <a href="#coverage">Coverage</a>
+    <a href="#principle">The design rule</a>
+    <a href="#a">A · Build now</a>
+    <a href="#b">B · Build next</a>
+    <a href="#c">C · Mitra</a>
+    <a href="#d">D · Needs a decision</a>
+    <a href="#e">E · Ruled out</a>
+  </nav>
+
+  <section class="block" id="coverage">
+    <div class="block-head"><h2>Is the check complete</h2></div>
+    <p>Effectively, yes. Eight repositories cloned and read — the dataset, the Word add-in, the Google Docs add-on, the MCP server, the playbooks, the legal-aid plugin, the answer benchmark, and the 1,473-line tool index — plus direct verification of the Indian tools, the AWS upstream, the Bar Council rules and the eCourts API.</p>
+    <p>Genuinely unread and genuinely immaterial: per-court audit files for the 24 High Courts we don't practise in, the 15 tribunal SQL schemas (tables with no extracted text behind them), individual scraper implementations, and the Word add-in's UI components. Each is a small read at the moment it becomes relevant.</p>
+    <p><b>One late finding worth recording:</b> the MCP server's changelog notes routes retired for "the India-market exit." Vaquill has withdrawn from India commercially — which explains why this dataset was opened up, and means they are a data source and possible contractor, not a competitor.</p>
+  </section>
+
+  <div class="principle" id="principle">
+    <h2>The design rule everything below should follow</h2>
+    <p>The single most valuable thing in the whole sweep isn't a dataset or a library — it's how the legal-aid plugin frames every one of its fifteen skills. Not one of them produces a finished work product:</p>
+    <p class="quote">Rule blocks are RESEARCH NEEDED; Application is STAFF ANALYSIS prompts; Conclusion is blank. The scaffold, not the analysis.</p>
+    <p>Its drafting skill "marks every uncertain element" and is "explicitly a starting point." Its research skill gives "leads and frameworks, NOT authoritative citations." Its intake skill "does NOT decide case acceptance." And a review queue gates anything before it reaches a client or a court.</p>
+    <p style="margin-bottom:0;">That is the pattern for legal AI a regulator would look at favourably, and it costs nothing to adopt. <b>Every tool below should produce scaffolding with gaps explicitly marked, never an answer presented as finished.</b></p>
+  </div>
+
+  <section class="block" id="a">
+    <div class="tier-label"><span class="tier-tag b-good">Tier A</span><h2>Build now — internal, free, no conduct question</h2></div>
+    <p class="tagline">Nothing here touches the public, needs a budget, or raises a Rule 36 issue.</p>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">01</span><span class="item-name">Deadline ledger with plausibility check</span><span class="badge b-gold">Start here</span></div>
+      <div class="item-body">
+        <p>A YAML ledger of every deadline — forum, matter, due date, owner, and crucially the <i>source</i> that generated it. Cross-matter rollup: overdue, today, next 3/7/14 days. You compute the date; the tool flags it if it falls outside the typical range for that deadline type, and logs any override.</p>
+        <p class="item-src"><b>From:</b> legal-aid-plugin deadlines skill · <b>Cost:</b> free · <b>Risk:</b> none</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">02</span><span class="item-name">Citation validator</span></div>
+      <div class="item-body">
+        <p>Run every citation in a draft through the Indian citation parser before it leaves the office. Does it parse; does the court code match the court named; is the year plausible. Mechanical, catches a real class of error.</p>
+        <p class="item-src"><b>From:</b> <code>indian_formats.py</code>, Apache-2.0 · <b>Cost:</b> free · <b>Effort:</b> small</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">03</span><span class="item-name">Own-document redaction</span></div>
+      <div class="item-body">
+        <p>Redact past drafts and opinions so they can be used as templates — phone, email, PAN, IFSC, Aadhaar (each requiring a context word so case numbers aren't corrupted), plus victim-relative and protected-child names, and detection of non-publication directions.</p>
+        <p class="item-src"><b>From:</b> <code>redaction.py</code>, Apache-2.0 · <b>Cost:</b> free · <b>Unblocks:</b> items 04 and 15</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">04</span><span class="item-name">The firm's own work-product index</span><span class="badge b-gold">Most differentiated</span></div>
+      <div class="item-body">
+        <p>Index redacted past drafts, opinions and pleadings on the GPU. This is the one corpus no competitor and no generic AI tool has, and it's what makes an assistant sound like this firm rather than a chatbot. Evaluate DocuChat first — offline, local, MIT, with character-level citation verification already built.</p>
+        <p class="item-src"><b>From:</b> DocuChat (MIT) or custom + GPU · <b>Cost:</b> free · <b>Size:</b> trivial</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">05</span><span class="item-name">Karnataka High Court research index</span></div>
+      <div class="item-body">
+        <p>581,276 judgments, 1,552,339 chunks. Download ~2.6 GB, embed on the GPU in under two hours, store 0.56 GB quantised. Normalise court names on ingest — the source stores Karnataka as <code>High Court of Karnataka</code> and exact-string filters silently miss variants.</p>
+        <p class="item-src"><b>From:</b> Vaquill <code>legal_corpus_v2</code> or AWS upstream · <b>Cost:</b> free · <b>Effort:</b> an afternoon</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">06</span><span class="item-name">Legislation and regulator search</span></div>
+      <div class="item-body">
+        <p>1.1M provisions with a computed <code>in_force</code> flag, plus RBI, SEBI, MCA, CBIC, TRAI and others at provision level. Filter by <code>has_non_obstante</code> to find overriding clauses across the whole corpus — a real research capability that doesn't exist in any free tool.</p>
+        <p class="item-src"><b>From:</b> <code>acts_india</code> parquet · <b>Cost:</b> free</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">07</span><span class="item-name">MCP server exposing all of the above</span></div>
+      <div class="item-body">
+        <p>One small Python server (FastMCP — two dependencies) exposing search, citation lookup, deadline queries and document search as tools, connected to Claude Desktop. Return citations and two-line snippets only, with a separate fetch-full-text tool, or search results will fill the context window.</p>
+        <p class="item-src"><b>From:</b> FastMCP; pattern from <code>vaquill-mcp</code> · <b>Cost:</b> free · <b>Client:</b> Claude Desktop, not the terminal</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">08</span><span class="item-name">Conflict checking</span></div>
+      <div class="item-body">
+        <p>Check a prospective party against past matters before accepting instructions. Deterministic, professionally necessary, unglamorous.</p>
+        <p class="item-src"><b>Cost:</b> free · <b>Effort:</b> small</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">09</span><span class="item-name">Judge and disposition analytics</span></div>
+      <div class="item-body">
+        <p>The corpus already carries <code>judges</code>, <code>disposition</code> and <code>bench_strength</code> per chunk. Disposal patterns by judge and by matter type, from data that exists. Not outcome prediction — pattern awareness.</p>
+        <p class="item-src"><b>From:</b> chunk metadata · <b>Cost:</b> free</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">10</span><span class="item-name">Practice-support skills</span></div>
+      <div class="item-body">
+        <p>Adapt the legal-aid skill patterns: an IRAC memo scaffold with blank conclusion, a research roadmap, a status summary in four registers (client / internal / court-ready / counsel), structured intake, and a review gate. These are markdown files, not software.</p>
+        <p class="item-src"><b>From:</b> legal-aid-plugin, Apache-2.0 · <b>Cost:</b> free · <b>Effort:</b> writing, not coding</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="b">
+    <div class="tier-label"><span class="tier-tag b-good">Tier B</span><h2>Build next</h2></div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">11</span><span class="item-name">Drafting assistant</span></div>
+      <div class="item-body">
+        <p>Two routes. Faster: start from the Master Claude for Legal skill pack (MIT, includes a citation verifier). Better product: fork the Word add-in's community build — one config flag, no vendor backend, and it supports Gemini or local Ollama. Either way it needs <b>its own API key</b>, separate from Mitra's.</p>
+        <p class="item-src"><b>From:</b> <code>ms-word-addin</code> or Master Claude for Legal · <b>Cost:</b> free tier · <b>Depends on:</b> items 03, 04</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">12</span><span class="item-name">Cause-list monitoring</span><span class="badge b-warn">Try the free app first</span></div>
+      <div class="item-body">
+        <p>Daily check of which matters are listed tomorrow, searchable by advocate name. Priced from Vaquill's own testing: ₹1.00 per cause-list call, so roughly ₹30/month. But the official eCourts app already does push notifications for saved cases — use it for a week before building anything.</p>
+        <p class="item-src"><b>From:</b> eCourts API · <b>Cost:</b> ~₹30/month · <b>Warning:</b> documented filter values are wrong and fail silently</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">13</span><span class="item-name">Indian judgment structure analysis</span></div>
+      <div class="item-body">
+        <p>Opennyai's rhetorical-role labelling — trained on Indian judgments rather than regex — to identify reasoning versus facts versus submissions. Improves both the research index and anything summarising a judgment.</p>
+        <p class="item-src"><b>From:</b> Opennyai, MIT · <b>Cost:</b> free · <b>Runs on:</b> the GPU</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">14</span><span class="item-name">Current-awareness alerts</span></div>
+      <div class="item-body">
+        <p>Weekly digest of new judgments touching the firm's practice areas, from the daily-synced AWS upstream rather than the frozen snapshot.</p>
+        <p class="item-src"><b>From:</b> AWS Open Data · <b>Cost:</b> free</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">15</span><span class="item-name">Clause bank and diligence templates</span></div>
+      <div class="item-body">
+        <p>The firm's own clauses, tagged by type, tone and jurisdiction, plus structured diligence-question sets per contract type. The US content doesn't transfer; the schemas do exactly.</p>
+        <p class="item-src"><b>From:</b> playbooks structure, CC BY 4.0 · <b>Cost:</b> free · <b>Effort:</b> your content</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">16</span><span class="item-name">Legislative-intent lookup</span></div>
+      <div class="item-body">
+        <p>Parliamentary debates, Law Commission reports, the Constitution and AIR volumes — 6.4 GB of text-bearing material their own audit flags as indexed by nobody. Answers <i>why</i> a provision reads as it does.</p>
+        <p class="item-src"><b>From:</b> <code>parliament-debates</code> · <b>Cost:</b> free</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">17</span><span class="item-name">Full-India index</span><span class="badge b-warn">Only if needed</span></div>
+      <div class="item-body">
+        <p>All 32.5M chunks: 53.6 GB download, ~36 hours of GPU time, 11.6 GB quantised. Entirely feasible — but only worth it if matters routinely reach beyond Karnataka and the Supreme Court.</p>
+        <p class="item-src"><b>Cost:</b> free, plus a weekend of background processing</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="c">
+    <div class="tier-label"><span class="tier-tag b-good">Tier C</span><h2>Mitra — the public bot</h2></div>
+    <p class="tagline">Separate from everything above: Mitra is serverless, public, and bound by rules the internal tools aren't.</p>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">18</span><span class="item-name">Foundation polish</span></div>
+      <div class="item-body"><p>Streaming responses, persistent rate limiting, feedback capture, merging the duplicated components. Already scoped, still first.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">19</span><span class="item-name">Real law instead of hand-written answers</span></div>
+      <div class="item-body"><p>A hosted index of ~150K chunks — practice-area legislation plus curated judgments, about 50 MB quantised, which fits free tiers. Use the published <code>in_force</code> flag; normalise court names.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">20</span><span class="item-name">Ratio-aware retrieval</span><span class="badge b-gold">Biggest quality gain</span></div>
+      <div class="item-body"><p>Weight retrieval toward <code>ratio_decidendi</code> and <code>conclusion</code> over <code>arguments</code> and <code>facts</code>, so Mitra quotes what a court held rather than what a party argued. Most legal chatbots can't make this distinction.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">21</span><span class="item-name">Deterministic citation validation</span></div>
+      <div class="item-body"><p>Before display, check every citation parses and every quoted passage actually appears in the cited source. Anything failing is dropped, not shown. Kills the most damaging failure mode in legal AI with regex rather than a better model.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">22</span><span class="item-name">Agentic retrieval</span></div>
+      <div class="item-body"><p>Search again when the first attempt wasn't enough, instead of always answering off a single lookup.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">23</span><span class="item-name">An Indian answer-quality benchmark</span></div>
+      <div class="item-body"><p>30–50 India-specific questions in the benchmark's format — including its clever <i>stale answer</i> field that catches a model citing last year's figures — scored with the deterministic scorer. Never with an LLM judge: measured swing was 0.20 to 0.70 on identical text.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">24</span><span class="item-name">Practice-area routing</span></div>
+      <div class="item-body"><p>Classify the question before searching. This is what InLegalBERT is actually good at — classification, not retrieval.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">25</span><span class="item-name">Multilingual answers</span></div>
+      <div class="item-body"><p>Hindi or Kannada, held to a real translation-quality bar. Lowest priority, still valid.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="d">
+    <div class="tier-label"><span class="tier-tag b-warn">Tier D</span><h2>Needs a decision before any work</h2></div>
+
+    <div class="item">
+      <div class="item-head"><span class="item-n">26</span><span class="item-name">Mitra's contact-details sign-off</span><span class="badge b-warn">Your call</span></div>
+      <div class="item-body"><p>Every answer currently ends with the firm's email and phone. Arguably content used to drive business rather than purely educational. Keep it deliberately, or strip it — the conservative reading is to strip.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">27</span><span class="item-name">Whether commercialisation is open at all</span></div>
+      <div class="item-body"><p>Rule 47 bars personally engaging in business; a sleeping partnership in an entity run by someone else may be permissible with a State Bar Council view. Settle this before building anything with selling in mind.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">28</span><span class="item-name">Publishing an India legal MCP server</span></div>
+      <div class="item-body"><p>A confirmed gap — 50+ legal MCP servers worldwide, none for India. But not firm-branded and not framed as visibility. Neutral identity as genuine contribution, or keep it internal.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">29</span><span class="item-name">Tribunal text extraction</span><span class="badge b-warn">Costs money</span></div>
+      <div class="item-body"><p>2.1M PDFs across ITAT, NCLT, CESTAT and GST AAR exist as case index plus scanned PDFs with no text. Vaquill sells this extraction as a service and has run 16M Indian legal PDFs through the pipeline. The highest-value paid upgrade available, and the only route to searchable tribunal authority.</p></div>
+    </div>
+    <div class="item">
+      <div class="item-head"><span class="item-n">30</span><span class="item-name">What actually costs you time each week</span><span class="badge b-gold">Answer this first</span></div>
+      <div class="item-body"><p>Everything above is inferred from a dataset, not from your practice. One honest answer here could reorder this entire list — and might remove half of it.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="e">
+    <div class="tier-label"><span class="tier-tag b-stop">Tier E</span><h2>Ruled out, with reasons</h2></div>
+    <ul>
+      <li><b>Public case-law search as lead generation</b> — Rule 36. Justified by its client-acquisition effect, which is the definition of indirect solicitation. Actively enforced since March 2025.</li>
+      <li><b>Training a model from scratch</b> — costs more than everything else combined, for a worse result than using Gemini well.</li>
+      <li><b>Fine-tuning on the 6 GB card</b> — right at the edge of feasible, not worth the time for the gain.</li>
+      <li><b>Running Mitra locally</b> — a laptop can't serve a public site 24/7.</li>
+      <li><b>Aalap as a Gemini replacement</b> — real and open, but their own model card says it's not a general-purpose Indian legal model.</li>
+      <li><b>Reusing Vaquill's own vectors</b> — locked to a paid embedding model, so every search would cost. Re-embedding ourselves is free and produces a 10–40× smaller index.</li>
+      <li><b>Mitra giving case-specific advice</b> — a firm rule, not a technical limit, and it doesn't move.</li>
+    </ul>
+  </section>
+
+  <footer>Everything We Can Build — reference document, Katti &amp; Co. web project</footer>
+
+</div>

@@ -1,0 +1,369 @@
+<title>Open India Law Brainstorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.65; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  h1 {
+    font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14;
+    letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance;
+  }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump {
+    display: flex; flex-wrap: wrap; gap: 0 1.2rem;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.74rem;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 0.9rem 0; margin-bottom: 2.4rem;
+  }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  .flag {
+    border-top: 2px solid var(--warn); border-bottom: 2px solid var(--warn);
+    background: var(--paper-raised); padding: 1.5rem 1.7rem; margin-bottom: 3rem;
+  }
+  .flag .k {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--warn);
+    margin: 0 0 0.6rem; display: block; font-weight: 500;
+  }
+  .flag p { margin: 0 0 0.8rem; }
+  .flag p:last-child { margin-bottom: 0; }
+
+  section.block { margin-bottom: 3.4rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.35rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 {
+    font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600;
+    font-size: 1.48rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance;
+  }
+  .tagline { color: var(--ink-soft); font-size: 1rem; margin: 0.5rem 0 1.5rem; max-width: 40rem; }
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.97rem; margin: 1.6rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  code {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.87em;
+    background: var(--accent-soft); color: var(--accent-strong);
+    padding: 0.1em 0.35em; border-radius: 3px;
+  }
+  a { color: var(--accent); }
+
+  .stat-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem 1.4rem; border: 1px solid var(--line); border-radius: 4px;
+    background: var(--paper-raised); padding: 1.2rem 1.4rem; margin: 1rem 0 1.6rem;
+  }
+  .stat .n { font-family: "IBM Plex Mono", monospace; font-size: 1.1rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 0.78rem; color: var(--ink-faint); margin-top: 0.1rem; }
+
+  .good-item, .bad-item {
+    border-left: 2px solid var(--good); padding-left: 1rem; margin-bottom: 1.1rem;
+  }
+  .bad-item { border-left-color: var(--warn); }
+  .good-item h4, .bad-item h4 {
+    font-family: "IBM Plex Sans", sans-serif; font-size: 0.96rem; font-weight: 600;
+    margin: 0 0 0.3rem; color: var(--ink);
+  }
+  .good-item p, .bad-item p { font-size: 0.94rem; color: var(--ink-soft); margin: 0; }
+
+  .idea { border-top: 1px solid var(--line); padding-top: 1.1rem; margin-top: 1.3rem; }
+  .idea-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+  .idea-name { font-family: "IBM Plex Mono", monospace; font-size: 0.9rem; color: var(--ink); font-weight: 500; }
+  .idea-tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--ink-faint);
+  }
+  .idea p { font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+  .ceiling {
+    border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+    padding: 1.6rem 1.8rem; background: var(--paper-raised); margin-bottom: 1.5rem;
+  }
+
+  .closing {
+    border-top: 1px solid var(--line); padding-top: 1.6rem; margin-top: 2.5rem;
+  }
+  footer {
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);
+    font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint);
+  }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — full repo read, Aug 29 2026</p>
+  <h1>What Open India Law actually gets us</h1>
+  <p class="dek">Cloned and read the entire <code>Vaquill-AI/open-india-law</code> repo directly — README, coverage tables, and Vaquill's own internal data-quality audit, not a summary of a summary. One finding below changes the plan; everything else holds up or improves on what we thought we had.</p>
+
+  <nav class="jump">
+    <a href="#flag">The catch</a>
+    <a href="#solid">What's solid</a>
+    <a href="#not-what-it-seems">Not what it seems</a>
+    <a href="#polished">Polished ideas</a>
+    <a href="#new">New ideas</a>
+    <a href="#rest-of-org">Rest of the org</a>
+    <a href="#ecosystem">Wider ecosystem</a>
+    <a href="#hands-on">Hands-on</a>
+    <a href="#max">At maximum</a>
+    <a href="#revolutionary">Revolutionary?</a>
+    <a href="#commercial">Commercial</a>
+    <a href="#next">Next step</a>
+  </nav>
+
+  <div class="flag" id="flag">
+    <span class="k">⚠ The one thing that changes the plan</span>
+    <p>Vaquill's own top-level README lists <code>legal_corpus_v2</code> (11.8M vectors) as "tribunal and regulator decision chunks." Their own internal data-quality audit, three folders deeper in the same repo, says the opposite in plain language: <i>"Coverage is High Courts and the Supreme Court only, with no tribunal content whatsoever… the retrieval code already has tribunal handling built for data that does not exist."</i></p>
+    <p>These two documents in the same repo contradict each other. The tribunal forums are exactly the ones that matter most for this firm — ITAT (tax), NCLT (corporate/insolvency), CESTAT (customs/excise), GST AAR — so this isn't a minor footnote, it's the load-bearing question. Until it's resolved directly with Vaquill, treat tribunal semantic search as <b>unverified, not available</b>. Everything below is written on that assumption.</p>
+  </div>
+
+  <section class="block" id="solid">
+    <div class="block-head"><span class="block-num">01</span><h2>What's actually solid</h2></div>
+    <p class="tagline">Verified against the primary source, not the marketing page.</p>
+
+    <div class="stat-row">
+      <div class="stat"><div class="n">12.8M</div><div class="l">judgments, full text + embeddings, all 25 High Courts + Supreme Court</div></div>
+      <div class="stat"><div class="n">1.1M</div><div class="l">legislation sections, full text + embeddings, in-force status tracked</div></div>
+      <div class="stat"><div class="n">581,276</div><div class="l">Karnataka High Court judgments, 1998–2025 — this firm's home court</div></div>
+      <div class="stat"><div class="n">$0</div><div class="l">cost for commercial use, attribution only</div></div>
+    </div>
+
+    <p>Case law and legislation are both genuinely full-text, embedded, and ready to query today — that part of the original find was accurate, not exaggerated. Karnataka High Court specifically has 14 years of dense, usable coverage (1,000+ cases/year from 2012 onward), which matters more for this firm than the aggregate 12.8M number does.</p>
+
+    <p>The maintainer publishing their own audit of the corpus's flaws — the kind of document most projects would keep internal — is itself a signal worth weighing: this is a source that's more trustworthy <i>because</i> it admits what's broken, not despite it.</p>
+  </section>
+
+  <section class="block" id="not-what-it-seems">
+    <div class="block-head"><span class="block-num">02</span><h2>Not what it first looks like</h2></div>
+    <p class="tagline">From Vaquill's own audit — real, specific, and worth knowing before building anything.</p>
+
+    <div class="bad-item">
+      <h4>Citations exist for the Supreme Court only</h4>
+      <p>Every High Court judgment — all 12.8M of them, including all of Karnataka's — has an empty citation field. "Find every case that cites this precedent" simply doesn't work for the court this firm actually appears in.</p>
+    </div>
+    <div class="bad-item">
+      <h4>2.1M tribunal documents are PDF-only, unextracted</h4>
+      <p>See the flag above — this is the same issue, restated at the data level rather than the retrieval level. ITAT, NCLT, CESTAT and the rest sit as scanned/generated PDFs with no text layer.</p>
+    </div>
+    <div class="bad-item">
+      <h4>436,622 judgments are duplicated across the two vector collections</h4>
+      <p>Wasted embedding spend today; wasted storage and duplicate hits for anyone who self-hosts a subset without deduping first.</p>
+    </div>
+    <div class="bad-item">
+      <h4>It's a snapshot, not a feed</h4>
+      <p>Already known, worth restating: <code>v2026.08.1</code> is frozen. Indian legislation and case law don't stop moving.</p>
+    </div>
+  </section>
+
+  <section class="block" id="polished">
+    <div class="block-head"><span class="block-num">03</span><h2>Polishing the earlier ideas</h2></div>
+    <p class="tagline">Same two projects as before, corrected for what we now actually know.</p>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Mitra's knowledge base</span></div>
+      <p>Still real, still the highest-leverage move — but scope it to <b>Karnataka High Court + Central legislation + the specific Acts for our six practice areas</b> first, not "all of it." That's a slice in the tens of GB, not 463GB, and it's the part that's actually full-text and embedded today. Tribunal-grounded answers (the ITAT citation Mitra would want for a tax question) stay out of scope until the tribunal-search question is resolved.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Internal case-law research tool</span></div>
+      <p>Same correction: build it on High Court + Supreme Court + legislation, which is real and usable now. For the tribunal gap specifically — don't build our own OCR pipeline for 2.1M PDFs. Vaquill explicitly offers this as a paid contract service and has already run 16 million Indian legal PDFs through the exact pipeline we'd need. That's very likely cheaper and faster than reproducing it ourselves, and it's covered under "Commercial," below.</p>
+    </div>
+  </section>
+
+  <section class="block" id="new">
+    <div class="block-head"><span class="block-num">04</span><h2>New, from reading the full repo</h2></div>
+    <p class="tagline">None of these were in the earlier writeup — they only show up once you read past the headline dataset.</p>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">The regulator corpus</span><span class="idea-tag">full text, provision-level</span></div>
+      <p>RBI, SEBI, MCA, DGFT, TRAI, CBIC, IRDAI, CPCB, MOEFCC, Law Commission — full text, not PDF-only, and genuinely matched to this firm's practice areas: MCA for Corporate, CBIC for Tax, TRAI/RBI for Tech Law's data-protection angle. Nobody had looked at this layer before this read; it's free, it's real, and it's currently unused in every plan so far.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Parliament &amp; Law Commission</span><span class="idea-tag">legislative intent</span></div>
+      <p>Lok Sabha debates and Law Commission reports let Mitra (or the firm's own research) speak to <i>why</i> a law reads the way it does, not just what it says — a genuinely different register of answer than "here's the section text."</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Adopt a source</span><span class="idea-tag">open-source contribution</span></div>
+      <p>Vaquill's README explicitly asks the community to "adopt" one scraper each, since portals break silently and nobody's watching most of them. Adopting the Karnataka High Court and ITAT scrapers specifically would keep our own most-used data fresher than everyone else's, for the cost of occasionally fixing a broken parser — and a founder-led firm maintaining live legal infrastructure used by others is a real, visible credibility move, not just internal tooling.</p>
+    </div>
+  </section>
+
+  <section class="block" id="revolutionary">
+    <div class="block-head"><span class="block-num">05</span><h2>Is there anything revolutionary here?</h2></div>
+    <p>Honestly: not a new technology — nothing here is a technical breakthrough. What's genuinely rare is the combination: a free, government-sourced, auditable-down-to-the-bug dataset, at this scale, for Indian law specifically, arriving at the exact moment a small Bengaluru firm is already building its own AI assistant. Most firms with an AI chatbot are quietly paying for a black-box case-law API or hand-writing a thin knowledge base. Very few can say their assistant is grounded in a dataset whose flaws are publicly documented and independently checkable.</p>
+    <p>The closest thing to "revolutionary" available here isn't a feature — it's a position: being one of the first Indian firms to build and talk publicly about a legal AI tool grounded in open, auditable primary sources, plus contributing real, cited fixes back to that same open corpus (the Supreme Court date-parsing bug and the v1/v2 duplication are both concrete, findable, fixable issues). That's a credibility story a chatbot feature list can't buy.</p>
+  </section>
+
+  <section class="block" id="commercial">
+    <div class="block-head"><span class="block-num">06</span><h2>Commercially, what can we do</h2></div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Public search as a lead-gen tool</span></div>
+      <p>A free, public "search Karnataka High Court judgments" utility on the firm's own site — separate from Mitra's advisory chatbot, pure search with no generated legal opinion attached — is a plausible SEO and credibility play: it brings in exactly the people searching for the case law this firm practices in, at zero marginal cost per query beyond hosting.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Productize the engineering, sell it to peer firms</span></div>
+      <p>Once the hard part is done once — scoping, deduping, fixing the known bugs, standing up real search over a usable slice of this data — that's reusable. Most small Indian firms have zero in-house capacity to do this themselves. Licensing the resulting internal tool (or building it as a hosted product) to other firms turns Aprameya's CS-engineer background into an actual second revenue line, not just a differentiator for this firm's own site.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">A relationship with Vaquill, not just a download</span></div>
+      <p>Two live threads worth pulling on directly: their paid contract-extraction service is the realistic path to unlocking the 2.1M tribunal PDFs (cheaper than building our own OCR pipeline from scratch), and their README is openly asking for domain-expert help validating India coverage — a working relationship, not just a one-way download, could mean early access, input into what gets fixed next, or co-branding, for the cost of a few emails and one adopted scraper.</p>
+    </div>
+  </section>
+
+  <section class="block" id="rest-of-org">
+    <div class="block-head"><span class="block-num">07</span><h2>The rest of Vaquill's org, checked one by one</h2></div>
+    <p class="tagline">Fetched every remaining repo directly — not assumed from the list.</p>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">ms-word-addin</span><span class="idea-tag">real, strong fork candidate</span></div>
+      <p>Confirmed self-hostable with your own key — OpenAI, Anthropic, Gemini, Groq, Azure, or fully local Ollama. Apache-2.0, 115 commits, zero open issues. This is the most concrete, lowest-risk starting point for the drafting-bot idea: point it at Gemini and it runs independent of Vaquill's own servers entirely.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">google-docs-addon</span><span class="idea-tag">real, but not self-hostable</span></div>
+      <p>Requires Vaquill's own backend (<code>api.vaquill.ai</code>) — no bring-your-own-key option exists. Less useful for us than the Word add-in for exactly that reason.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">open-legal-answer-benchmark</span><span class="idea-tag">real, reusable methodology</span></div>
+      <p>Deterministic scoring — checks required facts appear, every citation actually supports its claim, no wrong-jurisdiction authority leaks in. US-only test questions today; the methodology itself transfers directly to a hand-written India-specific test set for scoring Mitra's answers.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">playbooks</span><span class="idea-tag">real, richer than first thought</span></div>
+      <p>28 US-commercial playbooks confirmed, plus extras not mentioned before: 145 contract diligence questions, 79 US legal doctrines, a 46-clause library, landlord-tenant rules for all 50 states. All US-specific content, all reusable as a <i>structural</i> template for Indian-context equivalents.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">vaquill-mcp</span><span class="idea-tag">real, but paid and US-only</span></div>
+      <p>Requires a metered Vaquill API key (1 credit = $0.01/call) — not free, and wraps US law, not India. Worth knowing the architecture (auto-generates MCP tools from a live OpenAPI spec) rather than the data.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">legal-aid-plugin</span><span class="idea-tag">different market, interesting pattern</span></div>
+      <p>Built for civil legal-aid nonprofits (intake screening, deadline tracking), not firms like ours — but the shape of it (a Claude plugin with case-scoped YAML deadline ledgers and per-matter logs) is a genuinely new idea worth stealing structurally: an internal deadlines/matter-tracking assistant for the firm itself, separate from anything client-facing.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Vaquill's actual commercial product</span><span class="idea-tag">context, not competition</span></div>
+      <p>Targets US in-house legal departments — contract review, compliance (CCPA/GDPR/HIPAA/SOX), drafting, matter management. Zero overlap with a Bengaluru law firm's own tooling. Worth knowing mainly so we don't mistake them for a competitor — they're a data source and a potential partner, not either.</p>
+    </div>
+  </section>
+
+  <section class="block" id="ecosystem">
+    <div class="block-head"><span class="block-num">08</span><h2>Beyond Vaquill — the wider ecosystem</h2></div>
+    <p class="tagline">Vaquill maintains <code>awesome-legaltech</code>, a 28-category index of the entire open legal-tech space. This is the "outside Indian case law" check — and it surfaced real alternatives and gaps.</p>
+
+    <h3>India-specific resources Vaquill's own dataset doesn't include</h3>
+    <ul>
+      <li><b>InLegalBERT</b> — an embedding/language model trained specifically on 5.4M Indian legal documents. If Mitra ever moves to embedding-based retrieval, this is very likely a better-fit model for Indian legal text than a generic embedding model trained mostly on English-language Western law.</li>
+      <li><b>IL-TUR</b> (176K examples, 8 tasks) — an existing Indian legal-understanding benchmark. Combined with <code>open-legal-answer-benchmark</code>'s scoring methodology above, this is a running start on evaluating Mitra properly instead of eyeballing screenshots.</li>
+      <li><b>NyayaAnumana</b> (700K+ cases) and <b>ILDC</b> (34K cases) — alternative/supplementary Indian case datasets, differently scoped than Vaquill's.</li>
+      <li><b>Indian Kanoon</b>, <b>NyayaSahayak</b>, <b>Lexlegis.AI</b> — free case-law access and two direct comparables to what Mitra is trying to be, worth actually trying as competitive reference points.</li>
+    </ul>
+
+    <h3>A real gap, confirmed</h3>
+    <p>The list catalogs 50+ MCP servers across the US, EU, Korea, Taiwan, Brazil, Turkey, Poland, Australia — and <b>zero for India</b>. The "publish an india-law-mcp server" idea from the earlier roadmap isn't just internally useful, it would be filling a documented, visible gap in the open ecosystem, not reinventing something that already exists elsewhere.</p>
+
+    <h3>Better retrieval, if Mitra ever needs it</h3>
+    <p>Vaquill's embeddings use a generic model (Voyage voyage-4). The wider ecosystem lists <b>voyage-law-2</b> and <b>Kanon 2</b> (currently #1 on the legal embedding benchmark, MLEB) as law-specific alternatives, plus open architecture references — <b>LawGlance</b> and Harvard's <b>OLAW</b> — for what a well-built legal RAG pipeline actually looks like end to end.</p>
+  </section>
+
+  <section class="block" id="hands-on">
+    <div class="block-head"><span class="block-num">09</span><h2>Hands-on: tried the comparables, cloned the strongest fork candidate</h2></div>
+    <p class="tagline">Not just reading about these — actually visited them and inspected real code.</p>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Lexlegis.ai (MIRA)</span><span class="idea-tag">serious commercial competitor</span></div>
+      <p>This is the real benchmark, not NyayaSahayak. Real enterprise clients (KPMG, Dhruva Advisors, Thermax), 215 "skills," proprietary curated data rather than web-scraped, priced at ₹9,000–17,250 per user per month. This is useful for one specific reason: it sets the actual market price ceiling for what a productized version of our own internal tooling could plausibly charge other firms — see Commercial, above.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">NyayaSahayak</span><span class="idea-tag">thin, low signal</span></div>
+      <p>Public site gave almost nothing beyond a tagline. Either early-stage or under-documented — not a useful comparable right now.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">InLegalBERT — correcting the earlier take</span><span class="idea-tag">not what we assumed</span></div>
+      <p>Checked the model card directly: this is a classification-oriented BERT (statute identification, judgment prediction, document segmentation), not a model purpose-built for retrieval embeddings the way Voyage's models are. Using it as a drop-in semantic-search embedder would likely underperform a proper retrieval-tuned model. Worth knowing for what it's actually good at — tagging and classifying Indian legal text — rather than as a search backbone.</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">LawGlance</span><span class="idea-tag">real, concrete architecture upgrade idea</span></div>
+      <p>Open-source (Apache 2.0), already scoped to Indian law (Constitution, BNS 2023, Consumer Protection Act, IT Act, POCSO). The genuinely useful part: it doesn't run a fixed single retrieval-then-generate pass like Mitra does. It runs an <b>agentic retrieval loop</b> via LangGraph — the model decides when to call a search tool, can search again if the first pass wasn't enough, and only answers once it has sufficient context. That's a concrete, adoptable upgrade path for Mitra's medium-confidence tier, well beyond "add more knowledge base entries."</p>
+    </div>
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">ms-word-addin, cloned and inspected</span><span class="idea-tag">more mature than the README suggested</span></div>
+      <p>The actual code is far more built-out than the summary implied: contract review, NDA triage, playbook-fit matching, redaction, tracked-changes reconciliation, drafting, OCR, citation-style handling — a real, mature feature set, not a demo. And the self-hosted "community" build is genuinely trivial to stand up: one environment variable (<code>VITE_EDITION=community</code>), no Vaquill backend, no Supabase project. Provider icons in the repo confirm Claude, Gemini, OpenAI, Groq, Azure, and local Ollama are all real, working options — not just documentation claims.</p>
+    </div>
+  </section>
+
+  <div class="ceiling" id="max">
+    <h2 style="margin-bottom: 1rem;">What we can do, at maximum</h2>
+
+    <h3 style="margin-top:0;">Free, realistic, buildable now</h3>
+    <ul>
+      <li>Mitra grounded in real Karnataka High Court + Central legislation + practice-area regulator text, with an agentic (LawGlance-style) retrieval loop instead of a single BM25 pass.</li>
+      <li>An internal case-law search tool over the same verified-solid slice, reusing the same infrastructure.</li>
+      <li>A forked, self-hosted <code>ms-word-addin</code> pointed at Gemini — a working drafting/contract-review tool inside Word, running entirely on our own infrastructure and API key, in days not months given how built-out the fork already is.</li>
+      <li>An India-specific answer-quality benchmark, adapting <code>open-legal-answer-benchmark</code>'s methodology with our own test questions, so every future Mitra change has a real before/after number instead of eyeballed screenshots.</li>
+    </ul>
+
+    <h3>With a real budget</h3>
+    <ul>
+      <li>Vaquill's contract-extraction service to unlock the 2.1M tribunal PDFs (ITAT, NCLT, CESTAT, GST AAR) — the single highest-value paid upgrade, since that's where most tax/corporate/insolvency authority actually sits.</li>
+      <li>A properly hosted, deduped, dated-fixed vector index — not the full 463GB, a scoped and cleaned subset, professionally run rather than self-hosted on a laptop.</li>
+      <li>A law-specific embedding model (voyage-law-2 or similar) instead of generic embeddings, if retrieval quality ever becomes the bottleneck rather than coverage.</li>
+    </ul>
+
+    <h3>The genuine ceiling, no limitation at all</h3>
+    <p>Put together everything above and this stops being "a chatbot with a bigger knowledge base." It becomes: a firm running its own maintained slice of open Indian legal infrastructure (an adopted, kept-fresh scraper), publishing the first India-specific legal MCP server into a documented gap in the global ecosystem, operating an internal suite (research tool + self-hosted drafting assistant + deadline/matter tracking, the last one borrowed structurally from the legal-aid-plugin pattern) built entirely on free and self-hostable components, evaluated against a real benchmark instead of intuition — and, if the firm ever wanted a second revenue line, licensing that same internal tooling to other small Indian firms priced meaningfully under Lexlegis.ai's ₹9,000+/user/month, since our cost basis would be near-zero compared to theirs.</p>
+    <p style="margin-bottom:0;">Nothing in that ceiling requires inventing new technology — every individual piece above is real, verified, and either free or cheaply buyable today. The ceiling is entirely a question of how much of it we choose to build, not whether it's possible.</p>
+  </div>
+
+  <div class="closing">
+    <h2 style="margin-bottom: 1rem;" id="next">Recommended next step</h2>
+    <p>One email, before any building: ask Vaquill directly whether tribunal content (ITAT/NCLT/CESTAT/GST AAR) is actually retrievable via <code>legal_corpus_v2</code> today, or whether the README table is stale relative to their own audit. That single answer determines whether the tribunal-grounded parts of Mitra's knowledge base and the internal research tool are buildable now or blocked on their contract-extraction service. Everything else in this document is safe to start scoping in parallel.</p>
+  </div>
+
+  <footer>Open India Law Brainstorm — reference document, Katti &amp; Co. web project</footer>
+
+</div>

@@ -1,0 +1,250 @@
+<title>The Full Sweep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3; --stop: #9B3A2E; --stop-soft: #F2DEDA;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.68; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14; letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance; }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0 1.2rem; font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; margin-bottom: 2.6rem; }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  section.block { margin-bottom: 3.2rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.4rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.46rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance; }
+  .tagline { color: var(--ink-soft); font-size: 1rem; margin: 0.4rem 0 1.5rem; max-width: 40rem; }
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.96rem; margin: 1.5rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 0.85em; background: var(--accent-soft); color: var(--accent-strong); padding: 0.1em 0.35em; border-radius: 3px; }
+
+  .headline { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); background: var(--paper-raised); padding: 1.5rem 1.7rem; margin-bottom: 2.6rem; }
+  .headline h2 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+  .headline p:last-child { margin-bottom: 0; }
+
+  .find { border-left: 3px solid var(--accent); background: var(--paper-raised); padding: 1.05rem 1.25rem; margin-bottom: 1.3rem; }
+  .find .hdr { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.45rem; }
+  .find h4 { font-family: "IBM Plex Sans", sans-serif; font-size: 0.98rem; font-weight: 600; margin: 0; color: var(--ink); }
+  .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.63rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.18em 0.5em; border-radius: 3px; white-space: nowrap; }
+  .b-good { background: var(--good-soft); color: var(--good); }
+  .b-warn { background: var(--warn-soft); color: var(--warn); }
+  .b-stop { background: var(--stop-soft); color: var(--stop); }
+  .b-gold { background: var(--accent-soft); color: var(--accent-strong); }
+  .find p { font-size: 0.95rem; margin-bottom: 0.55rem; }
+  .find p:last-child { margin-bottom: 0; }
+
+  .tbl-wrap { overflow-x: auto; margin: 0.9rem 0 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 28rem; }
+  th, td { text-align: left; padding: 0.5rem 0.9rem 0.5rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+  td:first-child { color: var(--ink); font-weight: 500; }
+  td { color: var(--ink-soft); }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; font-family: "IBM Plex Mono", monospace; }
+  .hi { color: var(--good); font-weight: 600; }
+
+  .arch { border: 1px solid var(--line-strong); border-radius: 4px; background: var(--paper-raised); padding: 1.2rem 1.4rem; margin-bottom: 1.3rem; }
+  .arch h4 { font-family: "IBM Plex Sans", sans-serif; font-size: 0.98rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--ink); }
+  .arch dl { margin: 0; display: grid; grid-template-columns: 8.5rem 1fr; gap: 0.4rem 1rem; font-size: 0.93rem; }
+  .arch dt { font-family: "IBM Plex Mono", monospace; font-size: 0.75rem; color: var(--ink-faint); padding-top: 0.15rem; }
+  .arch dd { margin: 0; color: var(--ink-soft); }
+  .arch dd b { color: var(--ink); }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint); }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+    .arch dl { grid-template-columns: 1fr; gap: 0.15rem; }
+    .arch dt { padding-top: 0.5rem; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — finishing the repo, sizing the index, Aug 29 2026</p>
+  <h1>The full sweep</h1>
+  <p class="dek">You were right to push. I hadn't finished the repo, and the remaining files changed two things I told you. Plus the actual numbers on semantic search at scale — which are far better than the headline figure suggests — and an honest critique of the MCP plan.</p>
+
+  <nav class="jump">
+    <a href="#coverage">Repo coverage</a>
+    <a href="#new">What the rest held</a>
+    <a href="#sizing">Semantic search sizing</a>
+    <a href="#two">Two indexes</a>
+    <a href="#mcp">MCP critique</a>
+  </nav>
+
+  <div class="headline">
+    <h2>The number that changes things</h2>
+    <p>Vaquill's index is 463.6 GB, and I have been treating that as the cost of doing this. It isn't. That figure is a consequence of <i>their</i> choices — 1024-dimension vectors, unquantized, across the whole country.</p>
+    <p style="margin-bottom:0;">Re-embedding Karnataka High Court ourselves with a small model: <b>2.2 GB, or 0.56 GB quantized.</b> The entire Indian corpus, all 32.5M chunks: <b>46.5 GB, or 11.6 GB quantized</b> — against their 463.6 GB. A 10–40× reduction, from dimension choice and quantization alone. The scale question I have been treating as a real constraint mostly is not one.</p>
+  </div>
+
+  <section class="block" id="coverage">
+    <div class="block-head"><span class="block-num">01</span><h2>Did I check the whole repo — honestly</h2></div>
+    <p>No, not on the first two passes. Now: I have read every file that could change a decision. Specifically the README, coverage docs, dataset card, the licensing and release-gate files, the Qdrant restore guide, the full audit set (summary, tribunals, case-law data quality, court-name variants, the Karnataka court file, the eCourts API report), the chunking schema, and the reusable code — citations, redaction, taxonomy, published schema, section detector, judges extractor.</p>
+    <p><b>What I deliberately have not read, and why it doesn't matter:</b> the per-court audit files for the other 24 High Courts (same format as Karnataka, different numbers, none of them our forum); the 15 tribunal SQL schemas (describe tables we can't use, since there's no extracted text); and the individual scraper implementations (only relevant if we adopt a scraper, which is a later decision). If any of those becomes load-bearing, it's a small read at that point.</p>
+  </section>
+
+  <section class="block" id="new">
+    <div class="block-head"><span class="block-num">02</span><h2>What the remaining files held</h2></div>
+
+    <div class="find">
+      <div class="hdr"><h4>I was wrong about the <code>superseded</code> trap — it's already fixed</h4><span class="badge b-good">Good news, my error</span></div>
+      <p>Last time I told you any build on the legislation data must handle <code>superseded</code> itself or risk telling a client a dead RBI direction is current. Reading <code>schema.py</code>: the published parquet carries a computed <b><code>in_force</code> boolean</b> with the taxonomy repair already applied.</p>
+      <p>So the trap exists in <i>their internal Qdrant payloads</i> and in their own published spreadsheet — but not in the data we'd actually download. Use <code>in_force</code>, don't derive from <code>act_status</code>, and it's handled. I over-warned.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The legislation schema is richer than I realised</h4><span class="badge b-gold">Genuinely useful</span></div>
+      <p>Beyond section text, each provision carries: <code>legal_subject</code>, <code>provision_type</code>, <code>doc_type</code>, <code>department</code>, <code>regulatory_body</code>, <code>acts_referenced</code>, <code>defined_terms</code>, <code>amendment_count</code>, and two that are quietly excellent — <b><code>has_proviso</code></b> and <b><code>has_non_obstante</code></b>.</p>
+      <p>A non-obstante clause ("notwithstanding anything contained in…") is exactly the thing you want to find fast when arguing which provision overrides which. Being able to filter for it across 1.1M provisions is a real research capability, and it's free.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The <code>court</code> field was never normalised — 49 labels for 26 courts</h4><span class="badge b-stop">Would silently break search</span></div>
+      <p>Karnataka is stored as <code>High Court of Karnataka</code>, not "Karnataka High Court". Telangana is stored as <code>High Court  for State of Telangana</code> — with a double space. Their own audit says it plainly: any query filtering on an exact court string silently misses the variants.</p>
+      <p>This is the kind of bug that returns plausible-looking incomplete results rather than an error. Whatever we build must normalise court names on the way in.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The v2 collection is mislabelled in two separate files</h4><span class="badge b-warn">Trust the audit, not the docs</span></div>
+      <p>Both the README and <code>QDRANT_RESTORE.md</code> describe <code>legal_corpus_v2</code> as "tribunal and regulator decision chunks." The audit, generated from live Qdrant with exact counts, shows v2 holding Karnataka's 581,275 cases, Kerala's 916,187, and the Supreme Court's 371,159 chunks. It is High Court and Supreme Court material, not tribunal.</p>
+      <p>So my original instinct was half right after all: the labelling genuinely is wrong, in two places, and the tribunals audit explains where tribunal data actually lives — Supabase tables and R2 PDFs, never in any vector collection. Where the docs and the measured audit disagree, the audit wins.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>An eCourts API report with real prices — and a silent-failure warning</h4><span class="badge b-gold">Directly actionable</span></div>
+      <p>An undocumented gift: <code>ECOURTSINDIA_API_DISCREPANCY_REPORT.md</code>, a live-tested bug report against the third-party eCourts API, listing per-call costs — search ₹0.20, case detail ₹0.50, cause list ₹1.00, AI order analysis ₹2.50.</p>
+      <p><b>That prices the cause-list idea concretely: roughly ₹30/month for a daily check.</b> It also confirms <code>advocates</code> is a real search parameter, and lists actual case-type codes including <code>ITA</code> (Income Tax Appeal), <code>Tax_Ref</code>, <code>COP</code> (Company Petition), <code>ARB_PET</code> and <code>RERA</code> — this firm's forums exactly.</p>
+      <p>The warning matters as much: the documented filter values are wrong, and using them returns <b>zero results with no error</b>. Their report is the correction sheet for an integration we might otherwise have built blind.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The licensing position is stronger than "CC BY"</h4><span class="badge b-good">Reassuring</span></div>
+      <p><code>coverage.yml</code> records the actual legal basis: Copyright Act 1957 s.52(1)(q), with the text a Government work under s.17(d). Release cleared by counsel in August 2026. Their policy excludes commercial law reporters entirely, citing <i>EBC v. Modak</i> — the case on copyright in copy-edited judgments — and excludes aggregators.</p>
+      <p>They also note India has no government-edicts doctrine, so US reasoning doesn't transfer. For a law firm relying on this, that reasoning being written down and counsel-reviewed is worth more than the licence label alone.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The embedding pipeline is not in the public repo</h4><span class="badge b-warn">Scope limit</span></div>
+      <p><code>requirements.txt</code> has no ML dependencies at all — just scraping, PDF parsing and pandas. So what's published is the <i>scraping and parsing</i> pipeline. The chunk schema is documented, but the code that embeds and indexes is theirs and stays theirs.</p>
+      <p>Which is fine, because we're building that part ourselves anyway — but it means "fork their pipeline" was never quite the option I implied.</p>
+    </div>
+  </section>
+
+  <section class="block" id="sizing">
+    <div class="block-head"><span class="block-num">03</span><h2>Can we do semantic search with a much bigger knowledge base</h2></div>
+    <p class="tagline">Yes — comfortably. Computed, not estimated. Karnataka High Court is 581,276 cases across <b>1,552,339 chunks</b>, from the audit.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Scope</th><th>Chunks</th><th>Download</th><th>Vectors (384d)</th><th>Quantized</th><th>GPU time</th></tr>
+        <tr><td>Mitra's scoped KB</td><td class="num">150K</td><td class="num">0.25 GB</td><td class="num">0.21 GB</td><td class="num hi">0.05 GB</td><td class="num">10 min</td></tr>
+        <tr><td>Karnataka HC</td><td class="num">1.55M</td><td class="num">2.56 GB</td><td class="num">2.22 GB</td><td class="num hi">0.56 GB</td><td class="num">1.7 hrs</td></tr>
+        <tr><td>Karnataka + Central Acts</td><td class="num">2.18M</td><td class="num">3.60 GB</td><td class="num">3.12 GB</td><td class="num hi">0.78 GB</td><td class="num">2.4 hrs</td></tr>
+        <tr><td>Entire Indian corpus</td><td class="num">32.5M</td><td class="num">53.6 GB</td><td class="num">46.5 GB</td><td class="num hi">11.6 GB</td><td class="num">~36 hrs</td></tr>
+      </table>
+    </div>
+
+    <p>GPU time assumes a deliberately conservative 250 chunks/second for a small embedding model on the RTX 3060 — real throughput is often better. Karnataka is an afternoon. The <b>entire country</b> is a weekend of background processing and 11.6 GB on disk, which is genuinely surprising and worth sitting with: the scale objection I kept raising was mostly an artefact of quoting Vaquill's storage figure rather than computing our own.</p>
+
+    <p><b>The real constraint is not size — it's where the index has to live.</b> That's the next section, and it's the thing that actually shapes the design.</p>
+  </section>
+
+  <section class="block" id="two">
+    <div class="block-head"><span class="block-num">04</span><h2>Two indexes, not one</h2></div>
+    <p class="tagline">Mitra and the internal search tool run in different places, so they need differently-sized indexes. Treating them as one system was a mistake in my earlier plans.</p>
+
+    <div class="arch">
+      <h4>Mitra's index — small, hosted, always on</h4>
+      <dl>
+        <dt>Runs on</dt><dd>Vercel serverless — cannot hold a multi-GB index in memory, and cold-starts</dd>
+        <dt>Implication</dt><dd>Needs a <b>hosted</b> vector store it queries over the network, plus an embedding API call per question to turn the visitor's query into a vector</dd>
+        <dt>Size it to</dt><dd>~150K chunks — practice-area legislation plus a curated set of judgments. <b>50 MB quantized</b>, which fits free hosted tiers comfortably</dd>
+        <dt>Watch</dt><dd>Every query costs one embedding API call. Mitra already uses over half its Gemini free-tier ceiling, so this needs its own budget</dd>
+      </dl>
+    </div>
+
+    <div class="arch">
+      <h4>The internal tool's index — large, local, on demand</h4>
+      <dl>
+        <dt>Runs on</dt><dd>Your machine, on demand, with the GPU present</dd>
+        <dt>Implication</dt><dd>No hosting limit, no per-query API cost — embed the query locally on the same GPU</dd>
+        <dt>Size it to</dt><dd>Full Karnataka, or more. <b>0.56 GB quantized</b>, trivial on an SSD</dd>
+        <dt>Watch</dt><dd>Only available where the machine is — which is the tradeoff we already discussed</dd>
+      </dl>
+    </div>
+
+    <p style="margin-bottom:0;">Same source data, same embedding model, two differently-scoped builds. The internal one can be enormous because nothing is hosting it; Mitra's must stay small because a serverless function has to load and query it on every request from a stranger.</p>
+  </section>
+
+  <section class="block" id="mcp">
+    <div class="block-head"><span class="block-num">05</span><h2>Critique of the MCP plan</h2></div>
+    <p class="tagline">I proposed this enthusiastically and undersold its limits. It's still the right choice for the internal tool — for narrower reasons than I gave.</p>
+
+    <div class="find">
+      <div class="hdr"><h4>It does nothing for Mitra, and I blurred that</h4><span class="badge b-stop">Real limitation</span></div>
+      <p>An MCP server is a tool a human's AI client calls. It is not a backend a website can use. Mitra answers strangers at 3am with nobody driving — it needs its own hosted API and always will. Anywhere I implied MCP was part of Mitra's architecture was wrong.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Search results will eat the context window</h4><span class="badge b-warn">Design constraint I never mentioned</span></div>
+      <p>Chunks are ~4,096 characters. Ten results is ~40,000 characters — roughly 10,000 tokens for a single search. A few searches and the conversation is full, which degrades everything after it.</p>
+      <p><b>The fix, which has to be designed in rather than added later:</b> the search tool returns citations, court, date, disposition and a two-line snippet — never full chunks. A separate <code>fetch_full_text</code> tool retrieves one document when you actually want it. That's a materially different tool design from "return the top 10 matches."</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The terminal is the wrong front door for a lawyer</h4><span class="badge b-warn">Fix is easy</span></div>
+      <p>I kept describing this as "connect it here in Claude Code" — a developer tool. For daily research use, Claude Desktop is the right client: a normal application, same MCP server, no terminal. Worth setting up that way from the start rather than migrating later.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Publishing it publicly deserves more caution than I gave</h4><span class="badge b-warn">Reconsider</span></div>
+      <p>I twice framed an open-source India legal MCP server as a visibility and credibility play for the firm. Given Rule 36, "credibility play" is precisely the framing to avoid — and a software tool isn't obviously covered by Rule 51's protection for legal writing and scholarship the way an article would be.</p>
+      <p>If it's published at all, the defensible version is a genuine open-source contribution under a personal or neutral identity, not firm-branded, with no promotional framing. Or simply keep it internal, which costs nothing and removes the question entirely.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Where it genuinely is the right answer</h4><span class="badge b-good">Holds up</span></div>
+      <p>For the internal tool specifically, MCP remains excellent: zero new infrastructure, zero LLM cost beyond what you already have, and the reasoning is done by a strong model rather than something small running locally. Build the search index once, expose it as a handful of tightly-scoped tools, and it's usable immediately without building any interface at all.</p>
+      <p>That was the right instinct. The mistake was implying it was a general answer rather than a good answer to one specific problem.</p>
+    </div>
+  </section>
+
+  <footer>The Full Sweep — reference document, Katti &amp; Co. web project</footer>
+
+</div>

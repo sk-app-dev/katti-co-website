@@ -1,0 +1,249 @@
+<title>Second Opinion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3; --stop: #9B3A2E; --stop-soft: #F2DEDA;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.68; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14; letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance; }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0 1.2rem; font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; margin-bottom: 2.6rem; }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  section.block { margin-bottom: 3.2rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.4rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.46rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance; }
+  .tagline { color: var(--ink-soft); font-size: 1rem; margin: 0.4rem 0 1.5rem; max-width: 40rem; }
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.96rem; margin: 1.5rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 0.87em; background: var(--accent-soft); color: var(--accent-strong); padding: 0.1em 0.35em; border-radius: 3px; }
+  a { color: var(--accent); }
+
+  /* Retraction cards */
+  .retract { border-left: 3px solid var(--stop); background: var(--paper-raised); padding: 1.2rem 1.4rem; margin-bottom: 1.6rem; }
+  .retract .hdr { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+  .retract h4 { font-family: "IBM Plex Sans", sans-serif; font-size: 1rem; font-weight: 600; margin: 0; color: var(--ink); }
+  .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.63rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.18em 0.5em; border-radius: 3px; white-space: nowrap; }
+  .b-stop { background: var(--stop-soft); color: var(--stop); }
+  .b-warn { background: var(--warn-soft); color: var(--warn); }
+  .b-good { background: var(--good-soft); color: var(--good); }
+  .said { font-size: 0.93rem; color: var(--ink-soft); font-style: italic; border-left: 2px solid var(--line-strong); padding-left: 0.8rem; margin: 0 0 0.7rem; }
+  .retract p:last-child { margin-bottom: 0; }
+  .fix { font-size: 0.94rem; background: var(--good-soft); color: var(--ink); padding: 0.7rem 0.9rem; border-radius: 3px; margin-top: 0.8rem; }
+  .fix b { color: var(--good); }
+
+  /* comparison table */
+  .cmp-wrap { overflow-x: auto; margin: 0.8rem 0 1.4rem; }
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 30rem; }
+  table.cmp th, table.cmp td { text-align: left; padding: 0.6rem 0.9rem 0.6rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.cmp th { font-family: "IBM Plex Mono", monospace; font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+  table.cmp td:first-child { color: var(--ink); font-weight: 500; }
+  table.cmp td { color: var(--ink-soft); }
+  .win { color: var(--good); font-weight: 600; }
+
+  /* idea cards */
+  .idea { border-top: 1px solid var(--line); padding-top: 1.1rem; margin-top: 1.3rem; }
+  .idea-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 0.45rem; }
+  .idea-name { font-family: "IBM Plex Sans", sans-serif; font-size: 1rem; color: var(--ink); font-weight: 600; }
+  .idea p { font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .idea p:last-child { margin-bottom: 0; }
+
+  .callout { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); padding: 1.5rem 1.7rem; background: var(--paper-raised); margin-bottom: 2.4rem; }
+  .callout h2 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint); }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — adversarial review of my own plan, Aug 29 2026</p>
+  <h1>Second opinion</h1>
+  <p class="dek">Re-checked from scratch, deliberately ignoring my earlier conclusions. Three things I told you are wrong — two of them are professional-conduct risks, not technical ones. One is an architecture I anchored on and shouldn't have. Then the ideas I missed entirely because I was looking in the wrong place.</p>
+
+  <nav class="jump">
+    <a href="#wrong">What I got wrong</a>
+    <a href="#upstream">Better data source</a>
+    <a href="#missed">What I missed</a>
+    <a href="#revised">Revised plan</a>
+  </nav>
+
+  <div class="callout">
+    <h2>The honest headline</h2>
+    <p>My plan had a structural blind spot: I treated Bar Council rules as a constraint on <i>what Mitra says</i>, and then proposed a public lead-generation tool and a software business without re-applying that same lens. For a practising advocate, both are professional-conduct questions before they are technical ones — and the BCI has been actively enforcing since March 2025.</p>
+    <p style="margin-bottom:0;">The good news: the genuinely valuable ideas that survive this are the <b>operational</b> ones I never looked at, and they're lower-risk, cheaper, and more differentiated than anything I proposed before.</p>
+  </div>
+
+  <section class="block" id="wrong">
+    <div class="block-head"><span class="block-num">01</span><h2>What I got wrong</h2></div>
+
+    <div class="retract">
+      <div class="hdr"><h4>Public case-law search as lead generation</h4><span class="badge b-stop">Retract</span></div>
+      <p class="said">"A free, public 'search Karnataka High Court judgments' utility on the firm's own site… brings in exactly the people searching for the case law this firm practices in."</p>
+      <p>That sentence is the problem. The test under Rule 36, as the profession's own commentary frames it, is intent and effect: purely educational content is fine; the same content <i>used to drive business</i> crosses the line. I explicitly justified this tool by its client-acquisition effect. That is the definition of indirect solicitation.</p>
+      <p>This is not theoretical. The BCI issued a directive in March 2025 against online legal advertising, the Bar Council of Delhi followed in August 2025, and the stated consequences run to disciplinary proceedings and, in serious cases, cancellation of enrolment. Search-and-filter legal platforms have been specifically criticised.</p>
+      <div class="fix"><b>Fix:</b> drop the public-facing search tool entirely. Keep search internal. If the firm wants public presence, Rule 51 expressly permits legal writing, textbook editing, journalism and teaching — genuine scholarship is a permitted channel in a way that a branded lead-gen utility is not.</div>
+    </div>
+
+    <div class="retract">
+      <div class="hdr"><h4>"Licensing the tooling to peer firms as a second revenue line"</h4><span class="badge b-stop">Retract</span></div>
+      <p class="said">"…turns Aprameya's CS-engineer background into an actual second revenue line."</p>
+      <p>Rule 47 of the BCI Rules: <i>an advocate shall not personally engage in any business.</i> He may be a sleeping partner in a firm doing business, and only where the State Bar Council is of the opinion that the nature of the business is not inconsistent with the dignity of the profession. Rule 48 permits a non-executive directorship but bars Managing Director or Secretary roles.</p>
+      <p>So "build it, sell it to other firms" is not a business decision he can simply make — running it personally is barred on its face. Structures may exist (a separate entity actually run by someone else, with a State Bar Council view taken first), but I presented this as a straightforward upside three times and it is not.</p>
+      <div class="fix"><b>Fix:</b> treat commercialisation as a question for the State Bar Council <i>before</i> any engineering, not as a later packaging step. Build everything internal-only on the assumption it stays internal.</div>
+    </div>
+
+    <div class="retract">
+      <div class="hdr"><h4>Mitra's own sign-off — a risk I built in and never questioned</h4><span class="badge b-warn">Flag for your judgment</span></div>
+      <p>Every Mitra answer currently ends with a disclaimer that includes <i>"Contact Katti &amp; Co: [email] | [phone]"</i>. I wrote that, and I never examined it against the rule I kept citing.</p>
+      <p>A chatbot on the firm's site that answers a legal question and then presents the firm's contact details is at least arguable as content used to drive business rather than purely pedagogical. I'm not in a position to tell you where that lands — you are, and your State Bar Council is. But it deserves a deliberate decision rather than being something I quietly shipped.</p>
+      <div class="fix"><b>Options:</b> keep it and be comfortable with the position; or strip contact details from Mitra's answers, leaving contact information where it already sits on the site as permitted website content. The second is the conservative reading.</div>
+    </div>
+
+    <div class="retract">
+      <div class="hdr"><h4>Effort estimates, and who maintains this</h4><span class="badge b-warn">Correct</span></div>
+      <p class="said">"…days not weeks", "a day or two to a working version."</p>
+      <p>Optimistic to the point of being misleading. A Word add-in needs HTTPS hosting, a manifest, sideloading, testing across Word versions, plus replacing US-oriented prompts and playbooks with Indian ones — which is the actual work, not the fork. And the deeper issue I never raised: <b>Mitra alone generated roughly ten distinct bug reports in this session.</b> Three systems is three times that surface, owned by a practising advocate who is not an engineer. Every system built is a system that breaks.</p>
+      <div class="fix"><b>Fix:</b> one system at a time, fully working and genuinely used for a few weeks, before starting the next. Prefer designs with fewer moving parts even when a richer one is available.</div>
+    </div>
+
+    <div class="retract">
+      <div class="hdr"><h4>I never asked what actually costs the firm time</h4><span class="badge b-warn">Correct</span></div>
+      <p>Everything I proposed was technology-push: I found a large dataset and worked forward from it. I never asked what a Bengaluru IP/tax/corporate litigation practice actually loses hours to each week. Case-law research was my assumption, not your stated problem — and Indian Kanoon already offers 3 crore documents free, with precedent classification and structural analysis, plus a paid API with free starting credits and an existing MCP connector.</p>
+      <div class="fix"><b>Fix:</b> before building a research tool, the honest question is whether Indian Kanoon already covers it. Section 03 below proposes what I think the real bottlenecks are — but you should correct me.</div>
+    </div>
+  </section>
+
+  <section class="block" id="upstream">
+    <div class="block-head"><span class="block-num">02</span><h2>I anchored on the wrong data source</h2></div>
+    <p class="tagline">Fresh check, ignoring the earlier conclusion: Vaquill's dataset is built from an upstream source that is better on the dimensions that matter most.</p>
+
+    <p>Vaquill's own README credits the source — the AWS Open Data Registry collections published by Dattam Labs, mirrored in the <code>vanga/indian-high-court-judgments</code> project. I read that line earlier and moved past it. Checking it directly:</p>
+
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <tr><th>&nbsp;</th><th>Vaquill snapshot</th><th>AWS upstream</th></tr>
+        <tr><td>Judgments</td><td>12.8M</td><td class="win">~17.8M</td></tr>
+        <tr><td>Freshness</td><td>Frozen at v2026.08.1</td><td class="win">Synced daily via GitHub Actions; AWS registry updated quarterly</td></tr>
+        <tr><td>Access</td><td>Hugging Face / mirror</td><td class="win">Public S3, no credentials (<code>--no-sign-request</code>)</td></tr>
+        <tr><td>Licence</td><td>CC BY 4.0</td><td>CC BY 4.0 — same</td></tr>
+        <tr><td>Metadata</td><td>Chunked text + embeddings</td><td class="win">Includes acts, sections, hearing history, advocate info</td></tr>
+        <tr><td>Extraction done?</td><td class="win">Yes — text extracted, chunked</td><td>PDFs + metadata; extraction is your job</td></tr>
+      </table>
+    </div>
+
+    <p><b>Why this matters more than it looks:</b> staleness is not a cosmetic flaw for legal research, and Vaquill say so themselves. Their corpus is a fixed archive that only refreshes when someone re-runs 54 scrapers that break silently. The upstream syncs daily. For a tool a law firm actually relies on, that difference is the whole ballgame.</p>
+
+    <p><b>And the reason I originally preferred Vaquill has largely evaporated.</b> Their real value-add is extracted text, chunking and pre-computed embeddings. But we already decided to re-embed on your GPU — because their embeddings are locked to a paid model whose API we'd have to call on every search. Once we're re-embedding anyway, we're mostly paying for their extraction work, not their index.</p>
+
+    <div class="fix"><b>Corrected architecture:</b> judgments from the AWS upstream (fresher, larger, includes advocate/hearing metadata). Legislation and regulator material from Vaquill — that part is genuinely theirs, sourced from India Code with section-level structure and in-force/repealed status, and the AWS dataset has no equivalent. Use both, for what each is actually best at. Attribute both.</div>
+  </section>
+
+  <section class="block" id="missed">
+    <div class="block-head"><span class="block-num">03</span><h2>What I missed entirely</h2></div>
+    <p class="tagline">Every idea so far has been about <i>knowing the law</i>. A litigation practice mostly loses time to <i>running the matters</i> — and that layer is free, internal, carries no Rule 36 exposure, and is where I'd now put the highest-value bet.</p>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Limitation &amp; deadline calculator</span><span class="badge b-good">Strongest new idea</span></div>
+      <p>The single highest-value thing on any list I've given you — and it needs no AI at all, which is precisely why it's good. Limitation computation is deterministic law: Section 12 excludes the date of pronouncement and the time requisite for obtaining a copy; Section 4 extends when the last day is a holiday. Forum rules layer on top — NCLAT under IBC §61 is 30 days plus 15, and the Supreme Court has reaffirmed that beyond 45 days is absolutely uncondonable, not even under Article 142; CESTAT before Commissioner (Appeals) is 60 plus a condonable 30.</p>
+      <p>There's a genuine trap in there I'd want encoded: for IBC appeals, the holiday benefit under Section 4 applies to the 30-day limitation period but <i>not</i> to the 15-day condonation window. That is exactly the kind of distinction that is easy to get wrong under pressure and permanently costs a client their appeal.</p>
+      <p>A calculator that takes forum + order date + copy-application dates, and returns the date with its working shown and the provision cited, is high-value, verifiable, and carries <b>zero hallucination risk because no language model is involved</b>. Everything else on these lists is probabilistic; this is arithmetic.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Cause-list monitoring</span><span class="badge b-warn">Check before building</span></div>
+      <p>eCourts permits cause-list and case-status search <i>by advocate name</i>. A daily automated check answering "which of my matters are listed tomorrow, across every forum" is real, recurring, high-stakes operational value.</p>
+      <p>Honest caveat, which is why this isn't ranked first: the official eCourts mobile app already offers push notifications for saved cases and daily cause lists, and third-party services sell exactly this. <b>Try the official app for a week before building anything.</b> If it already covers your forums, building a worse version of a free government tool is not a win. If it falls short — particularly across the tribunal forums, where coverage is patchier — then it's worth building.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">The firm's own work product as the knowledge base</span><span class="badge b-good">Most differentiated</span></div>
+      <p>Public case law is available to everyone, including every competitor and every generic AI tool. The firm's own past drafts, opinions, notices and pleadings are the one corpus nobody else has — and the one that makes an assistant sound like <i>this firm</i> rather than like a chatbot.</p>
+      <p>Your GPU makes indexing this free and private; nothing leaves the machine. I had this listed as a footnote under "what the GPU can do." It should be near the top: it's simultaneously the highest-value data, the lowest-volume (so the fastest to build), and the one with no licensing, freshness, or attribution questions attached.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Practice-area judgment alerts</span></div>
+      <p>The upstream dataset syncs daily. A weekly internal digest — new Karnataka High Court and Supreme Court judgments touching the firm's practice areas — is straightforward current-awareness, purely internal, and effectively free once the data pipeline exists for anything else.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Conflict checking</span></div>
+      <p>Deterministic, professionally necessary, and trivial next to everything else here: check a prospective party name against the firm's own past matters before accepting instructions. Worth listing because it's the kind of unglamorous tool that quietly earns its place.</p>
+    </div>
+
+    <div class="idea">
+      <div class="idea-head"><span class="idea-name">Reconsider the drafting bot's shape</span></div>
+      <p>I recommended forking a mature Word add-in. Having thought about it again: that repo's value is a polished UI wrapped around US contract-review conventions, US playbooks, and US legal doctrines. The parts that matter for this firm — Indian document structure, the firm's own templates, Indian intake fields — all have to be replaced anyway.</p>
+      <p>It may well be less work to build something small and Indian-specific than to strip a mature US-oriented application back to its frame. Worth genuinely comparing before committing, rather than defaulting to the fork because it looked impressive.</p>
+    </div>
+  </section>
+
+  <section class="block" id="revised">
+    <div class="block-head"><span class="block-num">04</span><h2>Revised plan</h2></div>
+
+    <h3>Settle first — before any engineering</h3>
+    <ol>
+      <li><b>Your call on Mitra's contact-details sign-off.</b> Keep, or strip to the conservative reading.</li>
+      <li><b>Whether commercialisation is even open to you</b> under Rule 47, if it matters to your thinking. If it's closed, that simplifies every later decision.</li>
+      <li><b>What actually costs you time each week.</b> One honest answer here beats everything I've inferred.</li>
+      <li><b>Try the official eCourts app for a week</b> — it may already solve the cause-list problem for free.</li>
+    </ol>
+
+    <h3>Then build, one at a time</h3>
+    <ol>
+      <li><b>Limitation calculator.</b> Small, deterministic, immediately useful, no AI risk, no conduct exposure. The best first build on any list I've given you.</li>
+      <li><b>Firm's own work product, indexed on the GPU.</b> Private, free, most differentiated, and the foundation the drafting tool actually needs.</li>
+      <li><b>Drafting assistance</b> — shape decided after comparing fork-versus-build honestly, and using its own separate Gemini key.</li>
+      <li><b>Case-law research</b> — only if Indian Kanoon genuinely doesn't cover it, and built on the AWS upstream rather than the frozen snapshot.</li>
+    </ol>
+
+    <h3>Dropped from the plan</h3>
+    <ul>
+      <li>Public-facing search tool — Rule 36.</li>
+      <li>Commercialisation as an assumed upside — Rule 47, unresolved.</li>
+      <li>"Credibility play" framing of open-source contribution — the contribution itself is fine and Rule 51 supports genuine legal writing and scholarship; marketing it as visibility for the firm is the part that isn't.</li>
+    </ul>
+  </section>
+
+  <footer>Second Opinion — reference document, Katti &amp; Co. web project</footer>
+
+</div>

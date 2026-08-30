@@ -1,0 +1,242 @@
+<title>The Second Pass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3; --stop: #9B3A2E; --stop-soft: #F2DEDA;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.68; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14; letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance; }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0 1.2rem; font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; margin-bottom: 2.6rem; }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  section.block { margin-bottom: 3.2rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.4rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.46rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance; }
+  .tagline { color: var(--ink-soft); font-size: 1rem; margin: 0.4rem 0 1.5rem; max-width: 40rem; }
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.96rem; margin: 1.5rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 0.85em; background: var(--accent-soft); color: var(--accent-strong); padding: 0.1em 0.35em; border-radius: 3px; }
+  a { color: var(--accent); }
+
+  .correction { border-top: 2px solid var(--good); border-bottom: 2px solid var(--good); background: var(--paper-raised); padding: 1.4rem 1.6rem; margin-bottom: 2.6rem; }
+  .correction .k { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--good); margin: 0 0 0.6rem; display: block; font-weight: 500; }
+  .correction p:last-child { margin-bottom: 0; }
+
+  .find { border-left: 3px solid var(--accent); background: var(--paper-raised); padding: 1.1rem 1.3rem; margin-bottom: 1.4rem; }
+  .find .hdr { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .find h4 { font-family: "IBM Plex Mono", monospace; font-size: 0.92rem; font-weight: 500; margin: 0; color: var(--ink); }
+  .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.63rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.18em 0.5em; border-radius: 3px; white-space: nowrap; }
+  .b-gold { background: var(--accent-soft); color: var(--accent-strong); }
+  .b-good { background: var(--good-soft); color: var(--good); }
+  .b-warn { background: var(--warn-soft); color: var(--warn); }
+  .b-stop { background: var(--stop-soft); color: var(--stop); }
+  .find p { font-size: 0.95rem; margin-bottom: 0.6rem; }
+  .find p:last-child { margin-bottom: 0; }
+  .use { font-size: 0.93rem; background: var(--good-soft); color: var(--ink); padding: 0.6rem 0.85rem; border-radius: 3px; margin-top: 0.7rem; }
+  .use b { color: var(--good); }
+
+  .cmp-wrap { overflow-x: auto; margin: 0.8rem 0 1.4rem; }
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 0.89rem; min-width: 26rem; }
+  table.cmp th, table.cmp td { text-align: left; padding: 0.55rem 0.9rem 0.55rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.cmp th { font-family: "IBM Plex Mono", monospace; font-size: 0.69rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+  table.cmp td:first-child { color: var(--ink); font-weight: 500; }
+  table.cmp td { color: var(--ink-soft); }
+  table.cmp td.num { font-variant-numeric: tabular-nums; }
+
+  .tier { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); background: var(--paper-raised); padding: 1.5rem 1.7rem; margin-bottom: 1.5rem; }
+  .tier h3 { margin-top: 0; font-family: "IBM Plex Serif", serif; font-size: 1.15rem; }
+
+  .ladder { list-style: none; padding: 0; margin: 0 0 1rem; border-top: 1px solid var(--line); }
+  .ladder li { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 0.85rem 0; border-bottom: 1px solid var(--line); margin: 0; }
+  .ladder .lv { font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; color: var(--accent); padding-top: 0.15rem; }
+  .ladder .bd p { margin: 0 0 0.25rem; color: var(--ink); font-size: 0.96rem; }
+  .ladder .bd .sub { color: var(--ink-faint); font-size: 0.87rem; }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint); }
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+    .ladder li { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — rigorous repo read, Aug 29 2026</p>
+  <h1>The second pass</h1>
+  <p class="dek">I read maybe 15% of that repository the first time. Going through it properly turned up a correction to something I told you, a working Indian citation parser, an Indian PII redactor, and a retrieval feature most legal AI doesn't have. Then: what the firm can actually do with it, and Mitra's real ceiling.</p>
+
+  <nav class="jump">
+    <a href="#correction">A correction</a>
+    <a href="#gold">What's in there</a>
+    <a href="#karnataka">Karnataka specifics</a>
+    <a href="#traps">Traps</a>
+    <a href="#do">What we can do</a>
+    <a href="#mitra">Mitra's ceiling</a>
+  </nav>
+
+  <div class="correction" id="correction">
+    <span class="k">✓ Correcting my own alarm from last time</span>
+    <p>I told you Vaquill's docs contradicted each other on tribunal data and to treat tribunal search as <i>unverified</i>. Reading further, they resolved it themselves in <code>docs/audit/tribunals/README.md</code>: <i>"An earlier version stated that we hold no tribunal data at all. That was wrong. It was true only of the two searchable case-law collections."</i></p>
+    <p>The accurate position: they <b>do</b> hold 813,168 tribunal matters and 2,112,201 decision PDFs (542 GB) — as a <b>case index plus PDFs, with no extracted text</b>. So tribunal <i>metadata</i> (case number, parties, bench, dates) is real and available; tribunal <i>text</i> genuinely isn't searchable. That's a far more precise picture than "unverified," and it was sitting in a file I hadn't opened. My fault, and worth knowing: for ITAT, NCLT, CESTAT and GST AAR you can find <i>that</i> a matter exists, not <i>what it held</i>.</p>
+  </div>
+
+  <section class="block" id="gold">
+    <div class="block-head"><span class="block-num">01</span><h2>What's actually in there</h2></div>
+    <p class="tagline">Four things I missed entirely, all Apache-2.0, all directly usable.</p>
+
+    <div class="find">
+      <div class="hdr"><h4>scripts/citations/indian_formats.py</h4><span class="badge b-gold">Best find</span></div>
+      <p>A complete Indian legal citation parser. Every major reporter: AIR, SCC, SCC OnLine (Supreme <i>and</i> High Court), SCR, MANU, SCALE, JT, ILR, Cri LJ, Comp Cas, ITR, Taxman, GST, ITAT, NCLT/NCLAT — plus state reporters (Bom LR, DLT, KLJ, KLT, MLW, ALJ, PLR, CWN, Guj LR). It handles the new 2024–25 neutral citation formats including bench indicators (<code>2024:AHC-LKO:12762</code>, <code>-DB</code> suffixes), and ships four separate court-code lookup tables mapping AIR, neutral, SCC Online and MANU codes to court names.</p>
+      <div class="use"><b>Use it for:</b> validating every citation in a draft before it leaves the office — does this citation parse, and does the court code match the court named? That's a whole class of error caught mechanically. Also: extracting the citation graph from the firm's own past documents.</div>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>scripts/release/redaction.py</h4><span class="badge b-gold">Solves a real blocker</span></div>
+      <p>Indian-specific PII redaction, and it's carefully built rather than naive. Phone, email, and then PAN / IFSC / Aadhaar <i>each requiring a context word nearby</i> — because Indian case numbers share those shapes (their example: <code>WPCT0123456</code> is an IFSC by shape, <code>ABCDE1234F</code> is a PAN by shape, and masking on shape alone corrupts the judgment). Aadhaar candidates are additionally checked against the Verhoeff checksum. It also redacts named relatives of victims and named protected children (BNS s.72, JJ Act s.74 territory), and detects in-camera and non-publication directions.</p>
+      <div class="use"><b>Use it for:</b> the drafting tool's actual blocker. To use the firm's own past documents as templates, they must be redacted first — and this does it, for Indian identifiers, with real care about false positives. This is the single most immediately useful file in the repository for us.</div>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>scripts/pipeline/UNIFIED_CHUNKING_SCHEMA.md</h4><span class="badge b-good">Changes search quality</span></div>
+      <p>Every chunk carries <code>judges</code>, <code>disposition</code>, <code>bench_strength</code>, <code>acts_referenced</code>, <code>cases_cited</code>, <code>cited_by_count</code> — and critically a <code>section_type</code> with a priority score across 15 categories: <b>ratio_decidendi (100)</b>, conclusion (95), judgment (90), analysis (85), issues (80), <b>obiter_dicta (75)</b>, arguments (70), facts (65), precedents (60), relief (55), statutes (50), procedure (45).</p>
+      <p>That distinction matters more than it looks. A generic RAG system retrieves whatever paragraph is textually similar — which is as likely to be a party's rejected submission or passing obiter as the binding holding. Being able to retrieve <i>ratio</i> preferentially is a genuinely legal-domain-aware retrieval feature, and most legal chatbots don't have it.</p>
+      <div class="use"><b>Use it for:</b> Mitra's biggest quality upgrade — weight retrieval toward the binding reasoning, and be able to say "this is what the court <i>held</i>" versus "this is what a party <i>argued</i>."</div>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>legal_section_detector.py &amp; extract_judges_dispositions.py</h4><span class="badge b-good">Confirms an earlier idea</span></div>
+      <p>The section detector is the 15-category classifier itself — regex plus heuristics, tuned for Supreme Court, High Court and tribunal document structures. Reusable on the firm's own documents to auto-structure them.</p>
+      <p>And the judges/dispositions extractor confirms that <code>judges</code> and <code>disposition</code> are real, populated fields — which means the <b>judge argument-style lookup idea from the earlier plan is supported by data that already exists</b>, not speculative. Not the whole tool, but the foundation is real.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>The two corpora nobody is using</h4><span class="badge b-good">Their words, not mine</span></div>
+      <p>Flagged in their own audit as unused: <code>parliament-debates</code> — 12,317 text files, 6.4 GB, holding parliamentary debates, the Constitution, Law Commission reports, the gazette, IPC material <i>and AIR volumes</i>. Fully text-bearing, never indexed by anyone.</p>
+      <div class="use"><b>Use it for:</b> legislative intent — why a provision reads the way it does, not just what it says. A different register of answer than section text, and nobody is using it.</div>
+    </div>
+  </section>
+
+  <section class="block" id="karnataka">
+    <div class="block-head"><span class="block-num">02</span><h2>Karnataka specifics, which matter for the download</h2></div>
+    <p>Buried in the data-quality audit, and directly practical:</p>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <tr><th>Court</th><th>In v1</th><th>In v2</th><th>Duplicated</th></tr>
+        <tr><td>Karnataka HC</td><td class="num">1</td><td class="num">581,275</td><td class="num">0</td></tr>
+        <tr><td>Kerala HC</td><td class="num">3</td><td class="num">916,187</td><td class="num">0</td></tr>
+        <tr><td>Madhya Pradesh HC</td><td class="num">1</td><td class="num">402,631</td><td class="num">0</td></tr>
+        <tr><td>Rajasthan HC</td><td class="num">2</td><td class="num">324,565</td><td class="num">0</td></tr>
+        <tr><td>Punjab &amp; Haryana HC</td><td class="num">3</td><td class="num">483,251</td><td class="num">1</td></tr>
+      </table>
+    </div>
+    <p>Karnataka sits almost entirely in <code>legal_corpus_v2</code>, not v1 — so the relevant collection is the 179.6 GB one, not the 272.8 GB one. And Karnataka has <b>zero</b> judgments duplicated across the two collections, so the 436,622-duplicate problem I flagged earlier doesn't touch our slice at all. Two concrete facts that make the download smaller and the cleanup work nil.</p>
+  </section>
+
+  <section class="block" id="traps">
+    <div class="block-head"><span class="block-num">03</span><h2>Traps worth knowing before building</h2></div>
+
+    <div class="find">
+      <div class="hdr"><h4>"In force" is wrong by 9.4% for Central legislation</h4><span class="badge b-stop">Would mislead a client</span></div>
+      <p>From <code>taxonomy.py</code>: <code>act_status</code> has a fourth value, <code>superseded</code> (57,458 provisions), that naive code buckets as in-force. Vaquill note their own published spreadsheet does exactly this — reporting 613,970 Central provisions in force when 556,512 genuinely are.</p>
+      <p>These are mostly superseded RBI master directions and similar. If Mitra or a research tool told a client a superseded RBI direction was current, that is a real problem, not a cosmetic one. <b>Any build on the legislation data must treat <code>superseded</code> as not-in-force explicitly.</b></p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Tribunal enrichment columns are empty</h4><span class="badge b-warn">Thinner than the schema implies</span></div>
+      <p><code>headnotes</code>, <code>outcome</code>, <code>subject_matter</code>, <code>cited_acts</code> and <code>cited_sections</code> are defined on every tribunal table and empty on all 813,168 rows. <code>judges</code> is populated only for CAT, DRT, TDSAT and RERA — <b>not for ITAT, NCLT, CESTAT or GST AAR</b>, which are the ones this firm cares about. NCLT is weakest: only 36,080 of 63,487 matters carry a PDF link.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>A leaked third-party key in the repo</h4><span class="badge b-warn">Don't depend on it</span></div>
+      <p><code>pdf_highlighter.py</code> has a hardcoded PyMuPDF Pro trial API key committed into it. It isn't ours to use and it's a trial. The highlighting technique is fine to learn from; the file as written is not something to build on.</p>
+    </div>
+  </section>
+
+  <section class="block" id="do">
+    <div class="block-head"><span class="block-num">04</span><h2>What the firm can actually do</h2></div>
+
+    <div class="tier">
+      <h3>Internal — safe, free, no conduct question</h3>
+      <ul style="margin-bottom:0;">
+        <li><b>Limitation calculator</b> — still the best first build. Deterministic, no AI, no Rule 36 exposure.</li>
+        <li><b>Own work product, redacted and indexed</b> — now genuinely unblocked, because <code>redaction.py</code> handles the Indian PII problem properly. Redact past drafts and opinions, index on the GPU, and the firm has an assistant grounded in its own voice.</li>
+        <li><b>Citation validator</b> — run every draft's citations through <code>indian_formats.py</code> before filing. Small, mechanical, catches real errors.</li>
+        <li><b>Karnataka HC research index</b> — 581K judgments, in one collection, no dedup needed, with ratio-versus-obiter retrieval.</li>
+        <li><b>Judge and disposition analytics</b> — from fields that already exist in the data.</li>
+        <li><b>Legislative-intent lookup</b> — the parliament corpus nobody is using.</li>
+        <li><b>Conflict checking and cause-list monitoring</b> — as before, and try the official eCourts app first.</li>
+      </ul>
+    </div>
+
+    <div class="tier">
+      <h3>Public-facing — narrow, and only one thing qualifies</h3>
+      <p>Under Rule 36 as covered last time, nothing built on this data should be public if its purpose or effect is bringing in work. The one channel that is expressly permitted is Rule 51: legal writing, editing law texts, teaching, journalism.</p>
+      <p style="margin-bottom:0;">So: genuine scholarship — an article on what the corpus shows about, say, disposal patterns in Karnataka IP matters — is permitted territory in a way a branded search utility is not. The distinction is real and worth respecting rather than working around.</p>
+    </div>
+
+    <div class="tier">
+      <h3>Commercial, with someone else running it</h3>
+      <p>You asked specifically about doing this with someone's help, and that <i>is</i> the shape the rules point toward — though I'd want you to confirm it rather than take my reading.</p>
+      <p>Rule 47 bars an advocate from <i>personally</i> engaging in business, but expressly allows being a <b>sleeping partner</b> in a firm doing business — subject to the State Bar Council forming the view that the business is not inconsistent with the dignity of the profession. Rule 48 separately permits a non-executive directorship, while barring Managing Director and Secretary roles.</p>
+      <p>So the structure that appears open: a separate entity, genuinely run day-to-day by someone who is not you — a technical co-founder or operator — with you passive, and a State Bar Council view taken <i>before</i> anything is built or sold, not after. What is not open is you building it, running it, and selling it yourself.</p>
+      <p style="margin-bottom:0;">I'm reading rules here, not advising you — you are the advocate and this is your enrolment. But it does mean "with someone's help" isn't a workaround; it's closer to the actual permitted form.</p>
+    </div>
+  </section>
+
+  <section class="block" id="mitra">
+    <div class="block-head"><span class="block-num">05</span><h2>How far Mitra can be pushed</h2></div>
+    <p class="tagline">Revised with what this pass found. The last two rungs are new.</p>
+
+    <ul class="ladder">
+      <li><span class="lv">Now</span><div class="bd"><p>Finish the polish already underway — streaming, real rate limiting, feedback capture.</p></div></li>
+      <li><span class="lv">Next</span><div class="bd"><p>Real law instead of hand-typed answers — Karnataka HC and Central legislation, with <code>superseded</code> handled correctly.</p><p class="sub">That last clause is not optional; see the traps above.</p></div></li>
+      <li><span class="lv">Then</span><div class="bd"><p>Agentic retrieval — search again when the first attempt wasn't enough, rather than always answering off one lookup.</p></div></li>
+      <li><span class="lv">New</span><div class="bd"><p><b>Ratio-aware retrieval.</b> Weight toward <code>ratio_decidendi</code> and <code>conclusion</code> chunks over <code>arguments</code> and <code>facts</code>, so Mitra quotes what a court <i>held</i> rather than what a party <i>argued</i>.</p><p class="sub">This is the single biggest answer-quality upgrade available, and it exists because the data already carries section types.</p></div></li>
+      <li><span class="lv">New</span><div class="bd"><p><b>Mechanical citation validation.</b> Before any answer is shown, run every citation through the parser: does it parse, does the court code match the court named, is the year plausible. Anything that fails gets dropped rather than displayed.</p><p class="sub">This kills a whole category of hallucination without needing a better model — the most common and most damaging failure mode for legal AI, solved by regex.</p></div></li>
+      <li><span class="lv">Later</span><div class="bd"><p>Real benchmarking, practice-area routing, multilingual.</p></div></li>
+    </ul>
+
+    <h3>And the ceiling that doesn't move</h3>
+    <p>None of this changes what Mitra is allowed to be. It still explains rather than advises, still refuses case-specific questions, and the open question from last time still stands — whether appending the firm's contact details to every answer is the right side of Rule 36. Better retrieval makes the explaining sharper; it does not buy any more latitude.</p>
+  </section>
+
+  <footer>The Second Pass — reference document, Katti &amp; Co. web project</footer>
+
+</div>

@@ -1,0 +1,321 @@
+<title>Vaquill Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2;
+    --paper-raised: #FFFFFF;
+    --ink: #1C2230;
+    --ink-soft: #545F70;
+    --ink-faint: #8991A0;
+    --accent: #8A6A2E;
+    --accent-strong: #6E5424;
+    --accent-soft: #EDE3CC;
+    --line: #D6D9D2;
+    --line-strong: #B9BEB6;
+    --good: #3F6B4A;
+    --good-soft: #DEEAE1;
+    --warn: #A85C2A;
+    --warn-soft: #F3E2D3;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.65; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem;
+    letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  h1 {
+    font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14;
+    letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance;
+  }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+
+  nav.jump {
+    display: flex; flex-wrap: wrap; gap: 0 1.3rem;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.76rem;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 0.9rem 0; margin-bottom: 2.6rem;
+  }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  /* Verified-facts strip */
+  .verified {
+    border: 1px solid var(--line-strong); border-radius: 4px;
+    background: var(--paper-raised); padding: 1.3rem 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .verified .k {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.7rem;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--good);
+    margin: 0 0 0.9rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .verified .k::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--good); flex: none;
+  }
+  .vgrid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.1rem 1.6rem;
+  }
+  .vitem .num {
+    font-family: "IBM Plex Mono", monospace; font-size: 1.15rem;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .vitem .lbl { font-size: 0.8rem; color: var(--ink-faint); margin-top: 0.15rem; }
+  .verified .note {
+    margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--line);
+    font-size: 0.9rem; color: var(--ink-soft);
+  }
+
+  section.block { margin-bottom: 3.2rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.35rem; }
+  .block-num {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.95rem;
+    color: var(--accent); font-weight: 500;
+  }
+  h2 {
+    font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600;
+    font-size: 1.5rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance;
+  }
+  .tagline { color: var(--ink-soft); font-size: 1rem; margin: 0.5rem 0 1.5rem; max-width: 40rem; }
+  h3 {
+    font-family: "IBM Plex Sans", sans-serif; font-weight: 600;
+    font-size: 0.97rem; margin: 1.6rem 0 0.6rem; color: var(--ink);
+  }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  code {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.87em;
+    background: var(--accent-soft); color: var(--accent-strong);
+    padding: 0.1em 0.35em; border-radius: 3px;
+  }
+  a { color: var(--accent); }
+
+  /* Repo cards */
+  .repo {
+    border-top: 1px solid var(--line); padding-top: 1.1rem; margin-top: 1.4rem;
+  }
+  .repo-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 0.4rem;
+  }
+  .repo-name {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.92rem; color: var(--ink);
+  }
+  .repo-tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.68rem;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint);
+  }
+  .repo p { font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+  .decision {
+    background: var(--paper-raised); border: 1px solid var(--line-strong);
+    border-radius: 3px; padding: 1rem 1.15rem; margin: 1.4rem 0;
+  }
+  .decision .k {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--warn);
+    margin: 0 0 0.4rem; display: block;
+  }
+  .decision p { margin: 0; font-size: 0.94rem; color: var(--ink-soft); }
+
+  .idea {
+    border-left: 2px solid var(--line-strong); padding-left: 1rem; margin-bottom: 1.3rem;
+  }
+  .idea h4 {
+    font-family: "IBM Plex Sans", sans-serif; font-size: 0.96rem;
+    font-weight: 600; margin: 0 0 0.3rem; color: var(--ink);
+  }
+  .idea p { font-size: 0.94rem; color: var(--ink-soft); margin: 0; }
+
+  .closing {
+    border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent);
+    padding: 1.6rem 1.8rem; background: var(--paper-raised);
+  }
+
+  footer {
+    margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line);
+    font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint);
+  }
+
+  @media (max-width: 560px) {
+    body { padding: 3rem 1.1rem 5rem; font-size: 16px; }
+  }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — evaluated Aug 24, 2026</p>
+  <h1>The Vaquill find</h1>
+  <p class="dek">An open-source org shipping a free, structured Indian case-law and statute dataset — plus several working legal-AI tools we can fork instead of building from scratch. Sizes, freshness, and licensing below are verified, not estimated.</p>
+
+  <nav class="jump">
+    <a href="#dataset">The dataset</a>
+    <a href="#unblocks">What it unblocks</a>
+    <a href="#tools">Tools to fork</a>
+    <a href="#new-ideas">New ideas</a>
+    <a href="#decisions">Open decisions</a>
+  </nav>
+
+  <div class="verified">
+    <p class="k">Verified, not assumed</p>
+    <div class="vgrid">
+      <div class="vitem"><div class="num">54 GB</div><div class="lbl">compressed download (judgments + legislation)</div></div>
+      <div class="vitem"><div class="num">463.6 GB</div><div class="lbl">full vector index, uncompressed, all collections</div></div>
+      <div class="vitem"><div class="num">v2026.08</div><div class="lbl">snapshot version — static, not live</div></div>
+      <div class="vitem"><div class="num">Required</div><div class="lbl">attribution — imposed by the source, not optional</div></div>
+    </div>
+    <p class="note">This is a <b>point-in-time snapshot</b>, not a live feed. The maintainers say so directly: "Snapshots are point-in-time, not current law... always verify against the official source before relying on it." Their own scrapers can refresh it, but nothing updates automatically, and the scrapers themselves are expected to break over time as government sites change.</p>
+  </div>
+
+  <section class="block" id="dataset">
+    <div class="block-head">
+      <span class="block-num">01</span>
+      <h2>Open India Law</h2>
+    </div>
+    <p class="tagline">The centerpiece of the find — free, structured, and large enough to replace both a paid case-law subscription and weeks of manual knowledge-base curation.</p>
+
+    <h3>Coverage</h3>
+    <ul>
+      <li><b>12,848,644 court judgments</b> — Supreme Court and all 25 High Courts, 1950–2025, chunked into 32,572,660 parquet rows</li>
+      <li><b>813,168 tribunal/regulator matters</b> — 15 forums including ITAT, NCLT, NGT, CESTAT, each as a separate file</li>
+      <li><b>22,265 acts, 1,098,577 sections</b> — central, state, and union territory legislation, 1806–2026, with in-force/repealed/amendment status</li>
+      <li><b>32,518,048 vectors</b> pre-computed (Voyage AI voyage-4, 1024-dim) across three Qdrant collections — the slow, expensive part of building search is already done</li>
+    </ul>
+
+    <h3>Access</h3>
+    <ul>
+      <li>Hugging Face: <code>load_dataset("vaquill/open-india-law", "judgments")</code></li>
+      <li>Direct parquet downloads from mirrors</li>
+      <li>Qdrant snapshot recovery for the vector collections (their own <code>QDRANT_RESTORE.md</code> covers shard setup and disk requirements)</li>
+      <li>A browsable web UI for the 22,264 acts with source PDFs</li>
+    </ul>
+
+    <h3>License</h3>
+    <p>Scripts: Apache-2.0. Compiled data: CC BY 4.0. The underlying legal text itself needs no permission at all — it's government work, reproducible under s.52(1)(q) of the Indian Copyright Act. The one real obligation is attribution on the compiled dataset, which the maintainers are explicit isn't their preference but a condition their own government/tribunal sources impose.</p>
+  </section>
+
+  <section class="block" id="unblocks">
+    <div class="block-head">
+      <span class="block-num">02</span>
+      <h2>What this unblocks</h2>
+    </div>
+    <p>Two things scoped earlier that were each blocked on a real decision — both resolved now.</p>
+
+    <div class="repo">
+      <div class="repo-head"><span class="repo-name">Internal case-law research tool</span></div>
+      <p>Was blocked on choosing between a paid subscription (SCC Online/Manupatra, real licensing questions) or scraping court sites ourselves from scratch. That decision is moot — this is free, already covers Supreme Court through every High Court and 15 tribunals, and the expensive step (embedding 32.5M chunks) is already done. What was a multi-phase build collapses into: download, load into a vector store, ship a search UI.</p>
+    </div>
+
+    <div class="repo">
+      <div class="repo-head"><span class="repo-name">Mitra's knowledge base</span></div>
+      <p>The plan was to manually curate acts and landmark judgments per practice area — real time, mostly yours. The core acts for IP, tax, and corporate law are almost certainly already in here, structured and sectioned, with real judgments to cite alongside them instead of hand-written summaries. Curation work shifts from "write this from scratch" to "select and verify what's already structured."</p>
+    </div>
+  </section>
+
+  <section class="block" id="tools">
+    <div class="block-head">
+      <span class="block-num">03</span>
+      <h2>Working tools worth forking</h2>
+    </div>
+    <p class="tagline">Four repos in the same org that are already-built, not just data — each shortens something we'd otherwise build from zero.</p>
+
+    <div class="repo">
+      <div class="repo-head">
+        <span class="repo-name">contract-debugger</span>
+        <span class="repo-tag">Next.js · React · Tailwind</span>
+      </div>
+      <p>A complete, working app: upload a contract, GPT-4o flags risky or unfavorable clauses in plain English with severity ratings and suggested rewrites. Same stack as the firm's own site. This is the fastest path to a real internal tool — fork it, swap in Gemini, adjust prompts for Indian contract conventions. Days, not weeks.</p>
+    </div>
+
+    <div class="repo">
+      <div class="repo-head">
+        <span class="repo-name">ms-word-addin</span>
+        <span class="repo-tag">Apache-2.0 · BYOK</span>
+      </div>
+      <p>The fuller version of the same idea, live inside Word: chat with cited sources, automated review with tracked changes, draft-from-description, document finalization tools. The "community" build is fully self-hostable on your own Gemini key — no dependency on Vaquill's servers. Bigger lift than <code>contract-debugger</code>, but the natural next step once an MVP earns its keep.</p>
+    </div>
+
+    <div class="repo">
+      <div class="repo-head">
+        <span class="repo-name">open-legal-answer-benchmark</span>
+        <span class="repo-tag">MIT code · CC BY 4.0 data</span>
+      </div>
+      <p>Right now every judgment we've made about Mitra's answer quality has been eyeballing screenshots. This is a reproducible scoring methodology — checks that key facts appear, that citations actually support what's claimed, that wrong-jurisdiction authority doesn't leak into an answer — explicitly built for reuse with a different question set. Write 30–50 India-specific test questions in their format, reuse their scoring script, get real before/after numbers on every future Mitra change.</p>
+    </div>
+
+    <div class="repo">
+      <div class="repo-head">
+        <span class="repo-name">vaquill-mcp / courtlistener-mcp / canlii-mcp</span>
+        <span class="repo-tag">pattern, not data</span>
+      </div>
+      <p>Each of these wraps a legal API as an MCP server so any Claude- or Gemini-based tool can query it directly. Vaquill's own US version needs their paid API — but the pattern (FastMCP auto-generating tools from an OpenAPI spec) is exactly the shape of something we could build on top of our own self-hosted Open India Law data instead.</p>
+    </div>
+  </section>
+
+  <section class="block" id="new-ideas">
+    <div class="block-head">
+      <span class="block-num">04</span>
+      <h2>Beyond chatbot, drafting, search</h2>
+    </div>
+
+    <div class="idea">
+      <h4>An open-source india-law-mcp server</h4>
+      <p>Build the same wrapper pattern above, pointed at our own hosted Open India Law data instead of a paid API. Useful internally — Indian case-law search available to Mitra, to the drafting tool, and to me directly in future sessions doing research for you. Given Aprameya's own background, publishing this back to the open-source community is also a real credibility and visibility play for the firm, not just an internal utility.</p>
+    </div>
+
+    <div class="idea">
+      <h4>Multilingual Mitra, with an actual quality bar</h4>
+      <p><code>legal-mt-benchmark</code> is evaluation-only — no usable translation model — but it proves there's already real rigor applied to English↔Hindi legal translation quality (a 500-sentence benchmark built with IIT Patna, checking legal-term accuracy specifically). If Mitra ever answers in Hindi or Kannada for clients more comfortable there, this is the methodology to hold it to, not a "translate and hope" approach.</p>
+    </div>
+
+    <div class="idea">
+      <h4>Playbook structure as a template, not content</h4>
+      <p>The 28 negotiation playbooks in the <code>playbooks</code> repo are US-specific and not directly usable, but the format — clause-by-clause, both-sides framing (customer vs. vendor), strategic language recommendations — is a solid structural template for what the firm's own Indian-context contract playbooks should look like, if and when the drafting tool needs them.</p>
+    </div>
+  </section>
+
+  <div class="closing">
+    <h2 style="margin-bottom: 1rem;" id="decisions">Open decisions</h2>
+    <ul style="margin-bottom: 0;">
+      <li><b>Scope the vector index, don't load all of it.</b> 463.6 GB uncompressed for the full 32.5M vectors is real infrastructure cost. A smaller, targeted subset — Karnataka High Court plus the practice areas Mitra already covers, say — is very likely enough, and dramatically cheaper to host.</li>
+      <li><b>Decide a refresh cadence.</b> This is a fixed snapshot, not a live feed. Legal research on stale data is a real risk, not a cosmetic one — worth deciding upfront how often to re-pull (their next snapshot release, or running their scrapers ourselves) before this becomes load-bearing for anything client-facing.</li>
+      <li><b>Bake in attribution wherever this data surfaces</b> — in the internal tool's UI, and in Mitra's own answers if its knowledge base draws from this — since it's a condition of the license, not a courtesy.</li>
+    </ul>
+  </div>
+
+  <footer>The Vaquill Find — reference document, Katti &amp; Co. web project</footer>
+
+</div>

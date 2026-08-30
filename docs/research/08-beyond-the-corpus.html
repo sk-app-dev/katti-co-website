@@ -1,0 +1,208 @@
+<title>Beyond the Corpus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F4F5F2; --paper-raised: #FFFFFF; --ink: #1C2230;
+    --ink-soft: #545F70; --ink-faint: #8991A0; --accent: #8A6A2E;
+    --accent-strong: #6E5424; --accent-soft: #EDE3CC; --line: #D6D9D2;
+    --line-strong: #B9BEB6; --good: #3F6B4A; --good-soft: #DEEAE1;
+    --warn: #A85C2A; --warn-soft: #F3E2D3; --stop: #9B3A2E; --stop-soft: #F2DEDA;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+      --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+      --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+      --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+      --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14181F; --paper-raised: #1B212B; --ink: #E9E7DE;
+    --ink-soft: #ABB1BE; --ink-faint: #737B89; --accent: #C9A155;
+    --accent-strong: #DDBA75; --accent-soft: #362C18; --line: #2B313C;
+    --line-strong: #3A4150; --good: #79AE86; --good-soft: #22301F;
+    --warn: #D08148; --warn-soft: #3A2517; --stop: #D9705F; --stop-soft: #3A1F1A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16.5px; line-height: 1.68; margin: 0;
+    padding: 5rem 1.5rem 7rem; -webkit-font-smoothing: antialiased;
+  }
+  .doc { max-width: 44rem; margin: 0 auto; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+  h1 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem); line-height: 1.14; letter-spacing: -0.01em; margin: 0 0 0.9rem; text-wrap: balance; }
+  .dek { font-size: 1.06rem; color: var(--ink-soft); max-width: 41rem; margin: 0 0 2rem; }
+  nav.jump { display: flex; flex-wrap: wrap; gap: 0 1.2rem; font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; margin-bottom: 2.6rem; }
+  nav.jump a { color: var(--ink-soft); text-decoration: none; white-space: nowrap; }
+  nav.jump a:hover, nav.jump a:focus-visible { color: var(--accent); }
+
+  section.block { margin-bottom: 3.2rem; scroll-margin-top: 2rem; }
+  .block-head { display: flex; align-items: baseline; gap: 0.85rem; margin-bottom: 0.4rem; }
+  .block-num { font-family: "IBM Plex Mono", monospace; font-size: 0.95rem; color: var(--accent); font-weight: 500; }
+  h2 { font-family: "IBM Plex Serif", Georgia, serif; font-weight: 600; font-size: 1.46rem; letter-spacing: -0.005em; margin: 0; text-wrap: balance; }
+  .tagline { color: var(--ink-soft); font-size: 1rem; margin: 0.4rem 0 1.5rem; max-width: 40rem; }
+  h3 { font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 0.96rem; margin: 1.5rem 0 0.6rem; color: var(--ink); }
+  p { margin: 0 0 1rem; max-width: 41rem; }
+  ul, ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.55rem; }
+  li::marker { color: var(--ink-faint); }
+  code { font-family: "IBM Plex Mono", monospace; font-size: 0.85em; background: var(--accent-soft); color: var(--accent-strong); padding: 0.1em 0.35em; border-radius: 3px; }
+  a { color: var(--accent); }
+
+  .admit { border-top: 2px solid var(--warn); border-bottom: 2px solid var(--warn); background: var(--paper-raised); padding: 1.4rem 1.6rem; margin-bottom: 2.6rem; }
+  .admit .k { font-family: "IBM Plex Mono", monospace; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--warn); margin: 0 0 0.6rem; display: block; font-weight: 500; }
+  .admit p:last-child { margin-bottom: 0; }
+
+  .find { border-left: 3px solid var(--accent); background: var(--paper-raised); padding: 1.05rem 1.25rem; margin-bottom: 1.3rem; }
+  .find .hdr { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.45rem; }
+  .find h4 { font-family: "IBM Plex Sans", sans-serif; font-size: 0.98rem; font-weight: 600; margin: 0; color: var(--ink); }
+  .badge { font-family: "IBM Plex Mono", monospace; font-size: 0.63rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.18em 0.5em; border-radius: 3px; white-space: nowrap; }
+  .b-good { background: var(--good-soft); color: var(--good); }
+  .b-warn { background: var(--warn-soft); color: var(--warn); }
+  .b-stop { background: var(--stop-soft); color: var(--stop); }
+  .b-gold { background: var(--accent-soft); color: var(--accent-strong); }
+  .find p { font-size: 0.95rem; margin-bottom: 0.55rem; }
+  .find p:last-child { margin-bottom: 0; }
+  .meta { font-family: "IBM Plex Mono", monospace; font-size: 0.73rem; color: var(--ink-faint); margin-top: 0.5rem !important; }
+
+  .quote { border-left: 2px solid var(--line-strong); padding-left: 0.9rem; font-style: italic; color: var(--ink-soft); font-size: 0.93rem; margin: 0.7rem 0; }
+
+  .tbl-wrap { overflow-x: auto; margin: 0.9rem 0 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 28rem; }
+  th, td { text-align: left; padding: 0.5rem 0.9rem 0.5rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); font-weight: 500; }
+  td:first-child { color: var(--ink); font-weight: 500; }
+  td { color: var(--ink-soft); }
+
+  .revised { border-top: 2px solid var(--accent); border-bottom: 2px solid var(--accent); padding: 1.6rem 1.8rem; background: var(--paper-raised); }
+
+  footer { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); font-family: "IBM Plex Mono", monospace; font-size: 0.74rem; color: var(--ink-faint); }
+  @media (max-width: 560px) { body { padding: 3rem 1.1rem 5rem; font-size: 16px; } }
+</style>
+
+<div class="doc">
+
+  <p class="eyebrow">Katti &amp; Co. — the other repos, actually read, Aug 30 2026</p>
+  <h1>Beyond the corpus</h1>
+  <p class="dek">You asked whether I'd checked the other tools, not just the case-law dataset. I hadn't — I'd read web summaries of them, which is the same shortcut that has already caught me out twice. Cloning and reading them turned up two Indian-specific tools I never mentioned, a working offline system that is most of what we planned to build, and an expert design decision that directly challenges my best idea.</p>
+
+  <nav class="jump">
+    <a href="#admit">What I'd done</a>
+    <a href="#indian">Indian tools I missed</a>
+    <a href="#built">Already built</a>
+    <a href="#lessons">Two hard lessons</a>
+    <a href="#content">Reusable content</a>
+    <a href="#revised">Revised view</a>
+  </nav>
+
+  <div class="admit" id="admit">
+    <span class="k">⚠ What I had actually done</span>
+    <p>For every repo except the dataset, I fetched a web page and summarised it. That produced a list of names and one-line descriptions — enough to sound thorough, not enough to be right. The <code>awesome-legaltech</code> list alone is 1,473 lines; the summary I worked from surfaced perhaps a fifth of its India content and missed the two most relevant Indian projects entirely.</p>
+    <p style="margin-bottom:0;">This pass: cloned all of them, read source, configuration, prompts and data files.</p>
+  </div>
+
+  <section class="block" id="indian">
+    <div class="block-head"><span class="block-num">01</span><h2>Two Indian-specific tools I never mentioned</h2></div>
+    <p class="tagline">Both from OpenNyAI, both open-licensed, both built for Indian law specifically rather than adapted from US tooling. This is the biggest gap in everything I've told you.</p>
+
+    <div class="find">
+      <div class="hdr"><h4>Opennyai — an Indian legal NLP pipeline</h4><span class="badge b-gold">Biggest miss</span></div>
+      <p>A Python library built specifically for <b>Indian court judgments</b>, with three trained models: named-entity recognition for legal entities, extractive summarisation, and — the important one — <b>rhetorical role labelling</b>, which classifies each sentence by its structural function in the judgment.</p>
+      <p>That is the same capability I praised in Vaquill's chunk schema, except Vaquill does it with regex heuristics and this does it with models trained on Indian judgments, with published research behind each component. For identifying what part of a judgment is the reasoning versus the facts versus the submissions, this is the more serious tool.</p>
+      <p class="meta">MIT · 251 commits · Python ≥3.13 · optional CUDA</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Aalap-Mistral-7B — an open Indian legal model</h4><span class="badge b-warn">Real, but narrower than it sounds</span></div>
+      <p>OpenNyAI's instruction-tuned Mistral 7B for Indian paralegal tasks, Apache 2.0, 32K context. The honest version, from their own model card: it performs comparably to GPT-3.5-turbo <i>only on tasks present in its training data</i>, and on broader legal exams it is no better than base Mistral. Their words: <span class="quote">Aalap is not a general-purpose India legal LLM.</span></p>
+      <p>So not a Gemini replacement, and not a reason to change Mitra. But it does mean a genuinely open, Indian-legal-tuned model exists for narrow local tasks — and at 7B it would need 4-bit quantisation to fit your 6GB card, which is feasible but tight.</p>
+      <p class="meta">Apache 2.0 · 7B params · would need quantising for the RTX 3060</p>
+    </div>
+  </section>
+
+  <section class="block" id="built">
+    <div class="block-head"><span class="block-num">02</span><h2>Someone already built most of the internal tool</h2></div>
+
+    <div class="find">
+      <div class="hdr"><h4>Legal Document Chat (DocuChat)</h4><span class="badge b-gold">Uncomfortably close to our plan</span></div>
+      <p>Self-hosted document chat for attorneys. Runs <b>fully offline</b> after a one-time model download — loopback-only binding, no cloud calls ever. Ollama for inference, LanceDB as an embedded vector store with no server to run, PyMuPDF and Tesseract for parsing including scanned PDFs.</p>
+      <p>And the part that matters most: <b>citation verification is mechanical and character-level.</b> Every quoted passage is checked to confirm it actually appears in the cited source, and quotes that fail are <i>excluded rather than displayed</i>. The same gate applies before anything reaches its deadline panels and timelines.</p>
+      <p>That is precisely the discipline I recommended for Mitra, already implemented, in a system that also does the "index the firm's own documents" job I ranked as our most differentiated build. Worth evaluating seriously before building our own.</p>
+      <p class="meta">MIT (note: PyMuPDF is AGPL-3.0, which matters only for closed derivatives) · needs Ollama, Python 3.12+ · its default 14B chat model won't fit 6GB, so a smaller one would be substituted</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Master Claude for Legal</h4><span class="badge b-good">Directly relevant</span></div>
+      <p>An MIT-licensed Claude skill pack for legal teams: 10 reference documents covering privilege, verification, long documents and practice areas; five starter skills including NDA triage, version diff and a <b>citation verifier</b>; three firm templates; and a 51-question evaluation dataset.</p>
+      <p>Same delivery mechanism I proposed for our internal tools — Claude skills rather than a custom application — but already built by someone who has thought about privilege and verification. A better starting point than a blank page.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>Others worth knowing</h4><span class="badge b-good">Context</span></div>
+      <ul style="margin-bottom:0;">
+        <li><b>Suzie Law</b> — self-hostable, 12 practice-area personas, 160+ workflows, tracked-change redlines, and its 19 jurisdictions <i>include India</i>.</li>
+        <li><b>stella</b> — open-source legal workspace: matters, documents, contract review, self-hostable. The practice-management layer.</li>
+        <li><b>SpotDraft</b> — India-headquartered contract lifecycle management with on-device clause extraction. Direct domestic commercial context.</li>
+        <li><b>Ansvar Gateway</b> — worth stealing one design principle: it returns an explicit error rather than an uncited answer when a source is unavailable.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="lessons">
+    <div class="block-head"><span class="block-num">03</span><h2>Two findings that change my advice</h2></div>
+
+    <div class="find">
+      <div class="hdr"><h4>A legal-aid team deliberately refused to build my best idea</h4><span class="badge b-stop">Challenges the limitation calculator</span></div>
+      <p>The legal-aid plugin has a full deadlines skill — a YAML ledger, cross-case rollups, warning thresholds, ownership tracking, transfer propagation. And it states plainly that it <b>does not calculate deadlines from triggering events</b>:</p>
+      <p class="quote">Civil legal aid deadlines are local-rule and statute-specific — different states count days differently, different courts handle weekends differently, different agencies have different appeal windows. The staffer or managing attorney does the math against the actual rule; the skill records the result.</p>
+      <p>I proposed exactly the thing they refused to build, and called it the strongest idea on the list. Their reasoning partly transfers and partly doesn't: our forums are narrower and better-defined than the whole of US civil legal aid, so computation is more tractable for us. But their instinct about where liability sits is sound.</p>
+      <p><b>What they do instead is better than what I proposed:</b> a <i>plausibility check</i>. The lawyer computes the deadline; the system checks it against the typical range for that deadline type and flags outliers — "this is 63 days out, that type is usually 30–45, want to recompute?" — with any override logged. Guardrail, not oracle. And every deadline records its source so a successor can verify the arithmetic.</p>
+      <p><b>Revised recommendation:</b> build the ledger and the plausibility check first. Add computation only for the handful of forums where the rule is genuinely unambiguous, always showing the working and citing the provision, and always framed as a check on your arithmetic rather than a replacement for it.</p>
+    </div>
+
+    <div class="find">
+      <div class="hdr"><h4>LLM-as-judge is too noisy to grade legal answers</h4><span class="badge b-stop">Measured, not asserted</span></div>
+      <p>From the benchmark's scorer, an empirical finding I'd have otherwise learned the expensive way: scoring the <i>identical answer text</i>, an LLM judge's citation score swung between <b>0.20 and 0.70</b>. Their conclusion — any citation or retrieval improvement worth 0.05–0.2 is invisible under that noise.</p>
+      <p>So they replaced the judge for that dimension with a deterministic rule: for each <code>[N]</code> marker, does source N actually overlap the adjacent claim? Categories are precise — <code>out_of_range</code> (a fabricated index), <code>supported</code>, <code>misattributed</code> (cited a weak source when a good one was available), and <code>weak_window</code> (generic sentence, nothing to attribute). Same input, same output, every time.</p>
+      <p><b>What this changes:</b> when we benchmark Mitra, the citation dimension must be scored deterministically, not by asking a model. Their scorer is standard-library Python and reusable as-is; only the question set needs to be Indian.</p>
+    </div>
+  </section>
+
+  <section class="block" id="content">
+    <div class="block-head"><span class="block-num">04</span><h2>Reusable structures, not reusable content</h2></div>
+    <p class="tagline">The playbooks repo is US content throughout — but three of its <i>formats</i> transfer directly.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <tr><th>Asset</th><th>What's actually there</th><th>Transfers as</th></tr>
+        <tr><td>Diligence questions</td><td>Structured extraction columns — label, question, and a typed answer (party name, single-select with options)</td><td>A schema for pulling structured data out of contracts; swap the questions for Indian ones</td></tr>
+        <tr><td>Clause library</td><td>24 clause types, each with name, type, tone, jurisdiction and full text</td><td>The metadata shape for the firm's own clause bank — tone and jurisdiction tagging is the useful part</td></tr>
+        <tr><td>Doctrines</td><td>12 areas including copyright and patent</td><td>A checklist structure per practice area, not the doctrines themselves</td></tr>
+        <tr><td>Benchmark items</td><td>question, must_include, must_not_include, expected_authorities, plus a notes field recording the stale answer to watch for</td><td>Copy the format exactly. The stale-answer field is clever — it catches a model citing last year's figures</td></tr>
+      </table>
+    </div>
+
+    <p>One more, from the Word add-in's actual prompt file rather than its README: the community build ships a compact prompt pack where every feature enforces a strict JSON schema, and the shared grounding instruction is blunt — <i>never invent citations, statutes, case names, or dates; if it isn't determinable from the text provided, say so.</i> Provider list confirmed in code: OpenAI, Anthropic, Gemini, Groq, Azure and local Ollama, with Ollama needing no key at all.</p>
+  </section>
+
+  <div class="revised" id="revised">
+    <h2 style="margin-bottom: 1rem;">What this changes</h2>
+    <ol>
+      <li><b>Evaluate DocuChat before building an own-documents tool.</b> It is offline, local, MIT, and already enforces the citation discipline we wanted. Building our own may still win, but starting from a blank page would now be a choice rather than a necessity.</li>
+      <li><b>Use Opennyai for Indian judgment structure</b> rather than porting Vaquill's regex section detector. Purpose-built beats adapted.</li>
+      <li><b>Rebuild the limitation idea as a ledger plus plausibility check</b>, with computation limited to the forums where the rule is genuinely unambiguous. Their design is safer than mine.</li>
+      <li><b>Score citations deterministically</b> when benchmarking Mitra. Never with an LLM judge — that is measured, not theoretical.</li>
+      <li><b>Start the drafting tool from Master Claude for Legal's skill pack</b> rather than the Word add-in, if the goal is speed. The add-in is the better product; the skill pack is the faster path to something usable.</li>
+      <li><b>Aalap changes nothing for now.</b> Real and open, but too narrow to matter at this stage — worth revisiting only for specific offline paralegal tasks.</li>
+    </ol>
+  </div>
+
+  <footer>Beyond the Corpus — reference document, Katti &amp; Co. web project</footer>
+
+</div>
