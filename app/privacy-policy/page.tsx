@@ -1,7 +1,14 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import type { Metadata } from "next";
 import { client, SITE_SETTINGS_QUERY } from "@/lib/sanity";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "How Katti & Co. collects, uses and protects information shared through this website.",
+  alternates: { canonical: "/privacy-policy" },
+};
 
 const FALLBACK_EMAIL = "aprameya.katti@kattiandco.com";
 

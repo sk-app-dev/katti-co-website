@@ -196,7 +196,7 @@ export default function Contact() {
               <div style={{ fontSize: "2rem", marginBottom: "1rem" }}>✓</div>
               <div
                 style={{
-                  fontFamily: "var(--font-cinzel)",
+                  fontFamily: "var(--font-brand)", fontVariantCaps: "small-caps",
                   fontSize: ".8rem",
                   letterSpacing: ".12em",
                   color: "var(--grn)",

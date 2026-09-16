@@ -10,6 +10,11 @@ import Gallery from "../components/Gallery";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import MitraChat from "../components/MitraChat";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
   return (

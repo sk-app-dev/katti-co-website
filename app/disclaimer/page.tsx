@@ -1,6 +1,13 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Disclaimer",
+  description: "Terms on which Katti & Co. makes this website available, under the Bar Council of India rules.",
+  alternates: { canonical: "/disclaimer" },
+};
 
 export default function Disclaimer() {
   return (

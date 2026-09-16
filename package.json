@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fontsource/arimo": "^5.3.0",
     "@portabletext/react": "^6.0.3",
     "@sanity/client": "^7.20.0",
     "@sanity/image-url": "^1.2.0",

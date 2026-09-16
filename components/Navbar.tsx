@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import BrandMark from "./BrandMark";
 
 const NAV_LINKS = [
   { label: "About",     href: "#about" },
@@ -62,10 +63,7 @@ export default function Navbar() {
       <nav className={`nav${scrolled ? " scrolled" : ""}`}>
         {/* Wordmark */}
         <a href="/" className="nav-wordmark" style={{ textDecoration: "none" }}>
-          <div className="nav-name">
-            KATTI <span>&amp;</span> Co.
-          </div>
-          <div className="nav-sub">Advocates, IP, Tech, &amp; Tax Attorneys</div>
+          <BrandMark />
         </a>
 
         {/* Desktop links */}

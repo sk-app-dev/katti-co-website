@@ -1023,7 +1023,7 @@ export default function MitraChat(): React.JSX.Element {
 
               {/* Firm label */}
               <div className="mitra-avatar-firm">
-                <span className="mitra-avatar-firm-name">KATTI &amp; Co.</span>
+                <span className="mitra-avatar-firm-name">Katti &amp; Co.</span>
                 <span className="mitra-avatar-firm-role">Legal Assistant</span>
               </div>
 

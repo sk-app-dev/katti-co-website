@@ -2,6 +2,7 @@
 // components/Footer.tsx
 
 import Link from "next/link";
+import BrandMark from "./BrandMark";
 
 export default function Footer() {
 
@@ -10,10 +11,9 @@ export default function Footer() {
       <footer className="footer">
         <div className="footer-grid">
           <div>
-            <div className="footer-brand-name">KATTI &amp; Co.</div>
+            <div className="footer-brand-name"><BrandMark size="lg" /></div>
             <p className="footer-tagline">
-              Advocates, IP, Tech &amp; Tax Attorneys. Combining technical
-              insight with legal depth — Bengaluru, India.
+              Combining technical insight with legal depth — Bengaluru, India.
             </p>
           </div>
 
@@ -51,7 +51,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <div className="footer-bottom-row">
-            <div className="footer-copy">&copy; 2025 Katti &amp; Co. All rights reserved.</div>
+            <div className="footer-copy">&copy; {new Date().getFullYear()} Katti &amp; Co. All rights reserved.</div>
             <div className="footer-legal">
               <Link href="/privacy-policy" style={{ textDecoration: "none" }}>
                 <button style={{ background: "none", border: "none", cursor: "pointer", font: "inherit", color: "var(--t3)" }}>Privacy Policy</button>

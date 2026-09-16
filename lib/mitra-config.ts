@@ -36,17 +36,17 @@ export const MITRA_CONFIG = {
   // Sanity Studio to change the live email/phone, not this file.
   FIRM: {
     name:          "Katti & Co.",
-    full_name:     "Katti & Co. — Advocates, IP, Tech & Tax Attorneys",
+    full_name:     "Katti & Co. — Advocates · IP · Tax · Disputes",
     tagline:       "Where Technical Insight Meets Legal Depth",
     email:         "aprameya.katti@kattiandco.com",
     phone:         "+91 78993 01767",
     location:      "Bengaluru, Karnataka, India",
-    website:       "https://kattiandco.com",
+    website:       "https://www.kattiandco.com",
     vercel_url:    "https://katti-co-website.vercel.app",
     linkedin_firm: "https://www.linkedin.com/company/katti-co/?viewAsMember=true",
     linkedin_ank:  "https://www.linkedin.com/in/adv-aprameya-n-katti-640974119/",
     founder:       "Mr. Aprameya N. Katti",
-    founder_role:  "Founder & Principal Attorney",
+    founder_role:  "Founder & Managing Partner",
     founder_bg:
       "Computer science engineer turned advocate. Former Judicial Researcher, High Court of Karnataka.",
     description:

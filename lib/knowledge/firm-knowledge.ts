@@ -50,7 +50,7 @@ export const FIRM_KNOWLEDGE: Record<string, KnowledgeNode> = {
           "who are katti", "tell me about", "about the firm", "what firm",
         ],
         question: "Who is Katti & Co.?",
-        answer: `**Katti & Co. — Advocates, IP, Tech & Tax Attorneys**
+        answer: `**Katti & Co. — Advocates · IP · Tax · Disputes**
 
 Katti & Co. is a multidisciplinary law firm based in **Bengaluru, Karnataka, India**, founded by Mr. Aprameya N. Katti.
 
@@ -79,7 +79,7 @@ The founder is a **computer science engineer turned advocate** — enabling the 
           "principal attorney", "ank", "managing partner",
         ],
         question: "Who is Mr. Aprameya N. Katti?",
-        answer: `**Mr. Aprameya N. Katti — Founder & Principal Attorney**
+        answer: `**Mr. Aprameya N. Katti — Founder & Managing Partner**
 
 **Background:**
 - Formally trained as a **computer science engineer** before entering law — a rare dual background
@@ -124,7 +124,7 @@ His engineering background enables deep technical understanding of patent invent
 
 📧 **Email:** aprameya.katti@kattiandco.com
 📞 **Phone:** +91 78993 01767
-📍 **Location:** Bengaluru, Karnataka, India
+📍 **Office:** Unit No. 105, Ground Floor, Prestige Centre Point, Cunningham Road, Bengaluru 560 001
 💼 **LinkedIn (Firm):** linkedin.com/company/katti-co/?viewAsMember=true
 🌐 **Website:** kattiandco.com
 
