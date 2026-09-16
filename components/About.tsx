@@ -85,6 +85,7 @@ interface TeamMember {
 }
 
 const founderQuery = `*[_type == "founder"][0] {
+  _id,
   name,
   title,
   bio,
@@ -99,10 +100,32 @@ const founderQuery = `*[_type == "founder"][0] {
   }
 }`;
 
+const DownloadIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+    <path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+  </svg>
+);
+
+function bioParagraphs(bio: string): string[] {
+  return bio
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
 export default function About() {
   const [founder, setFounder] = useState<Founder | null>(null);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const toggleBio = (id: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -248,6 +271,16 @@ export default function About() {
                     LinkedIn — Personal Profile
                   </a>
                 )}
+                {founder._id && (
+                  <a
+                    href={`/api/profile/${founder._id}`}
+                    download
+                    className="founder-link"
+                  >
+                    <DownloadIcon />
+                    Download full profile (PDF)
+                  </a>
+                )}
               </div>
             </div>
           ) : (
@@ -260,32 +293,73 @@ export default function About() {
         {/* Team Members Section beside founder */}
         {!loading && teamMembers.length > 0 && (
           <div className="team-section reveal delay-3">
-            <div className="team-label">Our Team</div>
+            <div className="team-head">
+              <div className="team-label">Our Team</div>
+              <a href="/api/profile/all" download className="team-download-all">
+                <DownloadIcon />
+                Download all profiles (PDF)
+              </a>
+            </div>
             <div className="team-grid">
-              {teamMembers.map((member) => (
-                <div className="team-card" key={member._id}>
-                  {member.image?.asset && (
-                    <div className="team-photo">
-                      <Image
-                        src={urlFor(member.image).width(200).height(200).fit('crop').crop('top').auto('format').url()}
-                        alt={member.name}
-                        width={200}
-                        height={200}
-                      />
-                    </div>
-                  )}
-                  <div className="team-name">{member.name}</div>
-                  <div className="team-designation">{member.title}</div>
-                  {member.bio && <p className="team-bio">{member.bio}</p>}
-                  {member.expertise && member.expertise.length > 0 && (
-                    <div className="team-expertise">
-                      {member.expertise.map((skill, index) => (
-                        <span key={index} className="expertise-tag">{skill}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+              {teamMembers.map((member) => {
+                const paras = member.bio ? bioParagraphs(member.bio) : [];
+                const isOpen = expanded.has(member._id);
+                const isLong = paras.length > 1 || (paras[0]?.length ?? 0) > 360;
+                const shown = isOpen ? paras : paras.slice(0, 1);
+                return (
+                  <div className="team-card" key={member._id}>
+                    {member.image?.asset && (
+                      <div className="team-photo">
+                        <Image
+                          src={urlFor(member.image).width(400).height(400).fit('crop').crop('top').auto('format').url()}
+                          alt={`${member.name} — ${member.title}, Katti & Co.`}
+                          width={400}
+                          height={400}
+                          sizes="170px"
+                        />
+                      </div>
+                    )}
+                    <div className="team-name">{member.name}</div>
+                    <div className="team-designation">{member.title}</div>
+                    {shown.length > 0 && (
+                      <div
+                        className={`team-bio${isOpen || !isLong ? "" : " is-clamped"}`}
+                        id={`bio-${member._id}`}
+                      >
+                        {shown.map((para, i) => (
+                          <p key={i}>{para}</p>
+                        ))}
+                      </div>
+                    )}
+                    {isLong && (
+                      <button
+                        type="button"
+                        className="team-bio-toggle"
+                        aria-expanded={isOpen}
+                        aria-controls={`bio-${member._id}`}
+                        onClick={() => toggleBio(member._id)}
+                      >
+                        {isOpen ? "Show less" : "Read full bio"}
+                      </button>
+                    )}
+                    {member.expertise && member.expertise.length > 0 && (
+                      <div className="team-expertise">
+                        {member.expertise.map((skill, index) => (
+                          <span key={index} className="expertise-tag">{skill}</span>
+                        ))}
+                      </div>
+                    )}
+                    <a
+                      href={`/api/profile/${member._id}`}
+                      download
+                      className="team-download"
+                    >
+                      <DownloadIcon />
+                      Download profile (PDF)
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
