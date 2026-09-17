@@ -162,6 +162,7 @@ const GOLD_ON_LIGHT = rgb(0.6, 0.47, 0.15);
 const GOLD_ON_DARK = rgb(0.79, 0.65, 0.25);
 const BAND = rgb(0.05, 0.06, 0.09);
 const BAND_TEXT_STRONG = rgb(1, 1, 1);
+const BAND_RULE = rgb(0.5, 0.5, 0.52);
 
 interface Fonts {
   serif: PDFFont;
@@ -228,14 +229,14 @@ function drawBand(page: PDFPage, fonts: Fonts) {
   const advY = PAGE_H - 52;
   drawSpaced(page, adv, { x: mid - advW / 2, y: advY, size: 6.5, font: fonts.sansBold, color: BAND_TEXT_STRONG, spacing: 2.2 });
   for (const [x1, x2] of [[MARGIN, mid - advW / 2 - 6], [mid + advW / 2 + 6, MARGIN + nameW]]) {
-    page.drawLine({ start: { x: x1, y: advY + 2.3 }, end: { x: x2, y: advY + 2.3 }, thickness: 0.4, color: BAND_TEXT_STRONG });
+    page.drawLine({ start: { x: x1, y: advY + 2.3 }, end: { x: x2, y: advY + 2.3 }, thickness: 0.4, color: BAND_RULE });
   }
 
   const areas = "IP  ·  TAX  ·  DISPUTES";
   const areasW = spacedWidth(areas, fonts.sansBold, 5.5, 1.3);
   const areasY = PAGE_H - 63;
   drawSpaced(page, areas, { x: mid - areasW / 2, y: areasY, size: 5.5, font: fonts.sansBold, color: BAND_TEXT_STRONG, spacing: 1.3 });
-  page.drawLine({ start: { x: mid - areasW / 2, y: areasY - 3 }, end: { x: mid + areasW / 2, y: areasY - 3 }, thickness: 0.4, color: BAND_TEXT_STRONG });
+  page.drawLine({ start: { x: mid - areasW / 2, y: areasY - 3 }, end: { x: mid + areasW / 2, y: areasY - 3 }, thickness: 0.4, color: BAND_RULE });
 
   const label = "PROFESSIONAL PROFILE";
   const w = spacedWidth(label, fonts.sans, 7.5, 1.4);

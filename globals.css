@@ -62,12 +62,12 @@ img { max-width: 100%; display: block; }
   font-size: .5rem; font-weight: 700; letter-spacing: .34em; text-transform: uppercase;
 }
 .brand-descriptor::before, .brand-descriptor::after {
-  content: ""; flex: 1; height: 1px; background: #fff;
+  content: ""; flex: 1; height: 1px; background: rgba(255,255,255,.45);
 }
 .brand-descriptor::after { margin-left: -.34em; }
 .brand-areas {
   align-self: center; margin-top: .34em; padding: 0 .1em .22em .3em;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid rgba(255,255,255,.45);
   font-size: .4rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
 }
 .brand--lg .brand-name { font-size: 2rem; }
