@@ -11,6 +11,7 @@ export const COLORS = {
   text: "#e8e4d8",
   muted: "rgba(232,228,216,.62)",
   gold: "#c9a640",
+  brand: "#ffffff",
   line: "rgba(201,166,64,.10)",
 };
 
@@ -26,7 +27,7 @@ export function Wordmark({ size }: { size: number }) {
     <span style={{ fontSize: s, marginLeft: gap, marginRight: gap }}>{text}</span>
   );
   return (
-    <div style={{ display: "flex", alignItems: "baseline", fontWeight: 700, color: COLORS.text, lineHeight: 1 }}>
+    <div style={{ display: "flex", alignItems: "baseline", fontWeight: 700, color: COLORS.brand, lineHeight: 1 }}>
       {part("K", size)}
       {part("ATTI", small)}
       {part("&", size, Math.round(size * 0.24))}

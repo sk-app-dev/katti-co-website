@@ -21,11 +21,11 @@ export default function Footer() {
             <div className="footer-col-title">Practice</div>
             <ul>
               <li><a href="#practice" onClick={(e) => { e.preventDefault(); document.getElementById("c-ip")?.scrollIntoView(); }}>Patents &amp; IP</a></li>
-              <li><a href="#practice">Technology Law</a></li>
               <li><a href="#practice">Tax Litigation</a></li>
               <li><a href="#practice">Commercial Disputes</a></li>
-              <li><a href="#practice">Corporate Law</a></li>
               <li><a href="#practice">White Collar</a></li>
+              <li><a href="#practice">Corporate Law</a></li>
+              <li><a href="#practice">Technology Law</a></li>
             </ul>
           </div>
 

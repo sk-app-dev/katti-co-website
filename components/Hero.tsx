@@ -18,8 +18,8 @@ export default function Hero() {
 
         <p className="hero-tagline">
           A multidisciplinary law firm specialising in Intellectual Property,
-          Technology Law, Tax Litigation, Civil &amp; Commercial, Corporate Law
-          and White Collar Crimes — combining engineering precision with
+          Tax Litigation, Civil &amp; Commercial Disputes, White Collar Crimes,
+          Corporate Law and Technology Law — combining engineering precision with
           rigorous legal practice.
         </p>
 
@@ -47,7 +47,7 @@ export default function Hero() {
           <span className="stat-label">Constitutional Courts</span>
         </div>
         <div className="stat">
-          <span className="stat-number">IP · Tech · Tax</span>
+          <span className="stat-number">IP · Tax · Disputes</span>
           <span className="stat-label">Core Disciplines</span>
         </div>
       </div>

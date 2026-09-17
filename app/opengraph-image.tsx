@@ -11,7 +11,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-  const rule = { flex: 1, height: 2, background: COLORS.gold, opacity: 0.7 };
+  const rule = { flex: 1, height: 2, background: COLORS.brand };
   return new ImageResponse(
     (
       <div
@@ -32,7 +32,7 @@ export default async function Image() {
           <Wordmark size={132} />
           <div style={{ display: "flex", alignItems: "center", marginTop: 26, gap: 26 }}>
             <div style={rule} />
-            <div style={{ fontSize: 36, letterSpacing: 16, marginRight: -16, color: COLORS.gold, fontWeight: 700 }}>ADVOCATES</div>
+            <div style={{ fontSize: 36, letterSpacing: 16, marginRight: -16, color: COLORS.brand, fontWeight: 700 }}>ADVOCATES</div>
             <div style={rule} />
           </div>
           <div style={{ display: "flex", justifyContent: "center", marginTop: 22 }}>
@@ -40,11 +40,11 @@ export default async function Image() {
               style={{
                 fontSize: 27,
                 letterSpacing: 10,
-                color: COLORS.muted,
+                color: COLORS.brand,
                 fontWeight: 700,
                 paddingBottom: 10,
                 paddingLeft: 10,
-                borderBottom: `2px solid ${COLORS.muted}`,
+                borderBottom: `2px solid ${COLORS.brand}`,
               }}
             >
               {BRAND.areas.map((a) => a.toUpperCase()).join("  ·  ")}

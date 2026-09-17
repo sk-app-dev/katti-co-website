@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Insights",
-  description: "Articles from Katti & Co. on intellectual property, technology law, tax and disputes.",
+  description: "Articles from Katti & Co. on intellectual property, tax, disputes and technology law.",
   alternates: { canonical: "/blog" },
 };
 

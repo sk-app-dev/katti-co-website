@@ -59,11 +59,11 @@ The founder is a **computer science engineer turned advocate** — enabling the 
 
 **Core practice areas:**
 - Intellectual Property Rights (Patents, Trademarks, Copyrights, Designs, FTO)
-- Technology Law (SaaS, Data Protection, AI, Cybersecurity)
 - Tax Litigation & Advisory (Direct Tax, GST, ITAT, High Courts)
 - Civil & Commercial Disputes (Arbitration, Mediation, Commercial Courts)
-- Corporate & Commercial Law (M&A, Companies Act, FEMA, Startups)
 - White Collar Crimes & Investigations (Fraud, ED, SFIO, CBI)
+- Corporate & Commercial Law (M&A, Companies Act, FEMA, Startups)
+- Technology Law (SaaS, Data Protection, AI, Cybersecurity)
 
 **Jurisdictions:** IPO, USPTO, EPO, PCT, Supreme Court, High Courts, ITAT, GSTAT, Commercial Courts, Arbitration Tribunals.
 
@@ -194,20 +194,20 @@ Call directly: **+91 78993 01767**
 **1. Intellectual Property Rights**
 Full-spectrum IP: patent drafting & prosecution (IPO/USPTO/EPO/PCT), trademark registration & enforcement, copyright, designs, FTO (Freedom to Operate), IP due diligence, licensing, portfolio strategy.
 
-**2. Technology Law**
-SaaS & platform agreements, data protection & privacy, AI legal frameworks, cybersecurity compliance, digital governance, tech outsourcing contracts.
-
-**3. Tax Litigation & Advisory**
+**2. Tax Litigation & Advisory**
 Direct tax and GST disputes, SCN responses, appeals before ITAT and GSTAT, High Court writs, Supreme Court matters, tax planning.
 
-**4. Civil & Commercial Disputes**
+**3. Civil & Commercial Disputes**
 Arbitration, mediation, conciliation, commercial court litigation, injunctions, recovery matters, consumer disputes.
+
+**4. White Collar Crimes & Investigations**
+Fraud defence, corporate investigations, representation before ED (Enforcement Directorate), SFIO, CBI. Crisis management.
 
 **5. Corporate & Commercial Law**
 Company incorporation, M&A, due diligence, shareholders' agreements, Companies Act compliance, FEMA, foreign investment, startup structuring, ESOP.
 
-**6. White Collar Crimes & Investigations**
-Fraud defence, corporate investigations, representation before ED (Enforcement Directorate), SFIO, CBI. Crisis management.
+**6. Technology Law**
+SaaS & platform agreements, data protection & privacy, AI legal frameworks, cybersecurity compliance, digital governance, tech outsourcing contracts.
 
 📧 aprameya.katti@kattiandco.com | 📞 +91 78993 01767`,
         source: "Katti & Co. — Practice Areas (kattiandco.com)",

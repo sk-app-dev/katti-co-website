@@ -177,8 +177,8 @@ export default function About() {
           <div className="about-text reveal delay-1">
             <p>
               We are a multidisciplinary law firm with core practices in
-              Intellectual Property Rights, Technology Law, Tax Litigation and
-              Advisory, and Civil &amp; Commercial Disputes. We assist
+              Intellectual Property Rights, Tax Litigation and Advisory, Civil
+              &amp; Commercial Disputes, and Technology Law. We assist
               individuals, startups, and businesses by offering clear,
               practical, and reliable legal support.
             </p>

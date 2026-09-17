@@ -14,8 +14,8 @@ export const BRAND = {
   // Informational only (Bar Council Rule 36): who the firm is and what it
   // practises, never a claim or an invitation.
   description:
-    "Katti & Co. is a Bengaluru law firm practising in intellectual property, " +
-    "technology law, tax, and civil and commercial disputes.",
+    "Katti & Co. is a Bengaluru law firm practising in intellectual property, tax, " +
+    "civil and commercial disputes, white collar crime, corporate law and technology law.",
 } as const;
 
 export const SITE_TITLE = `${BRAND.name} — ${BRAND.tagline}`;

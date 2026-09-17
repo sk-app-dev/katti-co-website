@@ -48,10 +48,10 @@ img { max-width: 100%; display: block; }
 }
 .nav.scrolled { background: rgba(7,8,13,.97); }
 .nav-wordmark { display: flex; flex-direction: column; gap: 2px; cursor: pointer; user-select: none; }
-/* Wordmark — mirrors the business card: KATTI & CO. / ── ADVOCATES ── / IP · TAX · DISPUTES */
+/* Wordmark — mirrors the business card, one colour throughout like the print: KATTI & CO. / ── ADVOCATES ── / IP · TAX · DISPUTES */
 .brand {
   display: inline-flex; flex-direction: column; align-items: stretch;
-  font-family: var(--font-brand), Arial, sans-serif; color: var(--text); line-height: 1;
+  font-family: var(--font-brand), Arial, sans-serif; color: #fff; line-height: 1;
 }
 .brand-name {
   font-weight: 700; font-variant-caps: small-caps; font-size: 1.5rem;
@@ -59,16 +59,16 @@ img { max-width: 100%; display: block; }
 }
 .brand-descriptor {
   display: flex; align-items: center; gap: .55em; margin-top: .28em;
-  font-size: .5rem; font-weight: 700; letter-spacing: .34em; text-transform: uppercase; color: var(--gold);
+  font-size: .5rem; font-weight: 700; letter-spacing: .34em; text-transform: uppercase;
 }
 .brand-descriptor::before, .brand-descriptor::after {
-  content: ""; flex: 1; height: 1px; background: currentColor; opacity: .55;
+  content: ""; flex: 1; height: 1px; background: currentColor;
 }
 .brand-descriptor::after { margin-left: -.34em; }
 .brand-areas {
   align-self: center; margin-top: .34em; padding: 0 .1em .22em .3em;
-  border-bottom: 1px solid rgba(232,228,216,.55);
-  font-size: .4rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--t2);
+  border-bottom: 1px solid currentColor;
+  font-size: .4rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
 }
 .brand--lg .brand-name { font-size: 2rem; }
 .brand--lg .brand-descriptor { font-size: .62rem; }

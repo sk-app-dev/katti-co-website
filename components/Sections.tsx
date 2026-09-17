@@ -137,8 +137,8 @@ export async function BlogTeaser() {
       <div className="blog-teaser-grid">
         <div className="blog-teaser-text reveal delay-1">
           <p>
-            We share perspectives on Intellectual Property, Technology Law,
-            Tax Litigation, and the evolving legal landscape — practical
+            We share perspectives on Intellectual Property, Tax Litigation,
+            Technology Law, and the evolving legal landscape — practical
             insights written for founders, businesses, and innovators.
           </p>
           <p>

@@ -50,16 +50,16 @@ export const MITRA_CONFIG = {
     founder_bg:
       "Computer science engineer turned advocate. Former Judicial Researcher, High Court of Karnataka.",
     description:
-      "Multidisciplinary law firm in Bengaluru specialising in IP, Technology Law, Tax Litigation, Civil & Commercial, Corporate Law, and White Collar Crimes.",
+      "Multidisciplinary law firm in Bengaluru practising in IP, Tax Litigation, Civil & Commercial Disputes, White Collar Crimes, Corporate Law, and Technology Law.",
   },
 
   PRACTICE_AREAS: [
     "Intellectual Property Rights (Patents, Trademarks, Copyrights, Designs, FTO)",
-    "Technology Law (SaaS, Data Protection, AI frameworks, Cybersecurity)",
     "Tax Litigation & Advisory (Direct Tax, GST, ITAT, High Court, Supreme Court)",
     "Civil & Commercial Disputes (Arbitration, Mediation, Commercial Courts)",
-    "Corporate & Commercial Law (M&A, Companies Act, FEMA, Startups)",
     "White Collar Crimes & Investigations (Fraud, ED, SFIO, CBI)",
+    "Corporate & Commercial Law (M&A, Companies Act, FEMA, Startups)",
+    "Technology Law (SaaS, Data Protection, AI frameworks, Cybersecurity)",
   ],
 
   COURTS: [

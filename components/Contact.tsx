@@ -26,13 +26,13 @@ const MATTER_TYPES = [
   "Copyright Advisory",
   "IP Enforcement & Litigation",
   "FTO / IP Due Diligence",
-  "Technology Law Advisory",
   "Tax Litigation — Direct",
   "Tax Litigation — Indirect / GST",
   "Commercial Dispute",
   "Arbitration / Mediation",
-  "Corporate / M&A",
   "White Collar Crime",
+  "Corporate / M&A",
+  "Technology Law Advisory",
   "Other",
 ];
 
