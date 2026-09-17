@@ -12,6 +12,7 @@ export const COLORS = {
   muted: "rgba(232,228,216,.62)",
   gold: "#c9a640",
   brand: "#ffffff",
+  rule: "rgba(255,255,255,.45)",
   line: "rgba(201,166,64,.10)",
 };
 

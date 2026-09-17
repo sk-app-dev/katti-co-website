@@ -1,5 +1,6 @@
 // app/icon.tsx
-// Browser-tab icon: the card's "K" in gold on the site's dark ground.
+// Browser-tab icon: the card's "K" in white on black, with the card's
+// hairline rule beneath it.
 
 import { ImageResponse } from "next/og";
 import { COLORS, brandFonts } from "@/lib/brand-image";
@@ -15,18 +16,16 @@ export default async function Icon() {
           width: "100%",
           height: "100%",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: COLORS.bg,
+          background: "#000",
           borderRadius: 12,
-          color: COLORS.gold,
           fontFamily: "Arimo",
-          fontWeight: 700,
-          fontSize: 46,
-          lineHeight: 1,
         }}
       >
-        K
+        <div style={{ display: "flex", color: COLORS.brand, fontWeight: 700, fontSize: 44, lineHeight: 1 }}>K</div>
+        <div style={{ display: "flex", width: 34, height: 2, marginTop: 4, background: COLORS.rule }} />
       </div>
     ),
     { ...size, fonts: await brandFonts() },
