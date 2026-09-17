@@ -11,7 +11,7 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function Image() {
-  const rule = { flex: 1, height: 3, background: COLORS.brand };
+  const rule = { flex: 1, height: 1.5, background: COLORS.brand };
   return new ImageResponse(
     (
       <div
@@ -44,7 +44,7 @@ export default async function Image() {
                 fontWeight: 700,
                 paddingBottom: 10,
                 paddingLeft: 10,
-                borderBottom: `3px solid ${COLORS.brand}`,
+                borderBottom: `1.5px solid ${COLORS.brand}`,
               }}
             >
               {BRAND.areas.map((a) => a.toUpperCase()).join("  ·  ")}

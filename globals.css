@@ -62,18 +62,17 @@ img { max-width: 100%; display: block; }
   font-size: .5rem; font-weight: 700; letter-spacing: .34em; text-transform: uppercase;
 }
 .brand-descriptor::before, .brand-descriptor::after {
-  content: ""; flex: 1; height: 1.5px; background: #fff; border-radius: 1px;
+  content: ""; flex: 1; height: 1px; background: #fff;
 }
 .brand-descriptor::after { margin-left: -.34em; }
 .brand-areas {
   align-self: center; margin-top: .34em; padding: 0 .1em .22em .3em;
-  border-bottom: 1.5px solid #fff;
+  border-bottom: 1px solid #fff;
   font-size: .4rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase;
 }
 .brand--lg .brand-name { font-size: 2rem; }
 .brand--lg .brand-descriptor { font-size: .62rem; }
-.brand--lg .brand-areas { font-size: .5rem; border-bottom-width: 2px; }
-.brand--lg .brand-descriptor::before, .brand--lg .brand-descriptor::after { height: 2px; }
+.brand--lg .brand-areas { font-size: .5rem; }
 .nav-links { display: flex; align-items: center; gap: 1.8rem; list-style: none; }
 .nav-links a {
   font-size: .76rem; letter-spacing: .13em; text-transform: uppercase;

@@ -43,7 +43,7 @@ export default function Hero() {
           <span className="stat-label">Filing Jurisdictions</span>
         </div>
         <div className="stat">
-          <span className="stat-number">HCs · SCs · Tribunals</span>
+          <span className="stat-number">HCs · SC · Tribunals</span>
           <span className="stat-label">Courts &amp; Tribunals</span>
         </div>
         <div className="stat">
