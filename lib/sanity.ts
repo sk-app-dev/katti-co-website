@@ -7,7 +7,26 @@ export const client = createClient({
   apiVersion: "2024-01-01",
   useCdn: true,
   token: process.env.SANITY_API_TOKEN,
+  // Server-side the token can read unpublished drafts; never serve those.
+  perspective: "published",
 });
+
+// Recent posts shaped as Mitra's BlogPost (lib/mitra-engine.ts).
+export async function fetchRecentPosts(limit = 10) {
+  const posts = await client.fetch<
+    { title?: string; category?: string; excerpt?: string; publishedAt?: string; slug?: { current?: string } }[]
+  >(ALL_POSTS_QUERY);
+  return (posts || [])
+    .filter((p) => p.slug?.current)
+    .slice(0, limit)
+    .map((p) => ({
+      title: p.title || "",
+      category: p.category || "",
+      excerpt: p.excerpt || "",
+      date: p.publishedAt || "",
+      slug: p.slug!.current!,
+    }));
+}
 
 // GROQ Queries
 export const GALLERY_QUERY = `*[_type == "gallery"] | order(_createdAt desc) {

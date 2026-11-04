@@ -4,7 +4,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
-import { client } from "@/lib/sanity";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -83,35 +82,15 @@ export async function POST(request: NextRequest) {
 
   const { firstName, lastName, email, phone, org, matter, message } = parsed.data;
 
-  // Save a trackable record in Sanity (Form Submissions) alongside the
-  // email. Run concurrently and await both — a serverless function can be
-  // frozen the instant it returns a response, so an un-awaited write here
-  // could get killed before it ever reaches Sanity. A Sanity failure is
-  // logged but never fails the request — the email is the critical path.
-  const sanityWrite = client
-    .create({
-      _type: "formSubmission",
-      firstName,
-      lastName,
-      email,
-      phone,
-      org,
-      matter,
-      message,
-      submittedAt: new Date().toISOString(),
-      status: "new",
-    })
-    .catch((error) => {
-      console.error("Failed to save form submission to Sanity:", error);
-    });
-
+  // Email only. Enquiries are deliberately NOT stored in Sanity: the dataset
+  // is public, so anything saved there is readable by anyone on the internet.
   try {
-    const [result] = await Promise.all([
-      resend.emails.send({
+    const result = await resend.emails.send({
         from: process.env.CONTACT_SENDER_EMAIL || "noreply@kattiandco.com",
         to: process.env.CONTACT_RECIPIENT_EMAIL || "aprameya.katti@kattiandco.com",
         replyTo: email,
-        subject: `New Enquiry from ${escapeHtml(firstName || email)}`,
+        // Plain text, not HTML: strip line breaks instead of HTML-escaping.
+        subject: `New Enquiry from ${(firstName || email).replace(/[\r\n]+/g, " ")}`,
         html: `
           <h2>New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${escapeHtml(firstName)} ${escapeHtml(lastName)}</p>
@@ -122,9 +101,7 @@ export async function POST(request: NextRequest) {
           <p><strong>Message:</strong></p>
           <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
         `,
-      }),
-      sanityWrite,
-    ]);
+    });
 
     if (result.error) {
       console.error("Resend error:", result.error);

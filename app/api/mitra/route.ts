@@ -28,7 +28,7 @@ import {
   type FirmInfo,
 } from "@/lib/mitra-engine";
 import { MITRA_CONFIG } from "@/lib/mitra-config";
-import { client, SITE_SETTINGS_QUERY } from "@/lib/sanity";
+import { client, SITE_SETTINGS_QUERY, fetchRecentPosts } from "@/lib/sanity";
 
 // ── Live firm contact info (Sanity, falls back to static config) ──
 
@@ -63,10 +63,13 @@ const BlogPostSchema = z.object({
   slug:     z.string().max(200),
 });
 
+// livePosts is still accepted so older cached clients don't get a 422, but it
+// is ignored: it goes into the system prompt, so it must come from Sanity, not
+// from the browser (anyone could send fake "posts" carrying instructions).
 const RequestSchema = z.object({
   query:     z.string().min(1).max(2000).trim(),
   history:   z.array(MessageSchema).max(20).default([]),
-  livePosts: z.array(BlogPostSchema).max(50).default([]),
+  livePosts: z.array(BlogPostSchema).max(50).optional(),
 });
 
 // ── Ensure disclaimer present in LLM response ─────────────
@@ -111,9 +114,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const { query, history, livePosts } = parsed.data;
+  const { query, history } = parsed.data;
   const typedHistory = history as ConversationMessage[];
-  const typedPosts   = livePosts as BlogPost[];
 
   // ── 1. Secret topic check ─────────────────────────────
   if (containsSecretTopic(query)) {
@@ -186,7 +188,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       ? getGraphContext(graphResult.queryTokens)
       : [];
 
-  const systemPrompt = buildSystemPrompt(contextItems, typedPosts, firm);
+  const posts: BlogPost[] = await fetchRecentPosts(20).catch(() => []);
+  const systemPrompt = buildSystemPrompt(contextItems, posts, firm);
 
   try {
     const geminiText = await callGemini(query, typedHistory, systemPrompt);
